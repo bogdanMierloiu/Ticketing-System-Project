@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.AccountRequest;
 import ro.sci.requestservice.dto.AccountResponse;
-import ro.sci.requestservice.exception.NotFoundException;
+import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.mapper.RequestMapper;
-import ro.sci.requestservice.model.PoliceStructure;
 import ro.sci.requestservice.model.Policeman;
 import ro.sci.requestservice.model.Request;
 import ro.sci.requestservice.model.Status;
@@ -23,6 +22,7 @@ public class RequestService {
     private final PoliceStructureRepo policeStructureRepo;
     private final PolicemanService policemanService;
     private final RequestMapper requestMapper;
+    private final PolicemanMapper policemanMapper;
 
     @Transactional
     public AccountResponse add(AccountRequest accountRequest) {
@@ -35,15 +35,13 @@ public class RequestService {
         request.setIsApprovedBySecurityStructure(false);
         request.setIsApprovedByITChief(false);
 
-        return requestMapper.map(requestRepo.save(request));
+        Request savedRequest = requestRepo.save(request);
+        AccountResponse accountResponse = requestMapper.map(savedRequest);
+        accountResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
 
+        return accountResponse;
     }
 
 
-    private PoliceStructure getPoliceStructureById(Long id) {
-        return policeStructureRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("The ticket with id:" + id + " not exists")
-        );
-    }
 
 }

@@ -10,7 +10,6 @@ public class AccountResponse {
 
     private Long id;
 
-
     private PolicemanResponse policemanResponse;
 
     private Status status;

@@ -1,8 +1,6 @@
 package ro.sci.requestservice.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import ro.sci.requestservice.dto.PolicemanRequest;
 import ro.sci.requestservice.dto.PolicemanResponse;
 import ro.sci.requestservice.model.Policeman;
@@ -20,4 +18,12 @@ public interface PolicemanMapper {
     PolicemanResponse map(Policeman policeman);
 
     List<PolicemanResponse> map(List<Policeman> policemen);
+
+    @Mapping(source = "rank.id", target = "rankId")
+    @Mapping(source = "policeStructure.id", target = "policeStructureId")
+    @Mapping(source = "department.id", target = "departmentId")
+    @Named("mapPolicemanToResponse")
+    PolicemanResponse mapPolicemanToResponse(Policeman policeman);
+
+    Policeman mapRequestToPoliceman(PolicemanRequest policemanRequest);
 }
