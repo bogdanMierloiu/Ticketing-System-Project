@@ -21,7 +21,7 @@ public class Department {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Policeman> policemen;
