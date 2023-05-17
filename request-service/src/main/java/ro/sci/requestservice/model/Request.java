@@ -20,7 +20,8 @@ public class Request {
     @ManyToOne(fetch = FetchType.LAZY)
     private Policeman policeman;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "VARCHAR(16)")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private String observation;
