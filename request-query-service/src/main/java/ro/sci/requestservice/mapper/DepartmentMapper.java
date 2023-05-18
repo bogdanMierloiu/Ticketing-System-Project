@@ -3,7 +3,6 @@ package ro.sci.requestservice.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ro.sci.requestservice.dto.DepartmentRequest;
 import ro.sci.requestservice.dto.DepartmentResponse;
 import ro.sci.requestservice.model.Department;
 
@@ -15,8 +14,6 @@ import java.util.List;
 )
 public interface DepartmentMapper {
 
-
-    Department map(DepartmentRequest departmentRequest);
 
     DepartmentResponse map(Department department);
 

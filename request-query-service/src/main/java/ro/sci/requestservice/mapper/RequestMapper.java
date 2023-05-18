@@ -1,8 +1,11 @@
 package ro.sci.requestservice.mapper;
 
-import org.mapstruct.*;
-import ro.sci.requestservice.dto.AccountRequest;
-import ro.sci.requestservice.dto.AccountResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
+import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.model.Request;
 
 import java.util.List;
@@ -14,15 +17,18 @@ import java.util.List;
 )
 public interface RequestMapper {
 
-    Request map(AccountRequest accountRequest);
-
-    @Named("mapAccountResponse")
-    AccountResponse map(Request request);
-
-    List<AccountResponse> map(List<Request> requests);
-
+    @Named("mapPolicemanToResponse")
+    @Mapping(source = "policeman", target = "policemanResponse")
     @Mapping(source = "requestType", target = "requestTypeResponse")
-    @Named("mapAccountResponseWithRequestType")
-    AccountResponse mapWithRequestType(Request request);
+    RequestResponse map(Request request);
+
+    @Named("mapRequestTypeToResponse")
+    @Mapping(source = "requestType", target = "requestTypeResponse")
+    RequestResponse mapWithRequestType(Request request);
+
+    @Named("mapAccountResponses")
+    @Mapping(source = "policeman", target = "policemanResponse")
+    @Mapping(source = "requestType", target = "requestTypeResponse")
+    List<RequestResponse> map(List<Request> requests);
 }
 

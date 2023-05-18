@@ -31,8 +31,8 @@ public class PolicemanResponse {
     private RankResponse rank;
 
 
-    private Long policeStructureId;
+    private PoliceStructureResponse policeStructure;
 
 
-    private Long departmentId;
+    private DepartmentResponse department;
 }

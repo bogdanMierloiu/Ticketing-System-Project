@@ -1,14 +1,13 @@
 package ro.sci.requestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class Request {
@@ -18,9 +17,13 @@ public class Request {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private Policeman policeman;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private RequestType requestType;
 
     @Column(columnDefinition = "VARCHAR(16)")

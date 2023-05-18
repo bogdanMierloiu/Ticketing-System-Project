@@ -1,16 +1,14 @@
 package ro.sci.requestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Data
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,15 +36,20 @@ public class Policeman {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Rank rank;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private PoliceStructure policeStructure;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Department department;
 
     @OneToMany(mappedBy = "policeman", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private List<Request> requests;
 
 
