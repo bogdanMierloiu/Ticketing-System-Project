@@ -20,17 +20,30 @@ public class Request {
     @ManyToOne(fetch = FetchType.LAZY)
     private Policeman policeman;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RequestType requestType;
+
     @Column(columnDefinition = "VARCHAR(16)")
     @Enumerated(EnumType.STRING)
     private Status status;
 
     private String observation;
 
+    @Column(nullable = false)
+    private Long requestStructRegNo;
+
     private Boolean isApprovedByStructureChief;
+
+    private Long securityStructRegNo;
 
     private Boolean isApprovedBySecurityStructure;
 
+    private Long itStructRegNo;
+
     private Boolean isApprovedByITChief;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ItSpecialist itSpecialist;
 
 
 }
