@@ -18,7 +18,7 @@
     <div th:if="${#lists.isEmpty(requests)}">
         <h5>Nu exista inregistrari</h5>
     </div>
-    <div th:if="${not #lists.isEmpty(requests)}" class="table-responsive">
+    <div th:if="${not #lists.isEmpty(requests)}" class="table-responsive text-center">
         <table class="table table-hover table-white-text">
             <thead>
             <tr>
@@ -29,6 +29,7 @@
                 <th>Aprobat structura securitate</th>
                 <th>Aprobat sef SCI</th>
                 <th>Status</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -36,46 +37,70 @@
                 <td>
                     <span th:text="${request.getRequestTypeResponse.getRequestName()}"></span>
                 </td>
-<!--                <td>-->
-<!--                    <span th:text="${#temporals.format(criminalFile.getRegistrationDate(), 'dd-MM-yyyy')}"></span>-->
-<!--                </td>-->
                 <td>
-                    <span th:text="${request.getStatus()}"></span>
+                    <span th:text="${request.getPolicemanResponse.rank.rankName + ' ' + request.getPolicemanResponse.lastName + ' ' + request.getPolicemanResponse.firstName}"></span>
                 </td>
-<!--                <td>-->
-<!--                    <span th:text="${criminalFile.getLegalQualification()}"></span>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                <span th:text="${criminalFile.getCrimeTypeResponse() != null} ?-->
-<!--                 ${criminalFile.crimeTypeResponse.type} : 'nespecificat'"></span>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <ul th:each="author : ${criminalFile.getAuthorResponseList()}">-->
-<!--                        <li th:text="${author.getLastName() + ' ' + author.getFirstName()}">-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <form th:action="@{/criminal-file/deleteById/{id}(id=${criminalFile.id})}">-->
-<!--                        <input type="hidden" name="_method" value="DELETE">-->
-<!--                        <button class="btn btn-outline-danger my-2 my-sm-0" type="button"-->
-<!--                                onclick="if(confirm('Sunteti sigur ca doriti sa stergeti aceasta intrare?')) {this.form.submit();}">-->
-<!--                            Delete-->
-<!--                        </button>-->
-<!--                    </form>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <form th:action="@{/criminal-file/updateById/{id}(id=${criminalFile.id})}">-->
-<!--                        <input type="hidden" name="_method" value="UPDATE">-->
-<!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Modifica</button>-->
-<!--                    </form>-->
-<!--                </td>-->
-<!--                <td th:if="${criminalFile.isResolved == false}">-->
-<!--                    <form  th:action="@{/criminal-file/resolveById/{id}(id=${criminalFile.id})}">-->
-<!--                        <input type="hidden" name="_method" value="UPDATE">-->
-<!--                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Finalizeaza</button>-->
-<!--                    </form>-->
-<!--                </td>-->
+                <td>
+                    <span th:text="${request.getPolicemanResponse.getPoliceStructure.getStructureName}"></span>
+                </td>
+                <td>
+                    <span th:if="${request.isApprovedByStructureChief}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                    <span th:unless="${request.isApprovedByStructureChief}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                </td>
+                <td>
+                    <span th:if="${request.isApprovedBySecurityStructure}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                    <span th:unless="${request.isApprovedBySecurityStructure}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                </td>
+                <td>
+                    <span th:if="${request.isApprovedByITChief}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                    <span th:unless="${request.isApprovedByITChief}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                </td>
+                <td>
+                    <span th:text="${request.status}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/request/find/{requestId}(requestId=${request.id})}">
+                        <input type="hidden" name="requestId" th:value="${request.id}">
+                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Deschide</button>
+                    </form>
+                </td>
+
+
+                <!--                <td>-->
+                <!--                    <span th:text="${criminalFile.getLegalQualification()}"></span>-->
+                <!--                </td>-->
+                <!--                <td>-->
+                <!--                <span th:text="${criminalFile.getCrimeTypeResponse() != null} ?-->
+                <!--                 ${criminalFile.crimeTypeResponse.type} : 'nespecificat'"></span>-->
+                <!--                </td>-->
+                <!--                <td>-->
+                <!--                    <ul th:each="author : ${criminalFile.getAuthorResponseList()}">-->
+                <!--                        <li th:text="${author.getLastName() + ' ' + author.getFirstName()}">-->
+                <!--                        </li>-->
+                <!--                    </ul>-->
+                <!--                </td>-->
+                <!--                <td>-->
+                <!--                    <form th:action="@{/criminal-file/deleteById/{id}(id=${criminalFile.id})}">-->
+                <!--                        <input type="hidden" name="_method" value="DELETE">-->
+                <!--                        <button class="btn btn-outline-danger my-2 my-sm-0" type="button"-->
+                <!--                                onclick="if(confirm('Sunteti sigur ca doriti sa stergeti aceasta intrare?')) {this.form.submit();}">-->
+                <!--                            Delete-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+                <!--                </td>-->
+
+                <!--                <td th:if="${criminalFile.isResolved == false}">-->
+                <!--                    <form  th:action="@{/criminal-file/resolveById/{id}(id=${criminalFile.id})}">-->
+                <!--                        <input type="hidden" name="_method" value="UPDATE">-->
+                <!--                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Finalizeaza</button>-->
+                <!--                    </form>-->
+                <!--                </td>-->
             </tr>
             </tbody>
         </table>

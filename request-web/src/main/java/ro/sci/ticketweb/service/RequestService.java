@@ -19,6 +19,14 @@ public class RequestService {
                 .block();
     }
 
+    public RequestResponse findById(Long requestId) {
+        return webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
+                .retrieve()
+                .bodyToMono(RequestResponse.class)
+                .block();
+    }
+
 //    public TicketResponse[] getTicketsByItSpecialistId(Long itSpecialistId) {
 //        return webClientBuilder.build().get()
 //                .uri("lb://ticket-service/api/it-specialist/{workerId}", itSpecialistId)

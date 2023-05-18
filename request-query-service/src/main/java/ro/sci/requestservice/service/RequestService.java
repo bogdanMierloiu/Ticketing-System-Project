@@ -33,6 +33,14 @@ public class RequestService {
         return requestResponses;
     }
 
+    public RequestResponse findById(Long requestId) {
+        return requestMapper.map(
+                requestRepo.findById(requestId).orElseThrow(
+                        () -> new NotFoundException("The request with id " + requestId + " not found")
+                )
+        );
+    }
+
 
     private RequestType getRequestTypeById(Long requestTypeId) {
         return requestTypeRepo.findById(requestTypeId).orElseThrow(

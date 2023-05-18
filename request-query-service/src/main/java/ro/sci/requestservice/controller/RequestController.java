@@ -3,6 +3,7 @@ package ro.sci.requestservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.sci.requestservice.dto.RequestResponse;
@@ -21,6 +22,11 @@ public class RequestController {
     @GetMapping("/all-requests")
     public ResponseEntity<List<RequestResponse>> getAllRequests() {
         return ResponseEntity.ok(requestService.getAllRequests());
+    }
+
+    @GetMapping("/find/{requestId}")
+    public ResponseEntity<RequestResponse> findById(@PathVariable("requestId") Long requestId) {
+        return ResponseEntity.ok(requestService.findById(requestId));
     }
 
 

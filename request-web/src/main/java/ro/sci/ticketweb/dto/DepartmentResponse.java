@@ -15,7 +15,4 @@ public class DepartmentResponse {
 
     private String departmentName;
 
-
-
-
 }
