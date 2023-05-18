@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/request-service/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/eureka-discovery-server/pom.xml" />
+        <option value="$PROJECT_DIR$/request-query-service/pom.xml" />
       </list>
     </option>
   </component>
