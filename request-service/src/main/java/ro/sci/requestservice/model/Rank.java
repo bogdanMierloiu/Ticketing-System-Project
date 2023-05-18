@@ -26,5 +26,8 @@ public class Rank {
     @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Policeman> policemen;
 
+    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItSpecialist> itSpecialists;
+
 
 }

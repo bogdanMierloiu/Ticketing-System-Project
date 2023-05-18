@@ -30,15 +30,15 @@ public class Request {
     private String observation;
 
     @Column(nullable = false)
-    private Long requestStructRegNo;
+    private String requestStructRegNo;
 
     private Boolean isApprovedByStructureChief;
 
-    private Long securityStructRegNo;
+    private String securityStructRegNo;
 
     private Boolean isApprovedBySecurityStructure;
 
-    private Long itStructRegNo;
+    private String itStructRegNo;
 
     private Boolean isApprovedByITChief;
 

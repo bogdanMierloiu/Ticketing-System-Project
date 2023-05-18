@@ -28,7 +28,7 @@ public class PolicemanResponse {
     private String email;
 
 
-    private Long rankId;
+    private RankResponse rank;
 
 
     private Long policeStructureId;

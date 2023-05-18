@@ -12,13 +12,21 @@ public class AccountResponse {
 
     private PolicemanResponse policemanResponse;
 
+    private RequestTypeResponse requestTypeResponse;
+
     private Status status;
 
     private String observation;
 
+    private String requestStructRegNo;
+
     private Boolean isApprovedByStructureChief;
 
+    private String securityStructRegNo;
+
     private Boolean isApprovedBySecurityStructure;
+
+    private String itStructRegNo;
 
     private Boolean isApprovedByITChief;
 

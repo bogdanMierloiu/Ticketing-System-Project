@@ -6,18 +6,17 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AccountRequest {
+public class ItSpecialistRequest {
 
     private Long id;
 
     @NotBlank
-    private PolicemanRequest policemanRequest;
+    private String firstName;
 
     @NotBlank
-    private Long requestTypeId;
+    private String lastName;
 
     @NotBlank
-    private String requestStructRegNo;
+    private Long rankId;
 
-    private String observation;
 }

@@ -19,7 +19,7 @@ public interface PolicemanMapper {
 
     List<PolicemanResponse> map(List<Policeman> policemen);
 
-    @Mapping(source = "rank.id", target = "rankId")
+    @Mapping(source = "rank.id", target = "rank.id")
     @Mapping(source = "policeStructure.id", target = "policeStructureId")
     @Mapping(source = "department.id", target = "departmentId")
     @Named("mapPolicemanToResponse")
