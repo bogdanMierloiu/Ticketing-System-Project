@@ -3,9 +3,8 @@ package ro.sci.ticketweb.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import ro.sci.ticketweb.dto.PoliceStructureRequest;
 import ro.sci.ticketweb.service.*;
 
 @Controller
@@ -38,6 +37,18 @@ public class AdminWebController {
         return "structures";
     }
 
+    @GetMapping("/add-structure-form")
+    public String addStructureForm() {
+        return "add-structure";
+    }
+
+    @PostMapping("/add-structure")
+    public String addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
+        policeStructureService.addPoliceStructure(policeStructureRequest);
+        model.addAttribute("structures", policeStructureService.getAllStructures());
+        return "structures";
+    }
+
     @GetMapping("/show-departments/{policeStructureId}")
     public String viewDepartmentsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
         model.addAttribute("policeStructure", policeStructureService.getById(policeStructureId));
@@ -46,25 +57,25 @@ public class AdminWebController {
     }
 
     @GetMapping("/all-ranks")
-    public String viewAllRanks(Model model){
+    public String viewAllRanks(Model model) {
         model.addAttribute("ranks", rankService.getAllRanks());
         return "ranks";
     }
 
     @GetMapping("/all-specialists")
-    public String viewAllSpecialists(Model model){
+    public String viewAllSpecialists(Model model) {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "it-specialists";
     }
 
     @GetMapping("/all-request-type")
-    public String viewAllRequestType(Model model){
+    public String viewAllRequestType(Model model) {
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "request-types";
     }
 
     @GetMapping("/all-policemen")
-    public String viewAllPolicemen(Model model){
+    public String viewAllPolicemen(Model model) {
         model.addAttribute("policemen", policemanService.getAllPolicemen());
         return "policemen";
     }

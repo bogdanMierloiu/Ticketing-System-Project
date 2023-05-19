@@ -21,37 +21,14 @@
         </form>
     </div>
     <div>
-        <form th:action="@{/request/admin/add-structure-form}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Adauga structura de politie</button>
+        <form class="add-form" th:action="@{/request/admin/add-structure}" method="post">
+            <div class="form-group">
+                <label>
+                    <input type="text" name="structureName" placeholder="Introduceti denumirea structurii de politie" class="form-control form-control-lg" required>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Adauga</button>
         </form>
-    </div>
-
-    <div th:if="${#lists.isEmpty(structures)}">
-        <h5>Nu exista inregistrari</h5>
-    </div>
-    <div th:if="${not #lists.isEmpty(structures)}" class="table-responsive text-center">
-        <table class="table table-hover table-white-text">
-            <thead>
-            <tr>
-                <th>Denumirea structura</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="structure: ${structures}">
-                <td>
-                    <span th:text="${structure.structureName}"></span>
-                </td>
-                <td>
-                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">
-                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza departamente</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 

@@ -55,6 +55,7 @@ public class PoliceStructureService {
     public void addPoliceStructure(PoliceStructureRequest policeStructureRequest) {
         webClientBuilder.build().post()
                 .uri("lb://request-service/api/v1/police-structure")
+                .bodyValue(policeStructureRequest)
                 .retrieve()
                 .toBodilessEntity()
                 .block();
