@@ -4,29 +4,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ro.sci.ticketweb.dto.PoliceStructureRequest;
-import ro.sci.ticketweb.dto.PoliceStructureResponse;
+import ro.sci.ticketweb.dto.RankResponse;
 
 @Service
 @RequiredArgsConstructor
-public class PoliceStructureService {
+public class RankService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public PoliceStructureResponse[] getAllStructures() {
+    public RankResponse[] getAllRanks() {
         return webClientBuilder.build().get()
-                .uri("lb://request-query-service/api/v2/police-structure/all-structures")
+                .uri("lb://request-query-service/api/v2/rank/all-ranks")
                 .retrieve()
-                .bodyToMono(PoliceStructureResponse[].class)
+                .bodyToMono(RankResponse[].class)
                 .block();
     }
 
-    public PoliceStructureResponse getById(Long structureId) {
-        return webClientBuilder.build().get()
-                .uri("lb://request-query-service/api/v2/police-structure/find/{structureId}", structureId)
-                .retrieve()
-                .bodyToMono(PoliceStructureResponse.class)
-                .block();
-    }
+
+
 
 //    public RequestResponse findById(Long requestId) {
 //        return webClientBuilder.build().get()
@@ -59,6 +54,7 @@ public class PoliceStructureService {
                 .toBodilessEntity()
                 .block();
     }
+
 
 //    public void assignTicket(AssignTicketRequest request) {
 //        webClientBuilder.build().post()

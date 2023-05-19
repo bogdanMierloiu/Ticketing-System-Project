@@ -6,9 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ro.sci.ticketweb.service.DepartmentService;
-import ro.sci.ticketweb.service.PoliceStructureService;
-import ro.sci.ticketweb.service.RequestService;
+import ro.sci.ticketweb.service.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +16,9 @@ public class AdminWebController {
     private final RequestService requestService;
     private final PoliceStructureService policeStructureService;
     private final DepartmentService departmentService;
+    private final RankService rankService;
+    private final ItSpecialistService itSpecialistService;
+    private final RequestTypeService requestTypeService;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -38,8 +39,27 @@ public class AdminWebController {
 
     @GetMapping("/show-departments/{policeStructureId}")
     public String viewDepartmentsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+        model.addAttribute("policeStructure", policeStructureService.getById(policeStructureId));
         model.addAttribute("departments", departmentService.getByPoliceStructure(policeStructureId));
         return "departments";
+    }
+
+    @GetMapping("/all-ranks")
+    public String viewAllRanks(Model model){
+        model.addAttribute("ranks", rankService.getAllRanks());
+        return "ranks";
+    }
+
+    @GetMapping("/all-specialists")
+    public String viewAllSpecialists(Model model){
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "it-specialists";
+    }
+
+    @GetMapping("/all-request-type")
+    public String viewAllRequestType(Model model){
+        model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+        return "request-types";
     }
 
 //    @GetMapping("/add-ticket-form")

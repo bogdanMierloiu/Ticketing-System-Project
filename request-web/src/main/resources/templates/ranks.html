@@ -21,15 +21,15 @@
         </form>
     </div>
 
-    <h1 th:text="${policeStructure.structureName}"></h1>
+    <h1>Grade profesionale</h1>
 
-    <div th:if="${#lists.isEmpty(departments)}">
+    <div th:if="${#lists.isEmpty(ranks)}">
         <h5>Nu există înregistrări</h5>
     </div>
 
-    <div th:if="${not #lists.isEmpty(departments)}">
+    <div th:if="${not #lists.isEmpty(ranks)}">
         <ol class="department-list">
-            <li th:each="department: ${departments}" th:text="${department.departmentName}"></li>
+            <li th:each="rank: ${ranks}" th:text="${rank.rankName}"></li>
         </ol>
     </div>
 

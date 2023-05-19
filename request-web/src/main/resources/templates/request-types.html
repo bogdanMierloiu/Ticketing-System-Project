@@ -21,18 +21,32 @@
         </form>
     </div>
 
-    <h1 th:text="${policeStructure.structureName}"></h1>
-
-    <div th:if="${#lists.isEmpty(departments)}">
-        <h5>Nu există înregistrări</h5>
+    <div th:if="${#lists.isEmpty(requestTypes)}">
+        <h5>Nu exista inregistrari</h5>
     </div>
-
-    <div th:if="${not #lists.isEmpty(departments)}">
-        <ol class="department-list">
-            <li th:each="department: ${departments}" th:text="${department.departmentName}"></li>
-        </ol>
+    <div th:if="${not #lists.isEmpty(requestTypes)}" class="table-responsive text-center">
+        <table class="table table-hover table-white-text">
+            <thead>
+            <tr>
+                <th>Tip solicitare</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="requestType: ${requestTypes}">
+                <td>
+                    <span th:text="${requestType.requestName}"></span>
+                </td>
+<!--                <td>-->
+<!--                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
+<!--                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
+<!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza solicitari in lucru (DE IMPLEMENTAT)</button>-->
+<!--                    </form>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
     </div>
-
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
