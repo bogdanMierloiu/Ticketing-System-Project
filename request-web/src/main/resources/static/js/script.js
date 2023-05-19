@@ -1,7 +1,5 @@
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function populateDepartments() {
-            var policeStructureId = $('#policeStructure').val();
+       function populateDepartments() {
+            var policeStructureId = $('#policeStructure').find(':selected').val();
 
             // Efectuează solicitarea către server pentru a obține departamentele
             fetch('admin/show-departments/' + policeStructureId)
@@ -14,5 +12,4 @@
                     console.log('A apărut o eroare în solicitarea AJAX: ' + error);
                 });
         }
-    </script>
 
