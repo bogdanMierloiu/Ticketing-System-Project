@@ -19,6 +19,7 @@ public class AdminWebController {
     private final RankService rankService;
     private final ItSpecialistService itSpecialistService;
     private final RequestTypeService requestTypeService;
+    private final PolicemanService policemanService;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -60,6 +61,12 @@ public class AdminWebController {
     public String viewAllRequestType(Model model){
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "request-types";
+    }
+
+    @GetMapping("/all-policemen")
+    public String viewAllPolicemen(Model model){
+        model.addAttribute("policemen", policemanService.getAllPolicemen());
+        return "policemen";
     }
 
 //    @GetMapping("/add-ticket-form")
