@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpDesk-SCI</title>
+    <title>Account Request Manager</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -16,12 +16,37 @@
 
 <div class="content-wrap">
     <div>
-        <form th:action="@{/ticket/stats/all-tickets-not-resolved}" method="get">
-            <button type="submit"
-                    class="btn btn-outline-success d-flex align-items-center justify-content-center">
-                Tickets not resolved
-            </button>
+        <form th:action="@{/request/admin}">
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
         </form>
+    </div>
+
+    <div th:if="${#lists.isEmpty(structures)}">
+        <h5>Nu exista inregistrari</h5>
+    </div>
+    <div th:if="${not #lists.isEmpty(structures)}" class="table-responsive text-center">
+        <table class="table table-hover table-white-text">
+            <thead>
+            <tr>
+                <th>Denumirea structura</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="structure: ${structures}">
+                <td>
+                    <span th:text="${structure.structureName}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">
+                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">
+                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza departamente</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

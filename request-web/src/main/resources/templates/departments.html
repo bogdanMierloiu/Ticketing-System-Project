@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HelpDesk-SCI</title>
+    <title>Account Request Manager</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -13,29 +13,26 @@
 </head>
 <body>
 
+
 <div class="content-wrap">
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-body">
-                        <hr>
-                        <form class="add-form" th:action="@{/ticket/add}" method="post">
-                            <div class="form-group">
-                                <label for="description">Ticket</label>
-                                <textarea id="description" name="description" rows="5" cols="50" required
-                                          class="form-control"></textarea>
-                                <small class="form-text text-muted">Describe your problem:</small>
-                            </div>
-                            <input type="hidden" name="workerId" th:value="1">
-                            <input type="hidden" name="categoryId" th:value="1">
-                            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Create</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+        <form th:action="@{/request/admin}">
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
+        </form>
     </div>
+
+    <h1>NUME STRUCTURA</h1>
+
+    <div th:if="${#lists.isEmpty(departments)}">
+        <h5>Nu există înregistrări</h5>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(departments)}">
+        <ol class="department-list" type="a">
+            <li th:each="department: ${departments}" th:text="${department.departmentName}"></li>
+        </ol>
+    </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

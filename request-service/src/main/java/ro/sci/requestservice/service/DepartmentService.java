@@ -27,9 +27,11 @@ public class DepartmentService {
     }
 
 
+
+
     private PoliceStructure getPoliceStructureById(Long id) {
         return policeStructureRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("The ticket with id:" + id + " not exists")
+                new NotFoundException("The police structure with id:" + id + " not exists")
         );
     }
 

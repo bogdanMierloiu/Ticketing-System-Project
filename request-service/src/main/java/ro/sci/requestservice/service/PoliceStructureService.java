@@ -17,6 +17,5 @@ public class PoliceStructureService {
         PoliceStructure policeStructure = new PoliceStructure();
         policeStructure.setStructureName(policeStructureRequest.getStructureName());
         policeStructureRepo.save(policeStructure);
-
     }
 }

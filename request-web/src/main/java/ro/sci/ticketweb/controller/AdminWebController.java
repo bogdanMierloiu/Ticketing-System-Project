@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ro.sci.ticketweb.service.DepartmentService;
+import ro.sci.ticketweb.service.PoliceStructureService;
 import ro.sci.ticketweb.service.RequestService;
 
 @Controller
@@ -14,6 +16,8 @@ import ro.sci.ticketweb.service.RequestService;
 public class AdminWebController {
 
     private final RequestService requestService;
+    private final PoliceStructureService policeStructureService;
+    private final DepartmentService departmentService;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -26,10 +30,16 @@ public class AdminWebController {
         return "index";
     }
 
-    @GetMapping("/find/{requestId}")
-    public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
-        model.addAttribute("request", requestService.findById(requestId));
-        return "request-print";
+    @GetMapping("/all-structures")
+    public String viewAllStructures(Model model) {
+        model.addAttribute("structures", policeStructureService.getAllStructures());
+        return "structures";
+    }
+
+    @GetMapping("/show-departments/{policeStructureId}")
+    public String viewDepartmentsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+        model.addAttribute("departments", departmentService.getByPoliceStructure(policeStructureId));
+        return "departments";
     }
 
 //    @GetMapping("/add-ticket-form")

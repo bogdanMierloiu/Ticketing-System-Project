@@ -2,10 +2,14 @@ package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ro.sci.requestservice.dto.DepartmentResponse;
 import ro.sci.requestservice.exception.NotFoundException;
+import ro.sci.requestservice.mapper.DepartmentMapper;
 import ro.sci.requestservice.model.PoliceStructure;
 import ro.sci.requestservice.repository.DepartmentRepo;
 import ro.sci.requestservice.repository.PoliceStructureRepo;
+
+import java.util.List;
 
 
 @Service
@@ -14,8 +18,12 @@ public class DepartmentService {
 
     private final DepartmentRepo departmentRepo;
     private final PoliceStructureRepo policeStructureRepo;
+    private final DepartmentMapper departmentMapper;
 
 
+    public List<DepartmentResponse> getByPoliceStructureId(Long structureId) {
+        return departmentMapper.map(departmentRepo.findByPoliceStructureId(structureId));
+    }
 
 
     private PoliceStructure getPoliceStructureById(Long id) {
