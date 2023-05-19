@@ -20,6 +20,11 @@
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
         </form>
     </div>
+    <div>
+        <form th:action="@{/request/add-request-form}">
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Adauga solicitare</button>
+        </form>
+    </div>
 
     <div th:if="${#lists.isEmpty(requests)}">
         <h5>Nu exista inregistrari</h5>

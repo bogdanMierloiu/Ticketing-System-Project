@@ -6,7 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ro.sci.ticketweb.dto.AccountRequest;
+import ro.sci.ticketweb.dto.PolicemanRequest;
+import ro.sci.ticketweb.service.PoliceStructureService;
+import ro.sci.ticketweb.service.RankService;
 import ro.sci.ticketweb.service.RequestService;
+import ro.sci.ticketweb.service.RequestTypeService;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,6 +19,9 @@ import ro.sci.ticketweb.service.RequestService;
 public class RequestWebController {
 
     private final RequestService requestService;
+    private final RankService rankService;
+    private final PoliceStructureService policeStructureService;
+    private final RequestTypeService requestTypeService;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -25,6 +33,16 @@ public class RequestWebController {
     public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
         model.addAttribute("request", requestService.findById(requestId));
         return "request-print";
+    }
+
+    @GetMapping("/add-request-form")
+    public String addRequestForm(Model model) {
+        model.addAttribute("accountRequest", new AccountRequest());
+        model.addAttribute("policemanRequest", new PolicemanRequest());
+        model.addAttribute("ranks", rankService.getAllRanks());
+        model.addAttribute("structures", policeStructureService.getAllStructures());
+        model.addAttribute("requestTypes", requestService.getAllRequests());
+        return "add-request";
     }
 
 //    @GetMapping("/add-ticket-form")
