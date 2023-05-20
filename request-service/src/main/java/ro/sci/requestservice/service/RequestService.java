@@ -16,6 +16,7 @@ import ro.sci.requestservice.repository.RequestRepo;
 import ro.sci.requestservice.repository.RequestTypeRepo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Service
@@ -27,6 +28,8 @@ public class RequestService {
     private final PolicemanService policemanService;
     private final RequestMapper requestMapper;
     private final PolicemanMapper policemanMapper;
+
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
     @Transactional
     public RequestResponse add(AccountRequest accountRequest) {
@@ -40,6 +43,9 @@ public class RequestService {
         request.setIsApprovedByStructureChief(false);
         request.setIsApprovedBySecurityStructure(false);
         request.setIsApprovedByITChief(false);
+
+        request.setCreatedAt(LocalDateTime.now());
+        request.setObservation("Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter));
 
         Request savedRequest = requestRepo.save(request);
         RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
@@ -57,8 +63,9 @@ public class RequestService {
     public void structureChiefApprove(Long requestId) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
-        requestToApprove.setObservation("Aprobat de seful structurii de politie emitente la data de " +
-                LocalDateTime.now());
+        requestToApprove.setStructureChiefAppAt(LocalDateTime.now());
+        requestToApprove.setObservation(requestToApprove.getObservation() + "\n" + "Aprobat de seful structurii de politie emitente la data de " +
+                requestToApprove.getStructureChiefAppAt().format(dateTimeFormatter));
         requestRepo.save(requestToApprove);
     }
 

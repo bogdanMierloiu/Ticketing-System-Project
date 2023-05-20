@@ -20,4 +20,6 @@ public class AccountRequest {
     private String requestStructRegNo;
 
     private String observation;
+
+
 }
