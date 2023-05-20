@@ -39,7 +39,7 @@ public class RequestWebController {
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
         model.addAttribute("structures", policeStructureService.getAllStructures());
-        model.addAttribute("requestTypes", requestService.getAllRequests());
+        model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "add-request";
     }
 

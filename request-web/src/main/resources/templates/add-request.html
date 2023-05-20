@@ -21,52 +21,53 @@
         </form>
     </div>
     <div>
-        <form class="add-form" th:action="@{/request/admin/add-request}" method="post">
+        <form class="add-form" th:action="@{/request/add-request}" method="post">
 
             <label>
                 <span>Informatii politist</span>
             </label>
 
             <!-- Campurile pentru PolicemanRequest -->
-            <div>
-                <label for="lastName">Nume de familie:</label>
-                <input id="lastName" type="text" th:field="*{policemanRequest.lastName}" required>
-            </div>
-
-            <div>
-                <label for="firstName">Prenume:</label>
-                <input id="firstName" type="text" th:field="*{policemanRequest.firstName}" required>
-            </div>
-
-            <div>
-                <label for="personalNumber">CNP:</label>
-                <input id="personalNumber" type="text" th:field="*{policemanRequest.personalNumber}" required>
-            </div>
-
-            <div>
-                <label for="certificate">Autorizatie serie/nr:</label>
-                <input id="certificate" type="text" th:field="*{policemanRequest.certificate}" required>
-            </div>
-
-            <div>
-                <label for="phoneNumber">Nr.de telefon:</label>
-                <input id="phoneNumber" type="text" th:field="*{policemanRequest.phoneNumber}" required>
-            </div>
-
-            <div>
-                <label for="email">Email:</label>
-                <input id="email" type="text" th:field="*{policemanRequest.email}" required>
-            </div>
 
             <label>
-                <select th:field="*{policemanRequest.rankId}">
+                <select th:field="*{accountRequest.policemanRequest.rankId}">
                     <option value="">Selectati gradul profesional</option>
                     <option th:each="rank : ${ranks}" th:value="${rank.id}" th:text="${rank.rankName}"></option>
                 </select>
             </label>
+            <div>
+                <label for="lastName">Nume de familie:</label>
+                <input id="lastName" type="text" th:field="*{accountRequest.policemanRequest.lastName}" required>
+            </div>
+
+            <div>
+                <label for="firstName">Prenume:</label>
+                <input id="firstName" type="text" th:field="*{accountRequest.policemanRequest.firstName}" required>
+            </div>
+
+            <div>
+                <label for="personalNumber">CNP:</label>
+                <input id="personalNumber" type="text" th:field="*{accountRequest.policemanRequest.personalNumber}" required>
+            </div>
+
+            <div>
+                <label for="certificate">Autorizatie serie/nr:</label>
+                <input id="certificate" type="text" th:field="*{accountRequest.policemanRequest.certificate}" required>
+            </div>
+
+            <div>
+                <label for="phoneNumber">Nr.de telefon:</label>
+                <input id="phoneNumber" type="text" th:field="*{accountRequest.policemanRequest.phoneNumber}" required>
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input id="email" type="text" th:field="*{accountRequest.policemanRequest.email}" required>
+            </div>
+
 
             <label>
-                <select id="policeStructure" th:field="*{policemanRequest.policeStructureId}"
+                <select id="policeStructure" th:field="*{accountRequest.policemanRequest.policeStructureId}"
                         onchange="populateDepartments()">
                     <option value="">Selectați structura de poliție</option>
                     <option th:each="structure : ${structures}" th:value="${structure.id}"
@@ -75,7 +76,7 @@
             </label>
 
             <label>
-                <select id="departmentDropdown" th:field="*{policemanRequest.departmentId}">
+                <select id="departmentDropdown" th:field="*{accountRequest.policemanRequest.departmentId}">
                     <option value="">Selectați departamentul</option>
                     <option th:each="department : ${departments}" th:value="${department.id}"
                             th:text="${department.departmentName}"></option>
@@ -85,7 +86,7 @@
 
             <!--             Campul pentru requestTypeId -->
             <label>
-                <select id="requestType" th:field="*{policemanRequest.policeStructureId}">
+                <select id="requestType" th:field="*{accountRequest.requestTypeId}">
                     <option value="">Selectați tipul solicitarii</option>
                     <option th:each="requestType : ${requestTypes}" th:value="${requestType.id}"
                             th:text="${requestType.requestName}"></option>
