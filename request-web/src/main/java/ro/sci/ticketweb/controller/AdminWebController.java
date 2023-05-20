@@ -1,11 +1,16 @@
 package ro.sci.ticketweb.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ro.sci.ticketweb.dto.DepartmentResponse;
 import ro.sci.ticketweb.dto.PoliceStructureRequest;
 import ro.sci.ticketweb.service.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -55,6 +60,13 @@ public class AdminWebController {
         model.addAttribute("departments", departmentService.getByPoliceStructure(policeStructureId));
         return "departments";
     }
+
+    @GetMapping("/show-departments-script/{policeStructureId}")
+    public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("policeStructureId") Long policeStructureId) {
+        DepartmentResponse[] departments = departmentService.getByPoliceStructure(policeStructureId);
+        return ResponseEntity.ok(Arrays.asList(departments));
+    }
+
 
     @GetMapping("/all-ranks")
     public String viewAllRanks(Model model) {

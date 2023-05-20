@@ -3,6 +3,7 @@ package ro.sci.ticketweb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import ro.sci.ticketweb.dto.AccountRequest;
 import ro.sci.ticketweb.dto.RequestResponse;
 
 @Service
@@ -27,6 +28,15 @@ public class RequestService {
                 .block();
     }
 
+    public void addRequest(AccountRequest request) {
+        webClientBuilder.build().post()
+                .uri("lb://request-service/api/v1/request")
+                .bodyValue(request)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
 //    public TicketResponse[] getTicketsByItSpecialistId(Long itSpecialistId) {
 //        return webClientBuilder.build().get()
 //                .uri("lb://ticket-service/api/it-specialist/{workerId}", itSpecialistId)
@@ -43,14 +53,7 @@ public class RequestService {
 //                .block();
 //    }
 //
-//    public void addTicket(TicketRequest request) {
-//        webClientBuilder.build().post()
-//                .uri("lb://ticket-service/api")
-//                .bodyValue(request)
-//                .retrieve()
-//                .toBodilessEntity()
-//                .block();
-//    }
+//
 //
 //    public void assignTicket(AssignTicketRequest request) {
 //        webClientBuilder.build().post()

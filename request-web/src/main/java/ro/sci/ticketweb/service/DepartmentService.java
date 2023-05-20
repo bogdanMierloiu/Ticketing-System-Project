@@ -1,10 +1,13 @@
 package ro.sci.ticketweb.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ro.sci.ticketweb.dto.DepartmentResponse;
 import ro.sci.ticketweb.dto.PoliceStructureRequest;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class DepartmentService {
                 .bodyToMono(DepartmentResponse[].class)
                 .block();
     }
+
 
 //    public RequestResponse findById(Long requestId) {
 //        return webClientBuilder.build().get()

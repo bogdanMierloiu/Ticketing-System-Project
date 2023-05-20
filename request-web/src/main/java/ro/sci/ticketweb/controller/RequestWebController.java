@@ -3,15 +3,12 @@ package ro.sci.ticketweb.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ro.sci.ticketweb.dto.AccountRequest;
+import ro.sci.ticketweb.dto.DepartmentResponse;
+import ro.sci.ticketweb.dto.PoliceStructureRequest;
 import ro.sci.ticketweb.dto.PolicemanRequest;
-import ro.sci.ticketweb.service.PoliceStructureService;
-import ro.sci.ticketweb.service.RankService;
-import ro.sci.ticketweb.service.RequestService;
-import ro.sci.ticketweb.service.RequestTypeService;
+import ro.sci.ticketweb.service.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,6 +19,7 @@ public class RequestWebController {
     private final RankService rankService;
     private final PoliceStructureService policeStructureService;
     private final RequestTypeService requestTypeService;
+    private final DepartmentService departmentService;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -44,6 +42,16 @@ public class RequestWebController {
         model.addAttribute("requestTypes", requestService.getAllRequests());
         return "add-request";
     }
+
+    @PostMapping("/add-request")
+    public String addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
+        requestService.addRequest(accountRequest);
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "index";
+    }
+
+
+
 
 //    @GetMapping("/add-ticket-form")
 //    public String ticketForm(Model model) {
