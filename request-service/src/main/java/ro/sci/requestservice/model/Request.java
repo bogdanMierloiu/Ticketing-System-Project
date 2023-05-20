@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Builder
@@ -44,6 +46,12 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ItSpecialist itSpecialist;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime structureChiefAppAt;
+    private LocalDateTime securityStructAppAt;
+    private LocalDateTime itChiefAppAt;
+    private LocalDateTime solvedAt;
 
 
 }
