@@ -37,6 +37,14 @@ public class RequestService {
                 .block();
     }
 
+    public void structureChiefApprove(Long requestId) {
+        webClientBuilder.build().patch()
+                .uri("lb://request-service/api/v1/request/structure-chief-approve/{requestId}",requestId)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
 //    public TicketResponse[] getTicketsByItSpecialistId(Long itSpecialistId) {
 //        return webClientBuilder.build().get()
 //                .uri("lb://ticket-service/api/it-specialist/{workerId}", itSpecialistId)

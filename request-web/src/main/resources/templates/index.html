@@ -59,6 +59,12 @@
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
                     <span th:unless="${request.isApprovedByStructureChief}">
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                    <div>
+                        <form th:action="@{/request/structure-chief-approve/{requestId}(requestId=${request.id})}">
+                            <input type="hidden" name="requestId" th:value="${request.id}">
+                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Aproba</button>
+                        </form>
+                    </div>
                 </td>
                 <td>
                     <span th:if="${request.isApprovedBySecurityStructure}">

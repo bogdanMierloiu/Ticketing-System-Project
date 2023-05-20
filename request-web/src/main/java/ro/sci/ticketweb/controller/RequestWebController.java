@@ -50,7 +50,12 @@ public class RequestWebController {
         return "index";
     }
 
-
+    @GetMapping("/structure-chief-approve/{requestId}")
+    public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model) {
+        requestService.structureChiefApprove(requestId);
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "index";
+    }
 
 
 //    @GetMapping("/add-ticket-form")

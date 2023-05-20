@@ -6,7 +6,7 @@ import ro.sci.requestservice.model.Status;
 
 @Data
 @Builder
-public class AccountResponse {
+public class RequestResponse {
 
     private Long id;
 
