@@ -1,6 +1,7 @@
 package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.AccountRequest;
@@ -45,7 +46,9 @@ public class RequestService {
         request.setIsApprovedByITChief(false);
 
         request.setCreatedAt(LocalDateTime.now());
-        request.setObservation("Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter));
+        String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
+        request.setObservation(!StringUtils.isEmpty(accountRequest.getObservation()) ? request.getObservation() + "\n" + obvToAdd :
+                obvToAdd);
 
         Request savedRequest = requestRepo.save(request);
         RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
@@ -64,7 +67,8 @@ public class RequestService {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
         requestToApprove.setStructureChiefAppAt(LocalDateTime.now());
-        requestToApprove.setObservation(requestToApprove.getObservation() + "\n" + "Aprobat de seful structurii de politie emitente la data de " +
+        requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
+                "Aprobat de seful structurii de politie emitente la data de " +
                 requestToApprove.getStructureChiefAppAt().format(dateTimeFormatter));
         requestRepo.save(requestToApprove);
     }
