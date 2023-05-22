@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface DepartmentRepo extends JpaRepository<Department, Long> {
 
-    List<Department> findByPoliceStructureId(Long id);
+    List<Department> findByPoliceStructureSubunitId(Long id);
 }

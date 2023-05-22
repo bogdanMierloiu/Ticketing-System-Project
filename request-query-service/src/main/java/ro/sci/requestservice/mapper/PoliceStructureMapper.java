@@ -19,4 +19,3 @@ public interface PoliceStructureMapper {
 
     List<PoliceStructureResponse> map(List<PoliceStructure> policeStructures);
 }
-

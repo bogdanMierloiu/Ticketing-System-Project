@@ -1,16 +1,19 @@
-package ro.sci.requestservice.dto;
+package ro.sci.requestweb.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class PolicemanResponse {
 
     private Long id;
-
 
     private String firstName;
 
@@ -18,9 +21,7 @@ public class PolicemanResponse {
 
     private String lastName;
 
-
     private String personalNumber;
-
 
     private String certificate;
 
@@ -28,20 +29,15 @@ public class PolicemanResponse {
 
     private LocalDate certificateValidUntil;
 
-
     private String phoneNumber;
 
     private String phoneNumberPolice;
 
     private String email;
 
-
     private RankResponse rank;
 
-
     private PoliceStructureResponse policeStructure;
-
-    private PoliceStructureSubunitResponse policeStructureSubunit;
 
     private DepartmentResponse department;
 }

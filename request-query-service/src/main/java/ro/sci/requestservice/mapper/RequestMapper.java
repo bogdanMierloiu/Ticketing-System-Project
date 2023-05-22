@@ -31,4 +31,3 @@ public interface RequestMapper {
     @Mapping(source = "requestType", target = "requestTypeResponse")
     List<RequestResponse> map(List<Request> requests);
 }
-

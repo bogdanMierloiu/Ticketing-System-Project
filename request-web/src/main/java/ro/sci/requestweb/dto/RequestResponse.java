@@ -1,17 +1,19 @@
-package ro.sci.requestservice.dto;
+package ro.sci.requestweb.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import ro.sci.requestservice.model.Status;
+import lombok.*;
 
 @Data
 @Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class RequestResponse {
 
     private Long id;
 
+    @ToString.Exclude
     private PolicemanResponse policemanResponse;
 
+    @ToString.Exclude
     private RequestTypeResponse requestTypeResponse;
 
     private Status status;

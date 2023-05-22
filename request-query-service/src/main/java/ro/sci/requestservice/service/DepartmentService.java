@@ -21,8 +21,8 @@ public class DepartmentService {
     private final DepartmentMapper departmentMapper;
 
 
-    public List<DepartmentResponse> getByPoliceStructureId(Long structureId) {
-        return departmentMapper.map(departmentRepo.findByPoliceStructureId(structureId));
+    public List<DepartmentResponse> getBySubunitId(Long subunitId) {
+        return departmentMapper.map(departmentRepo.findByPoliceStructureSubunitId(subunitId));
     }
 
 

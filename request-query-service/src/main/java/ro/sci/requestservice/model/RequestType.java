@@ -1,15 +1,16 @@
 package ro.sci.requestservice.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
 @Builder
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestType {
@@ -21,8 +22,6 @@ public class RequestType {
     private String requestName;
 
     @OneToMany(mappedBy = "requestType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    @ToString.Exclude
     private List<Request> requests;
 
 

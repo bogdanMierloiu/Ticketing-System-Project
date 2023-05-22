@@ -1,13 +1,15 @@
 package ro.sci.requestservice.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class PoliceStructure {
     private String structureName;
 
     @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Department> departments;
+    private List<PoliceStructureSubunit> policeStructureSubunits;
 
     @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Policeman> policemen;
