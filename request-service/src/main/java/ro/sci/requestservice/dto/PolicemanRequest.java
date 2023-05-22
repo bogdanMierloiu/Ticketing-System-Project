@@ -13,6 +13,8 @@ public class PolicemanRequest {
     @NotBlank
     private String firstName;
 
+    private String firstNameSecondary;
+
     @NotBlank
     private String lastName;
 

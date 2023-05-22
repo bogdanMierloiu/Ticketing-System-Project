@@ -12,6 +12,7 @@ public class PolicemanResponse {
 
     private String firstName;
 
+    private String firstNameSecondary;
 
     private String lastName;
 

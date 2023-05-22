@@ -37,7 +37,7 @@ public class RequestService {
         Request request = requestMapper.map(accountRequest);
         Policeman policeman = policemanService.add(accountRequest.getPolicemanRequest());
         request.setPoliceman(policeman);
-        request.setStatus(Status.OPEN);
+        request.setStatus(Status.Deschisa);
         request.setObservation(accountRequest.getObservation());
         request.setRequestType(getRequestTypeById(accountRequest.getRequestTypeId()));
         request.setRequestStructRegNo(accountRequest.getRequestStructRegNo());

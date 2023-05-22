@@ -1,7 +1,6 @@
 package ro.sci.requestservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +21,9 @@ public class Policeman {
 
     @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
+    private String firstNameSecondary;
 
     @Column(nullable = false)
     private String lastName;

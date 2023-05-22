@@ -36,7 +36,8 @@
     </div>
     <div>
         <label>Prenume:</label>
-        <span class="field-value" th:text="${request.policemanResponse.firstName}"></span>
+        <span class="field-value"
+              th:text="${request.policemanResponse.firstName + ' ' + request.policemanResponse.firstNameSecondary}"></span>
     </div>
     <div>
         <label>CNP:</label>

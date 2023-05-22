@@ -43,10 +43,17 @@
                         <input id="lastName" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.lastName}" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
-                    <div class="mb-3">
-                        <label for="firstName" class="form-label">Prenume:</label>
-                        <input id="firstName" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.firstName}" required>
-                        <div class="invalid-feedback">Campul este obligatoriu.</div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">Prenume:</label>
+                            <input id="firstName" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.firstName}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="firstNameSecondary" class="form-label">Al doilea prenume:</label>
+                            <input id="firstNameSecondary" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.firstNameSecondary}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="personalNumber" class="form-label">CNP:</label>

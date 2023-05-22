@@ -44,7 +44,7 @@
                 <span th:text="${policeman.rank.rankName}"></span>
             </td>
             <td>
-                <span th:text="${policeman.lastName + ' ' + policeman.firstName}"></span>
+                <span th:text="${policeman.lastName + ' ' + policeman.firstName + ' ' + policeman.firstNameSecondary}"></span>
             </td>
             <td>
                 <span th:text="${policeman.personalNumber}"></span>
@@ -64,12 +64,12 @@
             <td>
                 <span th:text="${policeman.department.departmentName}"></span>
             </td>
-<!--            <td>-->
-<!--                <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
-<!--                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
-<!--                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza departamente</button>-->
-<!--                </form>-->
-<!--            </td>-->
+            <!--            <td>-->
+            <!--                <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
+            <!--                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
+            <!--                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza departamente</button>-->
+            <!--                </form>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>
