@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ro.sci.ticketweb.dto.DepartmentRequest;
 import ro.sci.ticketweb.dto.DepartmentResponse;
 import ro.sci.ticketweb.dto.PoliceStructureRequest;
 import ro.sci.ticketweb.service.*;
@@ -65,6 +66,21 @@ public class AdminWebController {
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("policeStructureId") Long policeStructureId) {
         DepartmentResponse[] departments = departmentService.getByPoliceStructure(policeStructureId);
         return ResponseEntity.ok(Arrays.asList(departments));
+    }
+
+    @GetMapping("/add-department-form/{policeStructureId}")
+    public String addDepartmentForm(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+        model.addAttribute("departmentRequest", new DepartmentRequest());
+        model.addAttribute("policeStructure", policeStructureService.getById(policeStructureId));
+        return "add-department";
+    }
+
+    @PostMapping("/add-department")
+    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+        departmentService.addDepartment(departmentRequest);
+        model.addAttribute("policeStructure", policeStructureService.getById(departmentRequest.getPoliceStructureId()));
+        model.addAttribute("departments", departmentService.getByPoliceStructure(departmentRequest.getPoliceStructureId()));
+        return "departments";
     }
 
 

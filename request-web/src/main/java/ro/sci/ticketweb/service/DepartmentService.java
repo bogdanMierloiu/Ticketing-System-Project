@@ -1,13 +1,11 @@
 package ro.sci.ticketweb.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import ro.sci.ticketweb.dto.DepartmentRequest;
 import ro.sci.ticketweb.dto.DepartmentResponse;
 import ro.sci.ticketweb.dto.PoliceStructureRequest;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +18,15 @@ public class DepartmentService {
                 .uri("lb://request-query-service/api/v2/department/find/{policeStructureId}", policeStructureId)
                 .retrieve()
                 .bodyToMono(DepartmentResponse[].class)
+                .block();
+    }
+
+    public void addDepartment(DepartmentRequest departmentRequest) {
+        webClientBuilder.build().post()
+                .uri("lb://request-service/api/v1/department")
+                .bodyValue(departmentRequest)
+                .retrieve()
+                .toBodilessEntity()
                 .block();
     }
 
