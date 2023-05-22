@@ -12,7 +12,7 @@ import ro.sci.requestservice.service.PoliceStructureSubunitService;
 
 
 @RestController
-@RequestMapping("api/v1/police-structure")
+@RequestMapping("api/v1/police-structure-subunit")
 @RequiredArgsConstructor
 public class PoliceStructureSubunitController {
 
