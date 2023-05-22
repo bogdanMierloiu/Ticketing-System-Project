@@ -32,8 +32,10 @@ public class PolicemanRequest {
     @NotBlank
     private LocalDate certificateValidUntil;
 
+        private String phoneNumber;
+
     @NotBlank
-    private String phoneNumber;
+    private String phoneNumberPolice;
 
     @NotBlank
     private String email;

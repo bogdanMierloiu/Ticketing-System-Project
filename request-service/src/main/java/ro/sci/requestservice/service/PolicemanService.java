@@ -33,6 +33,7 @@ public class PolicemanService {
         policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
         policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
         policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
+        policeman.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
         policeman.setEmail(policemanRequest.getEmail());
         policeman.setRank(getRankById(policemanRequest.getRankId()));
         policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
@@ -53,7 +54,7 @@ public class PolicemanService {
         );
     }
 
-    private Department getDepartmentById(Long departmentId){
+    private Department getDepartmentById(Long departmentId) {
         return departmentRepo.findById(departmentId).orElseThrow(
                 () -> new NotFoundException("The department with id " + departmentId + " not found")
         );

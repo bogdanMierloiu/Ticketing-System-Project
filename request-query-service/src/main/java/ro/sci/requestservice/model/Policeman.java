@@ -39,8 +39,10 @@ public class Policeman {
     @Column(nullable = false)
     private LocalDate certificateValidUntil;
 
-    @Column(nullable = false)
     private String phoneNumber;
+
+    @Column(nullable = false)
+    private String phoneNumberPolice;
 
     private String email;
 

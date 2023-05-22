@@ -31,6 +31,7 @@ public class PolicemanResponse {
 
     private String phoneNumber;
 
+    private String phoneNumberPolice;
 
     private String email;
 

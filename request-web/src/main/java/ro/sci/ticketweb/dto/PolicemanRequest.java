@@ -24,8 +24,10 @@ public class PolicemanRequest {
     @NotBlank
     private String lastName;
 
-    @NotBlank
     private String personalNumber;
+
+    @NotBlank
+    private String phoneNumberPolice;
 
     @NotBlank
     private String certificate;
