@@ -15,13 +15,16 @@ public class PolicemanResponse {
 
     private Long id;
 
+
     private String firstName;
 
     private String firstNameSecondary;
 
     private String lastName;
 
+
     private String personalNumber;
+
 
     private String certificate;
 
@@ -29,15 +32,20 @@ public class PolicemanResponse {
 
     private LocalDate certificateValidUntil;
 
+
     private String phoneNumber;
 
     private String phoneNumberPolice;
 
     private String email;
 
+
     private RankResponse rank;
 
+
     private PoliceStructureResponse policeStructure;
+
+    private PoliceStructureSubunitResponse policeStructureSubunit;
 
     private DepartmentResponse department;
 }

@@ -24,10 +24,17 @@ public class PoliceStructureSubunitController {
         return ResponseEntity.ok(policeStructureSubunitService.getAllSubunitStructures());
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(policeStructureSubunitService.findById(id));
+
+    @GetMapping("/find/{policeStructureId}")
+    public ResponseEntity<List<PoliceStructureSubunitResponse>> findByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId){
+        return ResponseEntity.ok(policeStructureSubunitService.getByPoliceStructure(policeStructureId));
     }
+
+gi
+//    @GetMapping("/find/{id}")
+//    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("id") Long id) {
+//        return ResponseEntity.ok(policeStructureSubunitService.findById(id));
+//    }
 
 
 }

@@ -26,6 +26,10 @@ public class PoliceStructureSubunitService {
         return policeStructureSubunitMapper.map(allSubunitStructures);
     }
 
+    public List<PoliceStructureSubunitResponse> getByPoliceStructure(Long policeStructureId) {
+        return policeStructureSubunitMapper.map(policeStructureSubunitRepo.findByPoliceStructureId(policeStructureId));
+    }
+
     public PoliceStructureSubunitResponse findById(Long id) {
         return policeStructureSubunitMapper.map(policeStructureSubunitRepo.findById(id).orElseThrow(
                 () -> new NotFoundException("The police subunit structure with id " + id + " not found")

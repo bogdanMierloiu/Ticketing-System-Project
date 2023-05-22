@@ -1,6 +1,5 @@
 package ro.sci.requestweb.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class DepartmentRequest {
+public class PoliceStructureSubunitResponse {
 
     private Long id;
 
-    @NotBlank
-    private String departmentName;
+    private String subunitName;
 
-    @NotBlank
-    private Long policeStructureSubunitId;
+
+
+
+
 }

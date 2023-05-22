@@ -1,6 +1,9 @@
 package ro.sci.requestweb.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder
@@ -10,10 +13,8 @@ public class RequestResponse {
 
     private Long id;
 
-    @ToString.Exclude
     private PolicemanResponse policemanResponse;
 
-    @ToString.Exclude
     private RequestTypeResponse requestTypeResponse;
 
     private Status status;

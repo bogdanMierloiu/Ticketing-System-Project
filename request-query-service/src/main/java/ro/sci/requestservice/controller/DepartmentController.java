@@ -20,7 +20,7 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping("/find/{subunitId}")
-    public ResponseEntity<List<DepartmentResponse>> findByPoliceStructure(@PathVariable("subunitId") Long subunitId) {
+    public ResponseEntity<List<DepartmentResponse>> findBySubunit(@PathVariable("subunitId") Long subunitId) {
         return ResponseEntity.ok(departmentService.getBySubunitId(subunitId));
     }
 

@@ -17,38 +17,41 @@ public class PolicemanRequest {
     private Long id;
 
     @NotBlank
-    private String firstName;
+    private String firstName; //
 
-    private String firstNameSecondary;
-
-    @NotBlank
-    private String lastName;
-
-    private String personalNumber;
+    private String firstNameSecondary; //
 
     @NotBlank
-    private String phoneNumberPolice;
+    private String lastName;  //
 
     @NotBlank
-    private String certificate;
+    private String personalNumber; //
 
     @NotBlank
-    private LocalDate certificateValidFrom;
+    private String certificate; //
 
     @NotBlank
-    private LocalDate certificateValidUntil;
+    private LocalDate certificateValidFrom; //
 
     @NotBlank
-    private String phoneNumber;
+    private LocalDate certificateValidUntil;   //
+
+    private String phoneNumber;  //
 
     @NotBlank
-    private String email;
+    private String phoneNumberPolice;  //
+
+    @NotBlank
+    private String email; //
 
     @NotBlank
     private Long rankId;
 
     @NotBlank
     private Long policeStructureId;
+
+    @NotBlank
+    private Long policeStructureSubunitId;
 
     @NotBlank
     private Long departmentId;
