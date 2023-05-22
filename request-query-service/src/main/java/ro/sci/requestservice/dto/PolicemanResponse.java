@@ -3,6 +3,8 @@ package ro.sci.requestservice.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class PolicemanResponse {
@@ -21,6 +23,10 @@ public class PolicemanResponse {
 
 
     private String certificate;
+
+    private LocalDate certificateValidFrom;
+
+    private LocalDate certificateValidUntil;
 
 
     private String phoneNumber;

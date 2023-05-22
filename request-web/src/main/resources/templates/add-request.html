@@ -60,11 +60,27 @@
                         <input id="personalNumber" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.personalNumber}" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
-                    <div class="mb-3">
-                        <label for="certificate" class="form-label">Autorizatie serie/nr:</label>
-                        <input id="certificate" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.certificate}" required>
-                        <div class="invalid-feedback">Campul este obligatoriu.</div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="certificate" class="form-label">Autorizatie serie/nr:</label>
+                            <input id="certificate" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.certificate}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="certificateValidFrom" class="form-label">Valabila de la:</label>
+                            <input id="certificateValidFrom" type="date" class="form-control" th:field="*{accountRequest.policemanRequest.certificateValidFrom}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="certificateValidUntil" class="form-label">Valabila pana la:</label>
+                            <input id="certificateValidUntil" type="date" class="form-control" th:field="*{accountRequest.policemanRequest.certificateValidUntil}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
                     </div>
+
+
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">Nr.de telefon:</label>
                         <input id="phoneNumber" type="text" class="form-control" th:field="*{accountRequest.policemanRequest.phoneNumber}" required>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,12 @@ public class Policeman {
 
     @Column(nullable = false)
     private String certificate;
+
+    @Column(nullable = false)
+    private LocalDate certificateValidFrom;
+
+    @Column(nullable = false)
+    private LocalDate certificateValidUntil;
 
     @Column(nullable = false)
     private String phoneNumber;

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @RequiredArgsConstructor
@@ -22,6 +24,10 @@ public class PolicemanResponse {
     private String personalNumber;
 
     private String certificate;
+
+    private LocalDate certificateValidFrom;
+
+    private LocalDate certificateValidUntil;
 
     private String phoneNumber;
 

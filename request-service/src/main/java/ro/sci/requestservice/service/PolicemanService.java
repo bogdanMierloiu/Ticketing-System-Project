@@ -30,6 +30,8 @@ public class PolicemanService {
         policeman.setLastName(policemanRequest.getLastName().toUpperCase());
         policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
         policeman.setCertificate(policemanRequest.getCertificate());
+        policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
+        policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
         policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
         policeman.setEmail(policemanRequest.getEmail());
         policeman.setRank(getRankById(policemanRequest.getRankId()));

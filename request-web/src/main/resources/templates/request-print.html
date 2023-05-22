@@ -46,6 +46,10 @@
     <div>
         <label>Autorizatie secret:</label>
         <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
+        <label>Valabila de la:</label>
+        <span class="field-value" th:text="${request.policemanResponse.certificateValidFrom}"></span>
+        <label>pana la:</label>
+        <span class="field-value" th:text="${request.policemanResponse.certificateValidUntil}"></span>
     </div>
     <div>
         <label>Nr. de telefon:</label>
