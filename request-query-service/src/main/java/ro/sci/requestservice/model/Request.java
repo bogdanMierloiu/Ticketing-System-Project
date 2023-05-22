@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Builder
@@ -48,5 +50,10 @@ public class Request {
     @ManyToOne(fetch = FetchType.LAZY)
     private ItSpecialist itSpecialist;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime structureChiefAppAt;
+    private LocalDateTime securityStructAppAt;
+    private LocalDateTime itChiefAppAt;
+    private LocalDateTime solvedAt;
 
 }

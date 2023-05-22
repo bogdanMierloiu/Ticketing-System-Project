@@ -24,7 +24,7 @@ public class RequestService {
 
 
     public List<RequestResponse> getAllRequests() {
-        List<Request> requests = requestRepo.findAll();
+        List<Request> requests = requestRepo.findAllOrderByCreatedAtDesc();
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
