@@ -55,6 +55,9 @@ public class Policeman {
     private PoliceStructure policeStructure;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    private PoliceStructureSubunit policeStructureSubunit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
 
     @OneToMany(mappedBy = "policeman", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

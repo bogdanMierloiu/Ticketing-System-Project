@@ -11,7 +11,7 @@ public class DepartmentResponse {
 
     private String departmentName;
 
-    private Long policeStructureId;
+    private PoliceStructureSubunitResponse policeStructureSubunit;
 
 
 }

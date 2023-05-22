@@ -27,7 +27,9 @@ public class Department {
     private List<Policeman> policemen;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private PoliceStructure policeStructure;
+    private PoliceStructureSubunit policeStructureSubunit;
 
 
 }
+
+

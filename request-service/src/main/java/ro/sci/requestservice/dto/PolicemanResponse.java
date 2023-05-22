@@ -11,17 +11,13 @@ public class PolicemanResponse {
 
     private Long id;
 
-
     private String firstName;
 
     private String firstNameSecondary;
 
-
     private String lastName;
 
-
     private String personalNumber;
-
 
     private String certificate;
 
@@ -35,12 +31,11 @@ public class PolicemanResponse {
 
     private String email;
 
-
     private RankResponse rank;
-
 
     private Long policeStructureId;
 
+    private Long policeStructureSubunitId;
 
     private Long departmentId;
 }

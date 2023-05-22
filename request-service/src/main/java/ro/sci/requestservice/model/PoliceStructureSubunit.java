@@ -13,21 +13,20 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PoliceStructure {
-
-
+public class PoliceStructureSubunit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String structureName;
+    private String subunitName;
 
-    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PoliceStructureSubunit> policeStructureSubunits;
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Department> departments;
 
-    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Policeman> policemen;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PoliceStructure policeStructure;
 }

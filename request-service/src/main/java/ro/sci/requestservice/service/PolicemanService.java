@@ -4,14 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.sci.requestservice.dto.PolicemanRequest;
 import ro.sci.requestservice.exception.NotFoundException;
-import ro.sci.requestservice.model.Department;
-import ro.sci.requestservice.model.PoliceStructure;
-import ro.sci.requestservice.model.Policeman;
-import ro.sci.requestservice.model.Rank;
-import ro.sci.requestservice.repository.DepartmentRepo;
-import ro.sci.requestservice.repository.PoliceStructureRepo;
-import ro.sci.requestservice.repository.PolicemanRepo;
-import ro.sci.requestservice.repository.RankRepo;
+import ro.sci.requestservice.model.*;
+import ro.sci.requestservice.repository.*;
 
 
 @Service
@@ -21,6 +15,7 @@ public class PolicemanService {
     private final PolicemanRepo policemanRepo;
     private final RankRepo rankRepo;
     private final PoliceStructureRepo policeStructureRepo;
+    private final PoliceStructureSubunitRepo policeStructureSubunitRepo;
     private final DepartmentRepo departmentRepo;
 
     public Policeman add(PolicemanRequest policemanRequest) {
@@ -37,6 +32,7 @@ public class PolicemanService {
         policeman.setEmail(policemanRequest.getEmail());
         policeman.setRank(getRankById(policemanRequest.getRankId()));
         policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
+        policeman.setPoliceStructureSubunit(getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId()));
         policeman.setDepartment(getDepartmentById(policemanRequest.getDepartmentId()));
 
         return policemanRepo.save(policeman);
@@ -54,9 +50,17 @@ public class PolicemanService {
         );
     }
 
+    private PoliceStructureSubunit getPoliceStructureSubunitById(Long policeStructureSubunitId) {
+        return policeStructureSubunitRepo.findById(policeStructureSubunitId).orElseThrow(
+                () -> new NotFoundException("The police structure subunit with id " + policeStructureSubunitId + " not found!")
+        );
+    }
+
     private Department getDepartmentById(Long departmentId) {
         return departmentRepo.findById(departmentId).orElseThrow(
                 () -> new NotFoundException("The department with id " + departmentId + " not found")
         );
     }
+
+
 }
