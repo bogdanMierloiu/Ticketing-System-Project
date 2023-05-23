@@ -30,7 +30,7 @@ public class PoliceStructureSubunitController {
         return ResponseEntity.ok(policeStructureSubunitService.getByPoliceStructure(policeStructureId));
     }
 
-gi
+
 //    @GetMapping("/find/{id}")
 //    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("id") Long id) {
 //        return ResponseEntity.ok(policeStructureSubunitService.findById(id));

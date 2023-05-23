@@ -64,27 +64,19 @@ public class AdminWebController {
         return "departments";
     }
 
-
-
-
+    //SCRIPT CALL
     @GetMapping("/show-subunits-script/{policeStructureId}")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId) {
         PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         return ResponseEntity.ok(Arrays.asList(subunits));
     }
 
-
-
-
-
+    //SCRIPT CALL
     @GetMapping("/show-departments-script/{policeStructureId}")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("policeStructureId") Long policeStructureId) {
         DepartmentResponse[] departments = departmentService.getByPoliceStructure(policeStructureId);
         return ResponseEntity.ok(Arrays.asList(departments));
     }
-
-
-
 
 
 

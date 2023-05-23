@@ -1,9 +1,9 @@
 function populateDepartments() {
-    var selectedStructureId = document.getElementById("policeStructure").value;
+    var selectedSubunitStructureId = document.getElementById("structuresDropdown").value;
 
-    if (selectedStructureId !== "") {
+    if (selectedSubunitStructureId !== "") {
         // Realizează o cerere către server pentru a obține departamentele
-        fetch("/request/admin/show-departments-script/" + selectedStructureId)
+        fetch("/request/admin/show-departments-script/" + selectedSubunitStructureId)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -24,7 +24,6 @@ function populateDepartments() {
                     departmentDropdown.appendChild(option);
                 });
 
-
                 // Actualizează valoarea câmpului policemanRequest.departmentId cu id-ul departamentului selectat
                 let selectedDepartmentId = departmentDropdown.value;
                 document.getElementById("departmentDropdown").setAttribute("th:value", selectedDepartmentId);
@@ -36,39 +35,41 @@ function populateDepartments() {
 }
 
 
+
 function populateSubunits() {
     var selectedStructureId = document.getElementById("policeStructure").value;
 
     if (selectedStructureId !== "") {
-        // Realizează o cerere către server pentru a obține departamentele
+        // Realizează o cerere către server pentru a obține subunitățile
         fetch("/request/admin/show-subunits-script/" + selectedStructureId)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
                 let structuresDropdown = document.getElementById("structuresDropdown");
-                departmentDropdown.innerHTML = "";
+                let departmentDropdown = document.getElementById("structuresDropdown"); // Modificați "departmentDropdown" în "structuresDropdown"
+
+                structuresDropdown.innerHTML = ""; // Modificați "departmentDropdown" în "structuresDropdown"
 
                 let defaultOption = document.createElement("option");
                 defaultOption.value = "";
-                defaultOption.text = "Selectați subunitatea";
-                departmentDropdown.appendChild(defaultOption);
+                defaultOption.text = "Selectați subunitatea de poliție";
+                structuresDropdown.appendChild(defaultOption); // Modificați "departmentDropdown" în "structuresDropdown"
 
-                data.map(function(department) {
+                data.map(function(subunit) { // Modificați "structure" în "subunit"
                     let option = document.createElement("option");
-                    option.value = department.id;
-                    option.text = department.departmentName;
+                    option.value = subunit.id; // Modificați "department.id" în "subunit.id"
+                    option.text = subunit.subunitName; // Modificați "department.departmentName" în "subunit.subunitName"
                     return option;
                 }).forEach(function(option) {
-                    departmentDropdown.appendChild(option);
+                    structuresDropdown.appendChild(option); // Modificați "departmentDropdown" în "structuresDropdown"
                 });
 
-
-                // Actualizează valoarea câmpului policemanRequest.departmentId cu id-ul departamentului selectat
-                let selectedStructureId = structuresDropdown.value;
-                document.getElementById("structuresDropdown").setAttribute("th:value", selectedStructureId);
+                // Actualizează valoarea câmpului policemanRequest.policeStructureSubunitId cu id-ul subunității selectate
+                let selectedStructureSubunitId = structuresDropdown.value; // Modificați "selectedStructureId" în "selectedStructureSubunitId"
+                document.getElementById("structuresDropdown").setAttribute("th:value", selectedStructureSubunitId); // Modificați "departmentDropdown" în "structuresDropdown"
             })
             .catch(error => {
-                console.error("Eroare la obținerea subunitatilor:", error);
+                console.error("Eroare la obținerea subunităților:", error);
             });
     }
 }

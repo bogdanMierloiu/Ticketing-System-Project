@@ -10,8 +10,7 @@
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-    
-    <div><p>TEST</p></div>
+
 
 <div class="content-wrap">
 
@@ -32,7 +31,7 @@
     </div>
 
     <div th:if="${not #lists.isEmpty(requests)}" class="table-responsive text-center">
-        <table class="table table-hover table-white-text">
+        <table class="table table-hover w-100">
             <thead>
             <tr>
                 <th>Tip solicitare</th>
@@ -97,6 +96,7 @@
         </table>
     </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

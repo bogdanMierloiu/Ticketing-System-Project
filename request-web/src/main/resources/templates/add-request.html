@@ -20,7 +20,7 @@
                 <h2 class="text-center mb-4">Formular de solicitare</h2>
                 <form class="needs-validation" th:action="@{/request/add-request}" method="post">
                     <div class="mb-3">
-                        <label for="requestType" class="form-label font-bold">Tipul solicitarii:</label>
+                        <label for="requestType" class="form-label font-bold" style="font-weight: bold;">Tipul solicitarii:</label>
                         <select id="requestType" class="form-select" th:field="*{accountRequest.requestTypeId}"
                                 required>
                             <option value="">Selectați tipul solicitarii</option>
@@ -30,7 +30,7 @@
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label font-bold">Informatii politist</label>
+                        <label class="form-label" style="font-weight: bold;">Informatii politist</label>
                     </div>
                     <div class="mb-3">
                         <label for="rankId" class="form-label">Grad profesional:</label>
@@ -57,7 +57,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="firstNameSecondary" class="form-label">Al doilea prenume:</label>
                             <input id="firstNameSecondary" type="text" class="form-control"
-                                   th:field="*{accountRequest.policemanRequest.firstNameSecondary}" required>
+                                   th:field="*{accountRequest.policemanRequest.firstNameSecondary}">
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
 
                     <!-- Police structure -->
                     <div class="mb-3">
-                        <label for="policeStructure" class="form-label">Structura de poliție:</label>
+                        <label for="policeStructure" class="form-label" style="font-weight: bold;">Structura de poliție:</label>
                         <select id="policeStructure" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.policeStructureId}"
                                 onchange="populateSubunits()" required>
@@ -127,8 +127,8 @@
                     <!-- Subunit structure -->
 
                     <div class="mb-3">
-                        <label for="policeStructureSubunit" class="form-label">Subunitatea de poliție:</label>
-                        <select id="policeStructureSubunit" class="form-select"
+                        <label for="structuresDropdown" class="form-label" style="font-weight: bold;">Subunitatea de poliție:</label>
+                        <select id="structuresDropdown" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.policeStructureSubunitId}"
                                 onchange="populateDepartments()" required>
                             <option value="">Selectați subunitatea de poliție</option>
@@ -140,7 +140,7 @@
 
                     <!-- Department -->
                     <div class="mb-3">
-                        <label for="departmentDropdown" class="form-label">Departament:</label>
+                        <label for="departmentDropdown" class="form-label" style="font-weight: bold;">Departament:</label>
                         <select id="departmentDropdown" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.departmentId}" required>
                             <option value="">Selectați departamentul</option>
@@ -155,13 +155,13 @@
 
 
                     <div class="mb-3">
-                        <label class="form-label">Request Structure Registration Number:</label>
+                        <label class="form-label" style="font-weight: bold;">Nr.de inregistrare din evidentele structurii solicitante:</label>
                         <input type="text" class="form-control" th:field="*{accountRequest.requestStructRegNo}"
                                required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Observation:</label>
+                        <label class="form-label" style="font-weight: bold;">Observatii:</label>
                         <textarea class="form-control" th:field="*{accountRequest.observation}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-success">Adauga</button>
