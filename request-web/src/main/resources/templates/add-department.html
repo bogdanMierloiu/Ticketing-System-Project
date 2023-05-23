@@ -21,13 +21,13 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h2 class="text-center mb-4" th:text="${policeStructure.structureName}"></h2>
-                <form class="needs-validation" th:action="@{/request/admin/add-department}" method="post" novalidate>
+                <h2 class="text-center mb-4" th:text="${subunit.subunitName}"></h2>
+                <form class="needs-validation" th:action="@{/request/admin/add-department}" method="post">
                     <div class="mb-3">
                         <label class="form-label">Denumire departament:</label>
                         <input type="text" class="form-control" th:field="*{departmentRequest.departmentName}" required>
                     </div>
-                    <input type="hidden" name="policeStructureId" th:value="${policeStructure.id}">
+                    <input type="hidden" name="policeStructureSubunitId" th:value="${subunit.id}">
                     <button type="submit" class="btn btn-success">Adauga</button>
                 </form>
             </div>

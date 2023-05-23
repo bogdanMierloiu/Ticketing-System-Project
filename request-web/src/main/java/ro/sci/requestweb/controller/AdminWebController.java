@@ -76,6 +76,20 @@ public class AdminWebController {
         return "subunits";
     }
 
+    @GetMapping("/add-department-form/{subunitId}")
+    public String addDepartmentForm(@PathVariable("subunitId") Long subunitId, Model model) {
+        model.addAttribute("departmentRequest", new DepartmentRequest());
+        model.addAttribute("subunit", policeStructureSubunitService.findById(subunitId));
+        return "add-department";
+    }
+
+    @PostMapping("/add-department")
+    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+        departmentService.addDepartment(departmentRequest);
+        model.addAttribute("subunit", policeStructureSubunitService.findById(departmentRequest.getPoliceStructureSubunitId()));
+        model.addAttribute("departments", departmentService.getBySubunit(departmentRequest.getPoliceStructureSubunitId()));
+        return "departments";
+    }
 
     @GetMapping("/show-departments/{subunitId}")
     public String viewDepartmentsForSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
@@ -99,20 +113,7 @@ public class AdminWebController {
     }
 
 
-    @GetMapping("/add-department-form/{policeStructureId}")
-    public String addDepartmentForm(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
-        model.addAttribute("departmentRequest", new DepartmentRequest());
-        model.addAttribute("policeStructure", policeStructureService.getById(policeStructureId));
-        return "add-department";
-    }
 
-//    @PostMapping("/add-department")
-//    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
-//        departmentService.addDepartment(departmentRequest);
-//        model.addAttribute("policeStructure", policeStructureService.getById(departmentRequest.getPoliceStructureSubunitId()));
-//        model.addAttribute("departments", departmentService.getByPoliceStructure(departmentRequest.getPoliceStructureSubunitId()));
-//        return "departments";
-//    }
 
 
     @GetMapping("/all-ranks")
