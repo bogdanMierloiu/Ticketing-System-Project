@@ -18,6 +18,11 @@
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
         </form>
     </div>
+    <div>
+        <form th:action="@{/request/admin/add-request-type-form}">
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga tip de solicitare</button>
+        </form>
+    </div>
 
     <div th:if="${#lists.isEmpty(requestTypes)}">
         <h5>Nu exista inregistrari</h5>

@@ -141,6 +141,18 @@ public class AdminWebController {
         return "request-types";
     }
 
+    @GetMapping("/add-request-type-form")
+    public String addRequestTypeForm() {
+        return "add-request-type";
+    }
+
+    @PostMapping("/add-request-type")
+    public String addRequestType(@ModelAttribute RequestTypeReq request, Model model){
+        requestTypeService.addRequestType(request);
+        model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+        return "request-types";
+    }
+
     // ----------------------------------  POLICEMEN ------------------------------------------------------
 
     @GetMapping("/all-policemen")
