@@ -19,6 +19,12 @@
         </form>
     </div>
 
+    <div>
+        <form th:action="@{/request/admin/add-specialist-form}">
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga lucrator SCI</button>
+        </form>
+    </div>
+
     <div th:if="${#lists.isEmpty(specialists)}">
         <h5>Nu exista inregistrari</h5>
     </div>

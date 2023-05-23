@@ -132,6 +132,18 @@ public class AdminWebController {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "it-specialists";
     }
+    @GetMapping("/add-specialist-form")
+    public String addSpecialistForm(Model model){
+        model.addAttribute("ranks", rankService.getAllRanks());
+        return "add-specialist-form";
+    }
+
+    @PostMapping("add-specialist")
+    public String addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model){
+        itSpecialistService.addSpecialist(request);
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "it-specialists";
+    }
 
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
 
