@@ -3,6 +3,7 @@ package ro.sci.requestweb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import ro.sci.requestweb.dto.PoliceStructureSubunitRequest;
 import ro.sci.requestweb.dto.PoliceStructureSubunitResponse;
 
 @Service
@@ -26,6 +27,17 @@ public class PoliceStructureSubunitService {
                 .bodyToMono(PoliceStructureSubunitResponse.class)
                 .block();
     }
+
+
+    public void addSubunitStructure(PoliceStructureSubunitRequest structureRequest) {
+        webClientBuilder.build().post()
+                .uri("lb://request-service/api/v1/police-structure-subunit")
+                .bodyValue(structureRequest)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
 
 
 }

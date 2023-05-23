@@ -46,6 +46,7 @@ public class AdminWebController {
     public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
         PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         model.addAttribute("subunits", subunits);
+        model.addAttribute("structure", policeStructureService.getById(policeStructureId));
         return "subunits";
     }
 
@@ -60,6 +61,21 @@ public class AdminWebController {
         model.addAttribute("structures", policeStructureService.getAllStructures());
         return "structures";
     }
+
+    @GetMapping("/add-subunit-form/{structureId}")
+    public String addSubunitForm(@PathVariable("structureId") Long structureId, Model model) {
+        model.addAttribute("structure", policeStructureService.getById(structureId));
+        return "add-subunit";
+    }
+
+    @PostMapping("/add-subunit")
+    public String addSubunit(@ModelAttribute PoliceStructureSubunitRequest structureRequest, Model model) {
+        policeStructureSubunitService.addSubunitStructure(structureRequest);
+        model.addAttribute("subunits", policeStructureSubunitService.getStructuresByPoliceStation(structureRequest.getPoliceStructureId()));
+        model.addAttribute("structure", policeStructureService.getById(structureRequest.getPoliceStructureId()));
+        return "subunits";
+    }
+
 
     @GetMapping("/show-departments/{subunitId}")
     public String viewDepartmentsForSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
