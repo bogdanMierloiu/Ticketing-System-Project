@@ -8,8 +8,20 @@ html, body {
 }
 
 .navbar {
-    background-color: #e9eafc !important;
+    background-color: #000000 !important;
 }
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin-right: 10px;
+}
+
+.justify-content-end {
+    margin-left: auto;
+} .
 
 .card {
     padding: 5px;
