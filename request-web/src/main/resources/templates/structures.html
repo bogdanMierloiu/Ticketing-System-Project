@@ -11,16 +11,15 @@
 </head>
 <body>
 
-
-<div class="content-wrap">
+<div class="container mt-5">
     <div>
         <form th:action="@{/request/admin}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Pagina admin</button>
         </form>
     </div>
     <div>
         <form th:action="@{/request/admin/add-structure-form}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Adauga structura de politie</button>
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga structura de politie</button>
         </form>
     </div>
 
@@ -31,7 +30,7 @@
         <table class="table table-hover table-white-text">
             <thead>
             <tr>
-                <th>Denumirea structura</th>
+                <th>Denumire structura de politie</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -42,9 +41,10 @@
                     <span th:text="${structure.structureName}"></span>
                 </td>
                 <td>
-                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">
+                    <form th:action="@{/request/admin/show-subunits/{policeStructureId}(policeStructureId=${structure.id})}">
                         <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza departamente</button>
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Afiseaza subunitatile de politie
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -52,6 +52,7 @@
         </table>
     </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

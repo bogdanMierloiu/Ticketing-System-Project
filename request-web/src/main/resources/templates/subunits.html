@@ -3,14 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Departamente</title>
+    <title>Subunitati de politie</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
-
 
 <div class="container mt-5">
     <div>
@@ -19,36 +18,39 @@
         </form>
     </div>
     <div>
-        <form th:action="@{/request/admin/add-department-form/{subunitId}(subunitId=${subunit.id})}">
-            <input type="hidden" name="policeStructureId" th:value="${subunit.id}">
-            <button class="btn btn-primary my-2 my-sm-0"d  type="submit">Adauga departament</button>
+        <form th:action="@{/request/admin/add-structure-form}">
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga structura de politie</button>
         </form>
     </div>
 
-    <h1 th:text="${subunit.subunitName}"></h1>
-
-    <div th:if="${#lists.isEmpty(departments)}">
+    <div th:if="${#lists.isEmpty(subunits)}">
         <h5>Nu exista inregistrari</h5>
     </div>
-    <div th:if="${not #lists.isEmpty(departments)}" class="table-responsive text-center">
+    <div th:if="${not #lists.isEmpty(subunits)}" class="table-responsive text-center">
         <table class="table table-hover table-white-text">
             <thead>
             <tr>
-                <th>Denumirea departament</th>
+                <th>Denumire subunitate de politie</th>
+                <th></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="department: ${departments}">
+            <tr th:each="subunit: ${subunits}">
                 <td>
-                    <span th:text="${department.departmentName}"></span>
+                    <span th:text="${subunit.subunitName}"></span>
+                </td>
+                <td>
+                    <form th:action="@{/request/admin/show-departments/{subunitId}(subunitId=${subunit.id})}">
+                        <input type="hidden" name="subunitId" th:value="${subunit.id}">
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Afiseaza departemntele de politie</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
-
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

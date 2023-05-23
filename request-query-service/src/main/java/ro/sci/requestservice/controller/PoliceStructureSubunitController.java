@@ -26,8 +26,13 @@ public class PoliceStructureSubunitController {
 
 
     @GetMapping("/find/{policeStructureId}")
-    public ResponseEntity<List<PoliceStructureSubunitResponse>> findByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId){
+    public ResponseEntity<List<PoliceStructureSubunitResponse>> findByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId) {
         return ResponseEntity.ok(policeStructureSubunitService.getByPoliceStructure(policeStructureId));
+    }
+
+    @GetMapping("/{subunitId}")
+    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("subunitId") Long subunitId) {
+        return ResponseEntity.ok(policeStructureSubunitService.findById(subunitId));
     }
 
 

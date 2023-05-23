@@ -19,7 +19,7 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    @GetMapping("/find/{subunitId}")
+    @GetMapping("/{subunitId}")
     public ResponseEntity<List<DepartmentResponse>> findBySubunit(@PathVariable("subunitId") Long subunitId) {
         return ResponseEntity.ok(departmentService.getBySubunitId(subunitId));
     }

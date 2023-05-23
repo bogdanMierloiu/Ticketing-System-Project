@@ -27,6 +27,7 @@ public class PoliceStructureSubunitService {
     }
 
     public List<PoliceStructureSubunitResponse> getByPoliceStructure(Long policeStructureId) {
+        List<PoliceStructureSubunit> testList = policeStructureSubunitRepo.findByPoliceStructureId(policeStructureId);
         return policeStructureSubunitMapper.map(policeStructureSubunitRepo.findByPoliceStructureId(policeStructureId));
     }
 

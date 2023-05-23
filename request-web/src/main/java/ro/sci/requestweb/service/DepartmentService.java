@@ -13,9 +13,9 @@ public class DepartmentService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public DepartmentResponse[] getByPoliceStructure(Long policeStructureId) {
+    public DepartmentResponse[] getBySubunit(Long subunitId) {
         return webClientBuilder.build().get()
-                .uri("lb://request-query-service/api/v2/department/find/{policeStructureId}", policeStructureId)
+                .uri("lb://request-query-service/api/v2/department/{subunitId}", subunitId)
                 .retrieve()
                 .bodyToMono(DepartmentResponse[].class)
                 .block();

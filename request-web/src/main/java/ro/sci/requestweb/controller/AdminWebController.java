@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ro.sci.requestweb.dto.DepartmentRequest;
-import ro.sci.requestweb.dto.DepartmentResponse;
-import ro.sci.requestweb.dto.PoliceStructureRequest;
-import ro.sci.requestweb.dto.PoliceStructureSubunitResponse;
+import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 
 import java.util.Arrays;
@@ -45,6 +42,13 @@ public class AdminWebController {
         return "structures";
     }
 
+    @GetMapping("/show-subunits/{policeStructureId}")
+    public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
+        model.addAttribute("subunits", subunits);
+        return "subunits";
+    }
+
     @GetMapping("/add-structure-form")
     public String addStructureForm() {
         return "add-structure";
@@ -57,10 +61,10 @@ public class AdminWebController {
         return "structures";
     }
 
-    @GetMapping("/show-departments/{policeStructureId}")
-    public String viewDepartmentsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
-        model.addAttribute("policeStructure", policeStructureService.getById(policeStructureId));
-        model.addAttribute("departments", departmentService.getByPoliceStructure(policeStructureId));
+    @GetMapping("/show-departments/{subunitId}")
+    public String viewDepartmentsForSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
+        model.addAttribute("subunit", policeStructureSubunitService.findById(subunitId));
+        model.addAttribute("departments", departmentService.getBySubunit(subunitId));
         return "departments";
     }
 
@@ -72,12 +76,11 @@ public class AdminWebController {
     }
 
     //SCRIPT CALL
-    @GetMapping("/show-departments-script/{policeStructureId}")
-    public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("policeStructureId") Long policeStructureId) {
-        DepartmentResponse[] departments = departmentService.getByPoliceStructure(policeStructureId);
+    @GetMapping("/show-departments-script/{subunitId}")
+    public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId) {
+        DepartmentResponse[] departments = departmentService.getBySubunit(subunitId);
         return ResponseEntity.ok(Arrays.asList(departments));
     }
-
 
 
     @GetMapping("/add-department-form/{policeStructureId}")
@@ -87,13 +90,13 @@ public class AdminWebController {
         return "add-department";
     }
 
-    @PostMapping("/add-department")
-    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
-        departmentService.addDepartment(departmentRequest);
-        model.addAttribute("policeStructure", policeStructureService.getById(departmentRequest.getPoliceStructureSubunitId()));
-        model.addAttribute("departments", departmentService.getByPoliceStructure(departmentRequest.getPoliceStructureSubunitId()));
-        return "departments";
-    }
+//    @PostMapping("/add-department")
+//    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+//        departmentService.addDepartment(departmentRequest);
+//        model.addAttribute("policeStructure", policeStructureService.getById(departmentRequest.getPoliceStructureSubunitId()));
+//        model.addAttribute("departments", departmentService.getByPoliceStructure(departmentRequest.getPoliceStructureSubunitId()));
+//        return "departments";
+//    }
 
 
     @GetMapping("/all-ranks")
