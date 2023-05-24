@@ -41,6 +41,39 @@ public class RequestService {
         );
     }
 
+    public List<RequestResponse> getAllByPolicemanId(Long id){
+        List<Request> requests = requestRepo.findAllByPolicemanId(id);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return requestResponses;
+    }
+
+    public List<RequestResponse> getAllByPolicemanName(String name){
+        String[] nameParts = name.split(" ");
+
+        String lastName = nameParts[0];
+        String firstName = "";
+        String firstNameSecondary = "";
+
+        if (nameParts.length > 1) {
+            firstName = nameParts[1];
+        }
+
+        if (nameParts.length > 2) {
+            firstNameSecondary = nameParts[2];
+        }
+        List<Request> requests = requestRepo.findAllByPolicemanName(lastName, firstName, firstNameSecondary);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return requestResponses;
+    }
+
 
     private RequestType getRequestTypeById(Long requestTypeId) {
         return requestTypeRepo.findById(requestTypeId).orElseThrow(

@@ -89,8 +89,8 @@
                  <span>
                      <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>
                      <span th:text="${' ' + request.getPolicemanResponse.lastName + ' '
-                         + request.getPolicemanResponse.firstName + ' '
-                         + request.getPolicemanResponse.firstNameSecondary}"></span>
+                                          + request.getPolicemanResponse.firstName
+                     + (request.getPolicemanResponse.firstNameSecondary != null ? ' ' + request.getPolicemanResponse.firstNameSecondary : '')}"></span>
                 </span>
             </td>
             <td>

@@ -20,9 +20,11 @@ public class PolicemanService {
 
     public Policeman add(PolicemanRequest policemanRequest) {
         Policeman policeman = new Policeman();
-        policeman.setFirstName(policemanRequest.getFirstName());
-        policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary());
-        policeman.setLastName(policemanRequest.getLastName());
+        policeman.setFirstName(policemanRequest.getFirstName().strip());
+        if (policemanRequest.getFirstNameSecondary() != null) {
+            policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().strip());
+        }
+        policeman.setLastName(policemanRequest.getLastName().strip());
         policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
         policeman.setCertificate(policemanRequest.getCertificate());
         policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
