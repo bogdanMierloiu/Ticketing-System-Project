@@ -52,6 +52,7 @@ public class RequestService {
                 obvToAdd);
 
         Request savedRequest = requestRepo.save(request);
+        policeman.getRequests().add(savedRequest);
         RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
         requestResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
 

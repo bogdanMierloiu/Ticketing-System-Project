@@ -60,10 +60,10 @@ public class RequestWebController {
     @GetMapping("/structure-chief-approve/{requestId}")
     public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
         requestService.structureChiefApprove(requestId);
+        String referer = request.getHeader("referer");
         model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + request.getRequestURL().toString();
+        return "redirect:" + referer;
     }
-
 
 
 }

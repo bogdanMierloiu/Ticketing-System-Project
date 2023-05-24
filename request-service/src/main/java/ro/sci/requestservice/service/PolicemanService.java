@@ -19,25 +19,30 @@ public class PolicemanService {
     private final DepartmentRepo departmentRepo;
 
     public Policeman add(PolicemanRequest policemanRequest) {
-        Policeman policeman = new Policeman();
-        policeman.setFirstName(policemanRequest.getFirstName().strip());
-        if (policemanRequest.getFirstNameSecondary() != null) {
-            policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().strip());
-        }
-        policeman.setLastName(policemanRequest.getLastName().strip());
-        policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
-        policeman.setCertificate(policemanRequest.getCertificate());
-        policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
-        policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
-        policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
-        policeman.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
-        policeman.setEmail(policemanRequest.getEmail());
-        policeman.setRank(getRankById(policemanRequest.getRankId()));
-        policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
-        policeman.setPoliceStructureSubunit(getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId()));
-        policeman.setDepartment(getDepartmentById(policemanRequest.getDepartmentId()));
+        Policeman policemanFromDB = policemanExists(policemanRequest);
+        if (policemanFromDB == null) {
+            Policeman policeman = new Policeman();
+            policeman.setFirstName(policemanRequest.getFirstName().strip());
+            if (policemanRequest.getFirstNameSecondary() != null) {
+                policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().strip());
+            }
+            policeman.setLastName(policemanRequest.getLastName().strip());
+            policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
+            policeman.setCertificate(policemanRequest.getCertificate());
+            policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
+            policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
+            policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
+            policeman.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
+            policeman.setEmail(policemanRequest.getEmail());
+            policeman.setRank(getRankById(policemanRequest.getRankId()));
+            policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
+            policeman.setPoliceStructureSubunit(getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId()));
+            policeman.setDepartment(getDepartmentById(policemanRequest.getDepartmentId()));
 
-        return policemanRepo.save(policeman);
+            return policemanRepo.save(policeman);
+        } else {
+            return policemanFromDB;
+        }
     }
 
     private Rank getRankById(Long rankId) {
@@ -62,6 +67,10 @@ public class PolicemanService {
         return departmentRepo.findById(departmentId).orElseThrow(
                 () -> new NotFoundException("The department with id " + departmentId + " not found")
         );
+    }
+
+    private Policeman policemanExists(PolicemanRequest policemanRequest) {
+        return policemanRepo.findByPersonalNumber(policemanRequest.getPersonalNumber());
     }
 
 

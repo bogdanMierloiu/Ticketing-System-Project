@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -61,7 +62,7 @@ public class Policeman {
     private Department department;
 
     @OneToMany(mappedBy = "policeman", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Request> requests;
+    private List<Request> requests = new ArrayList<>();
 
 
 }
