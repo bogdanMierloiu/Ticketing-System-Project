@@ -41,6 +41,7 @@ public class RequestService {
         request.setObservation(accountRequest.getObservation());
         request.setRequestType(getRequestTypeById(accountRequest.getRequestTypeId()));
         request.setRequestStructRegNo(accountRequest.getRequestStructRegNo());
+        request.setRegDateFromRequestStruct(accountRequest.getRegDateFromRequestStruct());
         request.setIsApprovedByStructureChief(false);
         request.setIsApprovedBySecurityStructure(false);
         request.setIsApprovedByITChief(false);

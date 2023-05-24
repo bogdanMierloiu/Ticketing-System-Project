@@ -12,7 +12,7 @@ function populateDepartments() {
 
                 let defaultOption = document.createElement("option");
                 defaultOption.value = "";
-                defaultOption.text = "Selectați departamentul";
+                defaultOption.text = "Selectati linia de munca";
                 departmentDropdown.appendChild(defaultOption);
 
                 data.map(function(department) {
@@ -52,7 +52,7 @@ function populateSubunits() {
 
                 let defaultOption = document.createElement("option");
                 defaultOption.value = "";
-                defaultOption.text = "Selectați subunitatea de poliție";
+                defaultOption.text = "Selectati subunitatea de politie";
                 structuresDropdown.appendChild(defaultOption); // Modificați "departmentDropdown" în "structuresDropdown"
 
                 data.map(function(subunit) { // Modificați "structure" în "subunit"
@@ -73,3 +73,21 @@ function populateSubunits() {
             });
     }
 }
+
+function setInitialDate(){
+    // Obține data curentă
+      var currentDate = new Date();
+
+    // Formatează data într-un format compatibil cu LocalDate din Java
+    var formattedDate = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' + ('0' + currentDate.getDate()).slice(-2);
+
+    // Setează valoarea câmpului de introducere a datei la data curentă
+      document.getElementById("regDateFromRequestStruct").value = formattedDate;
+}
+
+window.addEventListener("DOMContentLoaded", setInitialDate);
+
+
+
+
+

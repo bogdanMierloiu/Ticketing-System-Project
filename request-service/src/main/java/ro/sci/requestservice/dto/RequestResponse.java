@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import ro.sci.requestservice.model.Status;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class RequestResponse {
@@ -18,16 +20,27 @@ public class RequestResponse {
 
     private String observation;
 
+    // Request Structure
+
     private String requestStructRegNo;
+
+    private LocalDate regDateFromRequestStruct;
 
     private Boolean isApprovedByStructureChief;
 
+    // Security Structure
+
     private String securityStructRegNo;
+
+    private LocalDate regDateFromSecurityStruct;
 
     private Boolean isApprovedBySecurityStructure;
 
+    // IT Structure
+
     private String itStructRegNo;
 
-    private Boolean isApprovedByITChief;
+    private LocalDate regDateFromITStruct;
 
+    private Boolean isApprovedByITChief;
 }

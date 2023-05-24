@@ -20,7 +20,8 @@
                 <h2 class="text-center mb-4">Formular de solicitare</h2>
                 <form class="needs-validation" th:action="@{/request/add-request}" method="post">
                     <div class="mb-3">
-                        <label for="requestType" class="form-label font-bold" style="font-weight: bold;">Tipul solicitarii:</label>
+                        <label for="requestType" class="form-label font-bold" style="font-weight: bold;">Tipul
+                            solicitarii:</label>
                         <select id="requestType" class="form-select" th:field="*{accountRequest.requestTypeId}"
                                 required>
                             <option value="">Selectați tipul solicitarii</option>
@@ -71,7 +72,7 @@
                     <div class="mb-3">
                         <label for="certificate" class="form-label">Autorizatie serie/nr:</label>
                         <input id="certificate" type="text" class="form-control"
-                               placeholder="serie/nr."
+                               placeholder="MAI/12345"
                                th:field="*{accountRequest.policemanRequest.certificate}" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
@@ -114,11 +115,12 @@
 
                     <!-- Police structure -->
                     <div class="mb-3">
-                        <label for="policeStructure" class="form-label" style="font-weight: bold;">Structura de poliție:</label>
+                        <label for="policeStructure" class="form-label" style="font-weight: bold;">Structura de
+                            politie:</label>
                         <select id="policeStructure" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.policeStructureId}"
                                 onchange="populateSubunits()" required>
-                            <option value="">Selectați structura de poliție</option>
+                            <option value="">Selectati structura de politie</option>
                             <option th:each="structure : ${structures}" th:value="${structure.id}"
                                     th:text="${structure.structureName}"></option>
                         </select>
@@ -128,11 +130,12 @@
                     <!-- Subunit structure -->
 
                     <div class="mb-3">
-                        <label for="structuresDropdown" class="form-label" style="font-weight: bold;">Subunitatea de poliție:</label>
+                        <label for="structuresDropdown" class="form-label" style="font-weight: bold;">Subunitatea de
+                            politie:</label>
                         <select id="structuresDropdown" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.policeStructureSubunitId}"
                                 onchange="populateDepartments()" required>
-                            <option value="">Selectați subunitatea de poliție</option>
+                            <option value="">Selectati subunitatea de politie</option>
                             <option th:each="subunit : ${subunits}" th:value="${subunit.id}"
                                     th:text="${subunit.subunitName}"></option>
                         </select>
@@ -141,10 +144,11 @@
 
                     <!-- Department -->
                     <div class="mb-3">
-                        <label for="departmentDropdown" class="form-label" style="font-weight: bold;">Departament:</label>
+                        <label for="departmentDropdown" class="form-label" style="font-weight: bold;">Linia de
+                            munca:</label>
                         <select id="departmentDropdown" class="form-select"
                                 th:field="*{accountRequest.policemanRequest.departmentId}" required>
-                            <option value="">Selectați departamentul</option>
+                            <option value="">Selectati linia de munca</option>
                             <option th:each="department : ${departments}" th:value="${department.id}"
                                     th:text="${department.departmentName}"></option>
                         </select>
@@ -152,19 +156,28 @@
                     </div>
 
 
-
-
-
-                    <div class="mb-3">
-                        <label class="form-label" style="font-weight: bold;">Nr.de inregistrare din evidentele structurii solicitante:</label>
-                        <input type="text" class="form-control" th:field="*{accountRequest.requestStructRegNo}"
-                               required>
-                        <div class="invalid-feedback">Campul este obligatoriu.</div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" style="font-weight: bold;">Nr.de inregistrare:</label>
+                            <input type="text" class="form-control" th:field="*{accountRequest.requestStructRegNo}"
+                                   required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="regDateFromRequestStruct" class="form-label">din data de:</label>
+                            <input id="regDateFromRequestStruct" type="date" class="form-control"
+                                   th:field="*{accountRequest.regDateFromRequestStruct}" required>
+                            <div class="invalid-feedback">Campul este obligatoriu.</div>
+                        </div>
                     </div>
+
+
                     <div class="mb-3">
                         <label class="form-label" style="font-weight: bold;">Observatii:</label>
                         <textarea class="form-control" th:field="*{accountRequest.observation}"></textarea>
                     </div>
+
+
                     <button type="submit" class="btn btn-success">Adauga</button>
                 </form>
             </div>

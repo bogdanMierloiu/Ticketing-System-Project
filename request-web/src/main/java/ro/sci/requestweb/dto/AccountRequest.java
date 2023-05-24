@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @RequiredArgsConstructor
@@ -22,6 +24,9 @@ public class AccountRequest {
 
     @NotBlank
     private String requestStructRegNo;
+
+    @NotBlank
+    private LocalDate regDateFromRequestStruct;
 
     private String observation;
 

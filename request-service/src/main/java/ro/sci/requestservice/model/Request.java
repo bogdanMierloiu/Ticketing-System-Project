@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,16 +32,29 @@ public class Request {
 
     private String observation;
 
+    // Request Structure
+
     @Column(nullable = false)
     private String requestStructRegNo;
 
+    @Column(nullable = false)
+    private LocalDate regDateFromRequestStruct;
+
     private Boolean isApprovedByStructureChief;
+
+    // Security Structure
 
     private String securityStructRegNo;
 
+    private LocalDate regDateFromSecurityStruct;
+
     private Boolean isApprovedBySecurityStructure;
 
+    // IT Structure
+
     private String itStructRegNo;
+
+    private LocalDate regDateFromITStruct;
 
     private Boolean isApprovedByITChief;
 

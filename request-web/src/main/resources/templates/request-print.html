@@ -46,10 +46,10 @@
     <div>
         <label>Autorizatie secret:</label>
         <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
-        <label>Valabila de la:</label>
-        <span class="field-value" th:text="${request.policemanResponse.certificateValidFrom}"></span>
+        <label>valabila de la:</label>
+        <span class="field-value" th:text="${#temporals.format(request.policemanResponse.certificateValidFrom, 'yyyy-MM-dd')}"></span>
         <label>pana la:</label>
-        <span class="field-value" th:text="${request.policemanResponse.certificateValidUntil}"></span>
+        <span class="field-value" th:text="${#temporals.format(request.policemanResponse.certificateValidUntil, 'yyyy-MM-dd')}"></span>
     </div>
     <div>
         <label>Nr. de telefon mobil:</label>
@@ -68,7 +68,11 @@
         <span class="field-value" th:text="${request.policemanResponse.policeStructure.structureName}"></span>
     </div>
     <div>
-        <label>Departamentul:</label>
+        <label>Subunitatea de politie:</label>
+        <span class="field-value" th:text="${request.policemanResponse.policeStructureSubunit.subunitName}"></span>
+    </div>
+    <div>
+        <label>Linia de munca:</label>
         <span class="field-value" th:text="${request.policemanResponse.department.departmentName}"></span>
     </div>
 </div>
@@ -79,14 +83,20 @@
     <div>
         <label>Nr. inreg. unitatea solicitanta:</label>
         <span class="field-value" th:text="${request.requestStructRegNo}"></span>
+        <label>din data de: </label>
+        <span class="field-value" th:text="${#temporals.format(request.regDateFromRequestStruct, 'yyyy-MM-dd')}"></span>
     </div>
     <div>
         <label>Nr. inreg. structura de securitate:</label>
         <span class="field-value" th:text="${request.securityStructRegNo}"></span>
+        <label>din data de: </label>
+        <span class="field-value" th:text="${#temporals.format(request.regDateFromSecurityStruct, 'yyyy-MM-dd')}"></span>
     </div>
     <div>
         <label>Nr. inreg. SCI:</label>
         <span class="field-value" th:text="${request.itStructRegNo}"></span>
+        <label>din data de: </label>
+        <span class="field-value" th:text="${#temporals.format(request.regDateFromITStruct, 'yyyy-MM-dd')}"></span>
     </div>
 </div>
 
