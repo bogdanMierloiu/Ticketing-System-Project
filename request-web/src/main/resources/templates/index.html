@@ -11,10 +11,10 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/request}">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="40" height="40" viewBox="0 0 256 256"
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="45" height="40" viewBox="0 0 256 256"
                  xml:space="preserve">
     <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
        transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
@@ -29,32 +29,31 @@
               transform=" matrix(1 0 0 1 0 0)" stroke-linecap="round"/>
     </g>
 </svg>
+            D.G.P.M.B. - SERVICIUL COMUNICATII SI INFORMATICA
         </a>
-        <div class="navbar-nav">
-            <div class="nav-item active mr-3">
-                <form th:action="@{/request/admin}">
+        <div class="row">
+            <div class="col">
+                <form class="d-inline-block mr-3" th:action="@{/request/admin}">
                     <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
                 </form>
-            </div>
-            <div class="nav-item active">
-                <form th:action="@{/request/add-request-form}">
+                <form class="d-inline-block" th:action="@{/request/add-request-form}">
                     <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Adauga solicitare</button>
                 </form>
             </div>
-        </div>
-        <div class="justify-content-end align-items-center ml-auto">
-            <div class="nav-item active">
-                <form th:action="@{/player/find}" method="get">
-                    <div class="input-group">
-                        <input class="form-control mr-sm-2" type="search" aria-label="Search" name="input"
-                               required placeholder="Nume solicitant" style="padding-right: 5px">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-success" style="padding:5px">
-                                <span class="glyphicon glyphicon-search"></span> Cauta solicitare
-                            </button>
+            <div class="col-auto">
+                <div class="nav-item active">
+                    <form th:action="@{/player/find}" method="get">
+                        <div class="input-group">
+                            <input class="form-control mr-sm-2" type="search" aria-label="Search" name="input"
+                                   required placeholder="Nume solicitant" style="margin-right: 4px;">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-success" style="margin-left: 5px;">
+                                    <span class="glyphicon glyphicon-search"></span> Cauta solicitare
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -87,10 +86,12 @@
                 <span th:text="${request.getRequestTypeResponse.getRequestName()}"></span>
             </td>
             <td>
-                    <span th:text="${request.getPolicemanResponse.rank.rankName + ' '
-                    + request.getPolicemanResponse.lastName + ' '
-                    + request.getPolicemanResponse.firstName + ' '
-                    + request.getPolicemanResponse.firstNameSecondary}"></span>
+                 <span>
+                     <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>
+                     <span th:text="${' ' + request.getPolicemanResponse.lastName + ' '
+                         + request.getPolicemanResponse.firstName + ' '
+                         + request.getPolicemanResponse.firstNameSecondary}"></span>
+                </span>
             </td>
             <td>
                 <span th:text="${request.getPolicemanResponse.getPoliceStructure.getStructureName}"></span>

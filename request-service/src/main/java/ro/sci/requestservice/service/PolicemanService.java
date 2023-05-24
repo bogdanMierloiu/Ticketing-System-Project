@@ -20,9 +20,9 @@ public class PolicemanService {
 
     public Policeman add(PolicemanRequest policemanRequest) {
         Policeman policeman = new Policeman();
-        policeman.setFirstName(policemanRequest.getFirstName().toUpperCase());
-        policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().toUpperCase());
-        policeman.setLastName(policemanRequest.getLastName().toUpperCase());
+        policeman.setFirstName(policemanRequest.getFirstName());
+        policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary());
+        policeman.setLastName(policemanRequest.getLastName());
         policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
         policeman.setCertificate(policemanRequest.getCertificate());
         policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());

@@ -23,7 +23,7 @@ public class Policeman {
     @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+
     private String firstNameSecondary;
 
     @Column(nullable = false)
