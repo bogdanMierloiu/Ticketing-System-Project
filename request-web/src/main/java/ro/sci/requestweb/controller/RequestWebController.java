@@ -1,11 +1,13 @@
 package ro.sci.requestweb.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.PolicemanRequest;
+import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.service.*;
 
 @Controller
@@ -48,13 +50,19 @@ public class RequestWebController {
         return "index";
     }
 
-    @GetMapping("/structure-chief-approve/{requestId}")
-    public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model) {
-        requestService.structureChiefApprove(requestId);
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "index";
+    @GetMapping("/search-by-name")
+    public String searchByName(@RequestParam String name, Model model) {
+        RequestResponse[] allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
+        model.addAttribute("requests", allRequestsByPolicemanName);
+        return "requests-for-policeman";
     }
 
+    @GetMapping("/structure-chief-approve/{requestId}")
+    public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
+        requestService.structureChiefApprove(requestId);
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "redirect:" + request.getRequestURL().toString();
+    }
 
 
 
