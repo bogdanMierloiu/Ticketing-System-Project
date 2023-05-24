@@ -33,6 +33,14 @@ public class RequestService {
                 .block();
     }
 
+    public RequestResponse[] getAllRequestsByPolicemanId(Long policemanId) {
+        return webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/policeman/{policemanId}", policemanId)
+                .retrieve()
+                .bodyToMono(RequestResponse[].class)
+                .block();
+    }
+
     public RequestResponse findById(Long requestId) {
         return webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
@@ -57,32 +65,5 @@ public class RequestService {
                 .toBodilessEntity()
                 .block();
     }
-
-//    public TicketResponse[] getTicketsByItSpecialistId(Long itSpecialistId) {
-//        return webClientBuilder.build().get()
-//                .uri("lb://ticket-service/api/it-specialist/{workerId}", itSpecialistId)
-//                .retrieve()
-//                .bodyToMono(TicketResponse[].class)
-//                .block();
-//    }
-//
-//    public TicketResponse getTicketById(Long ticketId) {
-//        return webClientBuilder.build().get()
-//                .uri("lb://ticket-service/api/{ticketId}", ticketId)
-//                .retrieve()
-//                .bodyToMono(TicketResponse.class)
-//                .block();
-//    }
-//
-//
-//
-//    public void assignTicket(AssignTicketRequest request) {
-//        webClientBuilder.build().post()
-//                .uri("lb://ticket-service/api/assign")
-//                .bodyValue(request)
-//                .retrieve()
-//                .toBodilessEntity()
-//                .block();
-//    }
 
 }

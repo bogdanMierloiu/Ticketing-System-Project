@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,10 +25,10 @@ public class PoliceStructure {
     private String structureName;
 
     @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PoliceStructureSubunit> policeStructureSubunits;
+    private List<PoliceStructureSubunit> policeStructureSubunits = new ArrayList<>();
 
     @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Policeman> policemen;
+    private List<Policeman> policemen = new ArrayList<>();
 
 
 }

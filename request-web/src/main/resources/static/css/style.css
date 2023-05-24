@@ -76,5 +76,11 @@ p {
   z-index: 99;
 }
 
+.container {
+  padding-top: 30px
+}
 
+.two-line-span {
+  display: block;
+}
 

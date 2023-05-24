@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,10 +25,10 @@ public class Rank {
 
 
     @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Policeman> policemen;
+    private List<Policeman> policemen = new ArrayList<>();
 
     @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ItSpecialist> itSpecialists;
+    private List<ItSpecialist> itSpecialists = new ArrayList<>();
 
 
 }

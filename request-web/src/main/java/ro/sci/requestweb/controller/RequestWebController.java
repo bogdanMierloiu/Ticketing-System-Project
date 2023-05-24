@@ -57,6 +57,13 @@ public class RequestWebController {
         return "requests-for-policeman";
     }
 
+    @GetMapping("/show-requests-for-policeman/{policemanId}")
+    public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model) {
+        RequestResponse[] allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
+        model.addAttribute("requests", allRequestsByPolicemanId);
+        return "requests-for-policeman";
+    }
+
     @GetMapping("/structure-chief-approve/{requestId}")
     public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
         requestService.structureChiefApprove(requestId);

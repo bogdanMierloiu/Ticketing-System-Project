@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Department {
     private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Policeman> policemen;
+    private List<Policeman> policemen = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private PoliceStructureSubunit policeStructureSubunit;
