@@ -84,13 +84,13 @@
                         <div>
                             <label for="lastName" class="form-label">Nume:</label>
                             <input id="lastName" type="text" class="form-control"
-                                   name="lastName" required>
+                                   name="lastName" pattern="^[A-Za-z ]+$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Prenume:</label>
                             <input id="firstName" type="text" class="form-control"
-                                   name="firstName" required>
+                                   name="firstName" pattern="^[A-Za-z ]+$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                     </div>

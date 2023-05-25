@@ -91,27 +91,27 @@
                     <div class="mb-3">
                         <label for="lastName" class="form-label">Nume de familie:</label>
                         <input id="lastName" type="text" class="form-control"
-                               th:field="*{accountRequest.policemanRequest.lastName}" required>
+                               th:field="*{accountRequest.policemanRequest.lastName}" pattern="^[A-Za-z ]+$" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName" class="form-label">Prenume:</label>
                             <input id="firstName" type="text" class="form-control"
-                                   th:field="*{accountRequest.policemanRequest.firstName}" required>
+                                   th:field="*{accountRequest.policemanRequest.firstName}" pattern="^[A-Za-z ]+$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="firstNameSecondary" class="form-label">Al doilea prenume:</label>
                             <input id="firstNameSecondary" type="text" class="form-control"
-                                   th:field="*{accountRequest.policemanRequest.firstNameSecondary}">
+                                   th:field="*{accountRequest.policemanRequest.firstNameSecondary}" pattern="^[A-Za-z ]+$">
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="personalNumber" class="form-label">CNP:</label>
                         <input id="personalNumber" type="text" class="form-control"
-                               th:field="*{accountRequest.policemanRequest.personalNumber}" required>
+                               th:field="*{accountRequest.policemanRequest.personalNumber}" pattern="^[0-9]{13}$" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
 
@@ -141,7 +141,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="phoneNumber" class="form-label">Nr. de telefon mobil:</label>
                             <input id="phoneNumber" type="text" class="form-control"
-                                   th:field="*{accountRequest.policemanRequest.phoneNumber}" required>
+                                   th:field="*{accountRequest.policemanRequest.phoneNumber}" pattern="^[0-9]{10}$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -155,7 +155,7 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input id="email" type="text" class="form-control"
-                               th:field="*{accountRequest.policemanRequest.email}" required>
+                               th:field="*{accountRequest.policemanRequest.email}" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required>
                         <div class="invalid-feedback">Campul este obligatoriu.</div>
                     </div>
 
@@ -206,7 +206,7 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label" style="font-weight: bold;">Nr.de inregistrare:</label>
                             <input type="text" class="form-control" th:field="*{accountRequest.requestStructRegNo}"
-                                   required>
+                                   pattern="^[0-9]+$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                         <div class="col-md-6 mb-3">
