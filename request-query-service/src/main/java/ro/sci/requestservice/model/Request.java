@@ -30,6 +30,7 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(length = 5000)
     private String observation;
 
     // Request Structure

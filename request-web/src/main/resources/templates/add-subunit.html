@@ -60,21 +60,20 @@
 </nav>
 
 <div class="content-wrap">
-    <div class="text-center">
-        <form th:action="@{/request/admin}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
-        </form>
-    </div>
-    <div class="text-center">
-        <form class="add-form" th:action="@{/request/admin/add-subunit}" method="post">
-            <div class="form-group">
-                <label>
-                    <input type="text" name="subunitName" placeholder="Introduceti denumirea structurii de politie" class="form-control form-control-lg" required>
-                </label>
-                <input type="hidden" name="policeStructureId" th:value="${structure.id}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="text-center mb-4" th:text="${structure.structureName}"></h2>
+                <form class="needs-validation" th:action="@{/request/admin/add-subunit}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Denumire subunitate de politie:</label>
+                        <input type="text" class="form-control" name="subunitName" required>
+                    </div>
+                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">
+                    <button type="submit" class="btn btn-success">Adauga</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Adauga</button>
-        </form>
+        </div>
     </div>
 </div>
 

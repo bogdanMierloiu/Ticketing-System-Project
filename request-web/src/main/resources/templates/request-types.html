@@ -72,22 +72,20 @@
     <div th:if="${#lists.isEmpty(requestTypes)}">
         <h5>Nu exista inregistrari</h5>
     </div>
-    <div class="table-responsive text-center">
-        <table th:if="${not #lists.isEmpty(requestTypes)}" class="table table-hover text-center">
-            <thead>
-            <tr>
-                <th>Tip solicitare</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="requestType: ${requestTypes}">
-                <td>
-                    <span th:text="${requestType.requestName}"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <table th:if="${not #lists.isEmpty(requestTypes)}" class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>Tip solicitare</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="requestType: ${requestTypes}">
+            <td>
+                <span th:text="${requestType.requestName}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

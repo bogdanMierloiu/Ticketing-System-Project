@@ -47,7 +47,7 @@ public class RequestWebController {
     public String addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
         requestService.addRequest(accountRequest);
         model.addAttribute("requests", requestService.getAllRequests());
-        return "index";
+        return "redirect:/request";
     }
 
     @GetMapping("/search-by-name")
@@ -68,6 +68,7 @@ public class RequestWebController {
     public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
         requestService.structureChiefApprove(requestId);
         String referer = request.getHeader("referer");
+        System.out.println("Referer: " + referer);
         model.addAttribute("requests", requestService.getAllRequests());
         return "redirect:" + referer;
     }

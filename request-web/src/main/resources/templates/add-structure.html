@@ -60,20 +60,18 @@
 </nav>
 
 <div class="content-wrap">
-    <div class="text-center">
-        <form th:action="@{/request/admin}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
-        </form>
-    </div>
-    <div class="text-center">
-        <form class="add-form" th:action="@{/request/admin/add-structure}" method="post">
-            <div class="form-group">
-                <label>
-                    <input type="text" name="structureName" placeholder="Introduceti denumirea structurii de politie" class="form-control form-control-lg" required>
-                </label>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form class="needs-validation" th:action="@{/request/admin/add-structure}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Denumire structura:</label>
+                        <input type="text" class="form-control" name="structureName" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Adauga</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Adauga</button>
-        </form>
+        </div>
     </div>
 </div>
 
