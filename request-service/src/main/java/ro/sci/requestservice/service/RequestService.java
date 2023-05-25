@@ -9,10 +9,8 @@ import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.mapper.RequestMapper;
-import ro.sci.requestservice.model.Policeman;
-import ro.sci.requestservice.model.Request;
-import ro.sci.requestservice.model.RequestType;
-import ro.sci.requestservice.model.Status;
+import ro.sci.requestservice.model.*;
+import ro.sci.requestservice.repository.ItSpecialistRepo;
 import ro.sci.requestservice.repository.RequestRepo;
 import ro.sci.requestservice.repository.RequestTypeRepo;
 
@@ -29,6 +27,8 @@ public class RequestService {
     private final PolicemanService policemanService;
     private final RequestMapper requestMapper;
     private final PolicemanMapper policemanMapper;
+    private final ItSpecialistRepo itSpecialistRepo;
+
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
@@ -65,6 +65,8 @@ public class RequestService {
         );
     }
 
+
+    // Structure Chief Decisions
     public void structureChiefApprove(Long requestId) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
@@ -86,10 +88,57 @@ public class RequestService {
         requestRepo.save(requestToReject);
     }
 
+    // Security Structure Decisions
+
+    public void securityStructureApprove(Long requestId) {
+        Request requestToApprove = findById(requestId);
+        if (requestToApprove.getIsApprovedByStructureChief()) {
+            requestToApprove.setIsApprovedBySecurityStructure(true);
+            requestToApprove.setSecurityStructAppAt(LocalDateTime.now());
+            requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
+                    "Aprobat de strucutra de securitate la data de " +
+                    requestToApprove.getSecurityStructAppAt().format(dateTimeFormatter));
+            requestRepo.save(requestToApprove);
+        } else {
+            throw new UnsupportedOperationException("The request is not approved by chief of police structure");
+        }
+    }
+
+    public void securityStructureReject(Long requestId, String observation) {
+        Request requestToReject = findById(requestId);
+        requestToReject.setIsApprovedBySecurityStructure(false);
+        requestToReject.setStatus(Status.Respinsa);
+        requestToReject.setObservation(requestToReject.getObservation() + "\n" +
+                "Respinsa de structura la data de " +
+                LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
+        requestRepo.save(requestToReject);
+    }
+
+    // IT STRUCTURE
+
+    public void assignWorker(Long requestId, Long itSpecialistId) {
+        Request requestToAssign = findById(requestId);
+        ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
+        if(requestToAssign.getIsApprovedBySecurityStructure()){
+            requestToAssign.setItSpecialist(itSpecialistToAssign);
+            requestRepo.save(requestToAssign);
+        } else{
+            throw new UnsupportedOperationException("The request is not approved by security structure");
+        }
+    }
+
+
+    // UTILS
 
     private RequestType getRequestTypeById(Long requestTypeId) {
         return requestTypeRepo.findById(requestTypeId).orElseThrow(
                 () -> new NotFoundException("The request type with id " + requestTypeId + " not found")
+        );
+    }
+
+    private ItSpecialist getItSpecialistById(Long itSpecialistId) {
+        return itSpecialistRepo.findById(itSpecialistId).orElseThrow(
+                () -> new NotFoundException("The IT Specialist with id " + itSpecialistId + " not found")
         );
     }
 

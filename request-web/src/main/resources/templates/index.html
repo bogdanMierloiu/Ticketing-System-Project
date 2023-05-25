@@ -82,9 +82,11 @@
         </thead>
         <tbody>
         <tr th:each="request: ${requests}">
+            <!-- REQUEST TYPE -->
             <td>
                 <span th:text="${request.getRequestTypeResponse.getRequestName()}"></span>
             </td>
+            <!-- POLICEMAN DATA -->
             <td>
                  <span>
                      <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>
@@ -93,9 +95,11 @@
                      + (request.getPolicemanResponse.firstNameSecondary != null ? ' ' + request.getPolicemanResponse.firstNameSecondary : '')}"></span>
                 </span>
             </td>
+            <!-- POLICEMAN STRUCTURE -->
             <td>
                 <span th:text="${request.getPolicemanResponse.getPoliceStructure.getStructureName}"></span>
             </td>
+            <!-- POLICE STRUCTURE -->
             <td>
                 <div>
                  <span th:if="${request.isApprovedByStructureChief}">
@@ -118,23 +122,26 @@
                     </form>
                 </div>
             </td>
-
-
+            <!-- SECURITY STRUCTURE -->
             <td>
                     <span th:if="${request.isApprovedBySecurityStructure}">
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
                 <span th:unless="${request.isApprovedBySecurityStructure}">
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
             </td>
+            <!-- IT STRUCTURE -->
             <td>
                     <span th:if="${request.isApprovedByITChief}">
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
                 <span th:unless="${request.isApprovedByITChief}">
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
             </td>
+            <!-- STATUS -->
             <td>
-                <span th:text="${request.status}"></span>
+                <span th:if="${request.status == 'In_lucru'}" style="font-style: italic;">In lucru</span>
+                <span th:if="${request.status != 'In_lucru'}" style="font-style: italic;" th:text="${#strings.replace(request.status, '_', ' ')}"></span>
             </td>
+            <!-- BUTTON -->
             <td>
                 <form th:action="@{/request/find/{requestId}(requestId=${request.id})}">
                     <input type="hidden" name="requestId" th:value="${request.id}">
@@ -154,7 +161,7 @@
                 <p class="text-muted mb-0">Made with <i class="fas fa-heart text-danger"></i> for Police </p>
                 <span id="currentDate" class="text-muted mb-0"></span>
                 <div class="text-center">
-                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-phone"></i> +40-761495719</p>
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-phone"></i>32105</p>
                     <p class="text-muted mb-0 d-inline-block"><i class="fas fa-map-marker-alt"></i> Romania, Bucharest
                     </p>
                 </div>

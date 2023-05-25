@@ -147,7 +147,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="phoneNumberPolice" class="form-label">Nr. de telefon interior:</label>
                             <input id="phoneNumberPolice" type="text" class="form-control"
-                                   th:field="*{accountRequest.policemanRequest.phoneNumberPolice}" required>
+                                   th:field="*{accountRequest.policemanRequest.phoneNumberPolice}" pattern="^[0-9]{5}$" required>
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                     </div>
