@@ -60,47 +60,40 @@
 </nav>
 
 <div class="content-wrap">
-    <div>
-        <form th:action="@{/request/admin}">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
-        </form>
-    </div>
-
+    <!-- Button -->
     <div>
         <form th:action="@{/request/admin/add-specialist-form}">
             <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga lucrator SCI</button>
         </form>
     </div>
-
     <div th:if="${#lists.isEmpty(specialists)}">
         <h5>Nu exista inregistrari</h5>
     </div>
-    <div th:if="${not #lists.isEmpty(specialists)}" class="table-responsive text-center">
-        <table class="table table-hover table-white-text">
-            <thead>
-            <tr>
-                <th>Grad profesional</th>
-                <th>Nume/Prenume</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="specialist: ${specialists}">
-                <td>
-                    <span th:text="${specialist.rank.rankName}"></span>
-                </td>
-                <td>
-                    <span th:text="${specialist.lastName + ' ' + specialist.firstName}"></span>
-                </td>
-<!--                <td>-->
-<!--                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
-<!--                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
-<!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza solicitari in lucru (DE IMPLEMENTAT)</button>-->
-<!--                    </form>-->
-<!--                </td>-->
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <table th:if="${not #lists.isEmpty(specialists)}" class="table table-hover text-center">
+        <thead>
+        <tr>
+            <th>Grad profesional</th>
+            <th>Nume/Prenume</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="specialist: ${specialists}">
+            <td>
+                <span th:text="${specialist.rank.rankName}"></span>
+            </td>
+            <td>
+                <span th:text="${specialist.lastName + ' ' + specialist.firstName}"></span>
+            </td>
+            <!--                <td>-->
+            <!--                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
+            <!--                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
+            <!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza solicitari in lucru (DE IMPLEMENTAT)</button>-->
+            <!--                    </form>-->
+            <!--                </td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

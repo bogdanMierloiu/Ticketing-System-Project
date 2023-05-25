@@ -109,14 +109,14 @@ public class RequestService {
         requestToReject.setIsApprovedBySecurityStructure(false);
         requestToReject.setStatus(Status.Respinsa);
         requestToReject.setObservation(requestToReject.getObservation() + "\n" +
-                "Respinsa de structura la data de " +
+                "Respinsa de structura de securitate la data de " +
                 LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
         requestRepo.save(requestToReject);
     }
 
     // IT STRUCTURE
 
-    public void assignWorker(Long requestId, Long itSpecialistId) {
+    public void assignSpecialist(Long requestId, Long itSpecialistId) {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if(requestToAssign.getIsApprovedBySecurityStructure()){
