@@ -84,5 +84,9 @@ p {
   display: block;
 }
 
+.narrow-select {
+    width: 100px; /* Lățimea dorită pentru select */
+}
+
 
 

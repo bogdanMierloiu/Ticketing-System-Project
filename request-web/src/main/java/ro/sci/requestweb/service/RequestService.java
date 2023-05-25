@@ -58,6 +58,8 @@ public class RequestService {
                 .block();
     }
 
+    // POLICE STRUCTURE
+
     public void structureChiefApprove(Long requestId) {
         webClientBuilder.build().patch()
                 .uri(uriBuilder -> uriBuilder
@@ -76,6 +78,33 @@ public class RequestService {
                         .scheme("lb")
                         .host("request-service")
                         .path("/api/v1/request/structure-chief-reject/{requestId}")
+                        .queryParam("observation", observation)
+                        .build(requestId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    // SECURITY STRUCTURE
+
+    public void securityApprove(Long requestId) {
+        webClientBuilder.build().patch()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/security-approve/{requestId}")
+                        .build(requestId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public void securityReject(Long requestId, String observation) {
+        webClientBuilder.build().put()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/security-reject/{requestId}")
                         .queryParam("observation", observation)
                         .build(requestId))
                 .retrieve()

@@ -64,6 +64,8 @@ public class RequestWebController {
         return "requests-for-policeman";
     }
 
+    // POLICE STRUCTURE
+
     @GetMapping("/structure-chief-approve/{requestId}")
     public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
         requestService.structureChiefApprove(requestId);
@@ -81,10 +83,27 @@ public class RequestWebController {
     }
 
 
-
-
+    // POLICE STRUCTURE
     @PostMapping("/structure-chief-decision/{requestId}")
     public String structureChiefDecision(@PathVariable("requestId") Long requestId,
+                                         @RequestParam("decision") String decision,
+                                         @RequestParam(value = "observation", required = false) String observation,
+                                         Model model,
+                                         HttpServletRequest request) {
+        if ("approve".equals(decision)) {
+            requestService.structureChiefApprove(requestId);
+        } else if ("reject".equals(decision)) {
+            requestService.structureChiefReject(requestId, observation);
+        }
+        String referer = request.getHeader("referer");
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "redirect:" + referer;
+    }
+
+    // SECURITY STRUCTURE
+
+    @PostMapping("/security-decision/{requestId}")
+    public String securityDecision(@PathVariable("requestId") Long requestId,
                                          @RequestParam("decision") String decision,
                                          @RequestParam(value = "observation", required = false) String observation,
                                          Model model,
