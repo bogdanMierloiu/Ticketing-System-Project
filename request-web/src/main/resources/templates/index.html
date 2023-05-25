@@ -6,7 +6,7 @@
     <title>D.G.P.M.B.-S.C.I.</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
 <body>
@@ -67,7 +67,7 @@
         <h5>Nu exista inregistrari</h5>
     </div>
 
-    <table th:if="${not #lists.isEmpty(requests)}"  class="table table-hover text-center">
+    <table th:if="${not #lists.isEmpty(requests)}" class="table table-hover text-center">
         <thead>
         <tr>
             <th>Tip solicitare</th>
@@ -97,17 +97,29 @@
                 <span th:text="${request.getPolicemanResponse.getPoliceStructure.getStructureName}"></span>
             </td>
             <td>
-                    <span th:if="${request.isApprovedByStructureChief}">
-                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
-                <span th:unless="${request.isApprovedByStructureChief}">
-                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
                 <div>
-                    <form th:action="@{/request/structure-chief-approve/{requestId}(requestId=${request.id})}">
-                        <input type="hidden" name="requestId" th:value="${request.id}">
-                        <button class="btn btn-outline-info btn-sm my-2 my-sm-0" type="submit">Aproba</button>
+                 <span th:if="${request.isApprovedByStructureChief}">
+                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon -->
+                 </span>
+                    <span th:unless="${request.isApprovedByStructureChief}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
+                </span>
+                </div>
+                <div th:if="${!request.isApprovedByStructureChief}">
+                    <form id="decisionForm"
+                          th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
+                          method="post">
+                        <select class="form-select" id="decision" name="decision" onchange="onDecisionChange()">
+                            <option>Autorizează</option>
+                            <option value="approve">APROBA</option>
+                            <option value="reject">RESPINGE</option>
+                        </select>
+                        <input type="hidden" id="requestId" name="requestId" th:value="${request.id}">
                     </form>
                 </div>
             </td>
+
+
             <td>
                     <span th:if="${request.isApprovedBySecurityStructure}">
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
@@ -135,14 +147,52 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<footer>
+    <div class="container-fluid bg-light text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-muted mb-0">Made with <i class="fas fa-heart text-danger"></i> for Police </p>
+                <span id="currentDate" class="text-muted mb-0"></span>
+                <div class="text-center">
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-phone"></i> +40-761495719</p>
+                    <p class="text-muted mb-0 d-inline-block"><i class="fas fa-map-marker-alt"></i> Romania, Bucharest
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Motivul respingerii</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="observation" class="form-control" placeholder="Motivul respingerii" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anulează</button>
+                <button type="button" class="btn btn-primary" onclick="submitRejectForm()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/js/script.js}" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 <script src="http://localhost:35729/livereload.js"></script>
 </body>

@@ -68,11 +68,22 @@ public class RequestService {
     public void structureChiefApprove(Long requestId) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
+        requestToApprove.setStatus(Status.In_lucru);
         requestToApprove.setStructureChiefAppAt(LocalDateTime.now());
         requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
                 "Aprobat de seful structurii de politie emitente la data de " +
                 requestToApprove.getStructureChiefAppAt().format(dateTimeFormatter));
         requestRepo.save(requestToApprove);
+    }
+
+    public void structureChiefReject(Long requestId, String observation) {
+        Request requestToReject = findById(requestId);
+        requestToReject.setIsApprovedByStructureChief(false);
+        requestToReject.setStatus(Status.Respinsa);
+        requestToReject.setObservation(requestToReject.getObservation() + "\n" +
+                "Respinsa de sefulul structurii de politie emitente la data de " +
+                LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
+        requestRepo.save(requestToReject);
     }
 
 

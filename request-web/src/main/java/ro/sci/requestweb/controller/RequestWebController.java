@@ -68,7 +68,33 @@ public class RequestWebController {
     public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
         requestService.structureChiefApprove(requestId);
         String referer = request.getHeader("referer");
-        System.out.println("Referer: " + referer);
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "redirect:" + referer;
+    }
+
+    @GetMapping("structure-chief-reject/{requestId}")
+    public String structureChiefReject(@PathVariable("requestId") Long requestId, @RequestParam("observation") String observation, Model model, HttpServletRequest request) {
+        requestService.structureChiefReject(requestId, observation);
+        String referer = request.getHeader("referer");
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "redirect:" + referer;
+    }
+
+
+
+
+    @PostMapping("/structure-chief-decision/{requestId}")
+    public String structureChiefDecision(@PathVariable("requestId") Long requestId,
+                                         @RequestParam("decision") String decision,
+                                         @RequestParam(value = "observation", required = false) String observation,
+                                         Model model,
+                                         HttpServletRequest request) {
+        if ("approve".equals(decision)) {
+            requestService.structureChiefApprove(requestId);
+        } else if ("reject".equals(decision)) {
+            requestService.structureChiefReject(requestId, observation);
+        }
+        String referer = request.getHeader("referer");
         model.addAttribute("requests", requestService.getAllRequests());
         return "redirect:" + referer;
     }

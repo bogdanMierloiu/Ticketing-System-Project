@@ -60,10 +60,28 @@ public class RequestService {
 
     public void structureChiefApprove(Long requestId) {
         webClientBuilder.build().patch()
-                .uri("lb://request-service/api/v1/request/structure-chief-approve/{requestId}", requestId)
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/structure-chief-approve/{requestId}")
+                        .build(requestId))
                 .retrieve()
                 .toBodilessEntity()
                 .block();
     }
+
+    public void structureChiefReject(Long requestId, String observation) {
+        webClientBuilder.build().put()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/structure-chief-reject/{requestId}")
+                        .queryParam("observation", observation)
+                        .build(requestId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
 
 }

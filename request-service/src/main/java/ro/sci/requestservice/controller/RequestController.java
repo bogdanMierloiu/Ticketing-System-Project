@@ -26,4 +26,10 @@ public class RequestController {
         requestService.structureChiefApprove(requestId);
         return ResponseEntity.ok("Approved successfully");
     }
+
+    @PutMapping("/structure-chief-reject/{requestId}")
+    public ResponseEntity<String> structureChiefReject(@PathVariable("requestId") Long requestId, @RequestParam("observation") String observation) {
+        requestService.structureChiefReject(requestId, observation);
+        return ResponseEntity.ok("Rejected successfully");
+    }
 }
