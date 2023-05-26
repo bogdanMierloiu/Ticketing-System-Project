@@ -114,7 +114,8 @@
                     <form id="decisionForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
-                        <select class="form-select narrow-select" id="decision" name="decision" onchange="onDecisionChange()">
+                        <select class="form-select narrow-select" id="decision" name="decision"
+                                onchange="onDecisionChange()">
                             <option>Autorizează</option>
                             <option value="approve">APROBA</option>
                             <option value="reject">RESPINGE</option>
@@ -127,9 +128,9 @@
             <!-- SECURITY STRUCTURE -->
             <td>
                 <div>
-        <span th:if="${request.isApprovedBySecurityStructure}">
+                    <span th:if="${request.isApprovedBySecurityStructure}">
             <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon -->
-        </span>
+                    </span>
                     <span th:unless="${request.isApprovedBySecurityStructure}">
             <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
         </span>
@@ -138,7 +139,8 @@
                     <form id="decisionSecurityForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
-                        <select class="form-select narrow-select" id="securityDecision" name="decision" onchange="onDecisionChangeSecurity()">
+                        <select class="form-select narrow-select" id="securityDecision" name="decision"
+                                onchange="onDecisionChangeSecurity()">
                             <option>Autorizează</option>
                             <option value="approve">APROBA</option>
                             <option value="reject">RESPINGE</option>
@@ -151,11 +153,25 @@
 
             <!-- IT STRUCTURE -->
             <td>
-                    <span th:if="${request.isApprovedByITChief}">
+                <span th:if="${request.isApprovedByITChief}">
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
                 <span th:unless="${request.isApprovedByITChief}">
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                <div th:if="${!request.isApprovedByITChief}" class="text-center">
+                    <form id="decisionITForm"
+                          th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
+                          method="post">
+                        <select class="form-select narrow-select" id="itDecision" name="decision"
+                                onchange="onDecisionChangeIT()">
+                            <option>Autorizează</option>
+                            <option value="approve">APROBA</option>
+                            <option value="reject">RESPINGE</option>
+                        </select>
+                        <input type="hidden" id="requestITId" name="requestId" th:value="${request.id}">
+                    </form>
+                </div>
             </td>
+
             <!-- STATUS -->
             <td>
                 <span th:if="${request.status == 'In_lucru'}" style="font-style: italic;">In lucru</span>
@@ -214,7 +230,8 @@
 </div>
 
 <!-- Modal pentru structura de securitate -->
-<div class="modal fade" id="rejectModalForSecurity" tabindex="-1" role="dialog" aria-labelledby="securityRejectModalLabel"
+<div class="modal fade" id="rejectModalForSecurity" tabindex="-1" role="dialog"
+     aria-labelledby="securityRejectModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -225,11 +242,36 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" id="securityObservation" class="form-control" placeholder="Motivul respingerii" required>
+                <input type="text" id="securityObservation" class="form-control" placeholder="Motivul respingerii"
+                       required>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Anulează</button>
                 <button type="button" class="btn btn-primary" onclick="submitRejectFormSecurity()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal respingere pentru structura IT -->
+<div class="modal fade" id="rejectModalForIT" tabindex="-1" role="dialog"
+     aria-labelledby="itRejectModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itRejectModalLabel">Motivul respingerii</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="itObservation" class="form-control" placeholder="Motivul respingerii"
+                       required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anulează</button>
+                <button type="button" class="btn btn-primary" onclick="submitRejectFormIT()">OK</button>
             </div>
         </div>
     </div>

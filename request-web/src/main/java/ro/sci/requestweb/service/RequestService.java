@@ -112,5 +112,30 @@ public class RequestService {
                 .block();
     }
 
+    // IT STRUCTURE
 
+    public void itApprove(Long requestId, Long itSpecialistId) {
+        webClientBuilder.build().put()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/it-approve/{requestId}/{itSpecialistId}")
+                        .build(requestId, itSpecialistId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public void itReject(Long requestId, String observation) {
+        webClientBuilder.build().put()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/it-reject/{requestId}")
+                        .queryParam("observation", observation)
+                        .build(requestId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
 }

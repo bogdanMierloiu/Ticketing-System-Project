@@ -118,5 +118,25 @@ public class RequestWebController {
         return "redirect:" + referer;
     }
 
+    // IT STRUCTURE
+
+    @PostMapping("/it-decision/{requestId}")
+    public String securityDecision(@PathVariable("requestId") Long requestId,
+                                   @RequestParam("decision") String decision,
+                                   @RequestParam("itSpecialistId") Long itSpecialistId,
+                                   @RequestParam(value = "observation", required = false) String observation,
+                                   Model model,
+                                   HttpServletRequest request) {
+        if ("approve".equals(decision)) {
+            requestService.itApprove(requestId,itSpecialistId);
+        } else if ("reject".equals(decision)) {
+            requestService.itReject(requestId, observation);
+        }
+        String referer = request.getHeader("referer");
+        model.addAttribute("requests", requestService.getAllRequests());
+        return "redirect:" + referer;
+    }
+
+
 
 }
