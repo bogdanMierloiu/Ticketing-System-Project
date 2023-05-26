@@ -48,6 +48,26 @@ public class RequestController {
         return ResponseEntity.ok("Rejected successfully");
     }
 
+
+    // IT STRUCTURE
+
+    @PutMapping("/it-approve/{requestId}/{itSpecialistId}")
+    public ResponseEntity<String> itApproveAssign(@PathVariable("requestId") Long requestId,
+                                                  @PathVariable("itSpecialistId") Long itSpecialistId) {
+        requestService.assignSpecialist(requestId, itSpecialistId);
+        return ResponseEntity.ok("Assigned successfully");
+    }
+
+    @PutMapping("/it-reject/{requestId}")
+    public ResponseEntity<String> itReject(@PathVariable("requestId") Long requestId,
+                                           @RequestParam String observation) {
+        requestService.itReject(requestId, observation);
+        return ResponseEntity.ok("Rejected successfully");
+    }
+
+
+
+
     // SPECIALISTS
 
     @PatchMapping("/assign-specialist/{requestId}/{itSpecialistId}")

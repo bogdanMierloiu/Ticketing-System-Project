@@ -94,6 +94,7 @@ public class RequestService {
         Request requestToApprove = findById(requestId);
         if (requestToApprove.getIsApprovedByStructureChief()) {
             requestToApprove.setIsApprovedBySecurityStructure(true);
+            requestToApprove.setStatus(Status.In_lucru);
             requestToApprove.setSecurityStructAppAt(LocalDateTime.now());
             requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
                     "Aprobat de strucutra de securitate la data de " +
@@ -119,12 +120,27 @@ public class RequestService {
     public void assignSpecialist(Long requestId, Long itSpecialistId) {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
-        if(requestToAssign.getIsApprovedBySecurityStructure()){
+        if (requestToAssign.getIsApprovedBySecurityStructure()) {
+            requestToAssign.setIsApprovedByITChief(true);
+            requestToAssign.setStatus(Status.In_lucru);
+            requestToAssign.setObservation(requestToAssign.getObservation() + "\n" +
+                    "Aprobat de Serviciul Comunicatii si Informatica la data de " +
+                    requestToAssign.getSecurityStructAppAt().format(dateTimeFormatter));
             requestToAssign.setItSpecialist(itSpecialistToAssign);
             requestRepo.save(requestToAssign);
-        } else{
+        } else {
             throw new UnsupportedOperationException("The request is not approved by security structure");
         }
+    }
+
+    public void itReject(Long requestId, String observation) {
+        Request requestToReject = findById(requestId);
+        requestToReject.setIsApprovedByITChief(false);
+        requestToReject.setStatus(Status.Respinsa);
+        requestToReject.setObservation(requestToReject.getObservation() + "\n" +
+                "Respinsa de Serviciul Comunicatii si Informatica la data de " +
+                LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
+        requestRepo.save(requestToReject);
     }
 
 
