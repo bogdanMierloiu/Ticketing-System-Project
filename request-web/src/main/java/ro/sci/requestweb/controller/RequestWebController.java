@@ -104,14 +104,14 @@ public class RequestWebController {
 
     @PostMapping("/security-decision/{requestId}")
     public String securityDecision(@PathVariable("requestId") Long requestId,
-                                         @RequestParam("decision") String decision,
-                                         @RequestParam(value = "observation", required = false) String observation,
-                                         Model model,
-                                         HttpServletRequest request) {
+                                   @RequestParam("decision") String decision,
+                                   @RequestParam(value = "observation", required = false) String observation,
+                                   Model model,
+                                   HttpServletRequest request) {
         if ("approve".equals(decision)) {
-            requestService.structureChiefApprove(requestId);
+            requestService.securityApprove(requestId);
         } else if ("reject".equals(decision)) {
-            requestService.structureChiefReject(requestId, observation);
+            requestService.securityReject(requestId, observation);
         }
         String referer = request.getHeader("referer");
         model.addAttribute("requests", requestService.getAllRequests());

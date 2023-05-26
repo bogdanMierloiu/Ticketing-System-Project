@@ -91,24 +91,6 @@ window.addEventListener("DOMContentLoaded", setInitialDate);
 
 function onDecisionChange() {
     var decision = document.getElementById("decision").value;
-    var observationContainer = document.getElementById("structureRejectModalLabel");
-
-    if (decision === "reject") {
-        // Afiseaza fereastra modală
-        $('#rejectModal').modal('show');
-    } else if (decision === "approve") {
-        // Ascunde fereastra modală
-        $('#rejectModal').modal('hide');
-        // Golește câmpul de observații
-        document.getElementById("observation").value = "";
-        // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
-        submitDecisionForm();
-    }
-}
-
-
-function onDecisionChange() {
-    var decision = document.getElementById("decision").value;
     var observationContainer = document.getElementById("observationContainer");
 
     if (decision === "reject") {
@@ -123,8 +105,6 @@ function onDecisionChange() {
         submitDecisionForm();
     }
 }
-
-
 
 function submitDecisionForm() {
     var requestId = document.getElementById("requestId").value;
@@ -177,68 +157,66 @@ function submitRejectForm() {
 // AUTORIZATION SECURITY STRUCTURE
 
 function onDecisionChangeSecurity() {
-    var decision = document.getElementById("decisionSecurity").value;
-    var requestId = document.getElementById("requestIdSecurity").value;
-    var observationContainer = document.getElementById("securityRejectModalLabel");
+    var decision = document.getElementById("securityDecision").value;
+    var observationContainer = document.getElementById("observationContainer");
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
-        $('#rejectModal').modal('show');
+        $('#rejectModalForSecurity').modal('show');
     } else if (decision === "approve") {
         // Ascunde fereastra modală
-        $('#rejectModal').modal('hide');
+        $('#rejectModalForSecurity').modal('hide');
         // Golește câmpul de observații
         document.getElementById("observation").value = "";
-        // Trimitere cerere Ajax către ruta corespunzătoare
+        // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
         submitDecisionFormSecurity();
     }
 }
 
 function submitDecisionFormSecurity() {
-    var requestId = document.getElementById("requestIdSecurity").value;
-    var decision = document.getElementById("decisionSecurity").value;
+    var requestId = document.getElementById("requestSecurityId").value;
+        var decision = document.getElementById("securityDecision").value;
 
-    // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
-    $.ajax({
-        url: "/request/security-decision/" + requestId,
-        type: "POST",
-        data: { decision: decision },
-        success: function(response) {
-            // Succes - gestionează răspunsul
-            alert("Cererea a fost aprobată cu succes!");
-            // Refresh pagina
-            window.location.reload();
-        },
-        error: function(xhr, status, error) {
-            // Eroare - gestionează eroarea
-            alert("A apărut o eroare la aprobarea cererii: " + error);
-        }
-    });
-}
-
+        // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
+        $.ajax({
+            url: "/request/security-decision/" + requestId,
+            type: "POST",
+            data: { decision: decision },
+            success: function(response) {
+                // Succes - gestionează răspunsul
+                alert("Cererea a fost aprobată cu succes!");
+                // Refresh pagina
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                // Eroare - gestionează eroarea
+               alert("A apărut o eroare la aprobarea cererii:", error);
+            }
+        });
+    }
 
 function submitRejectFormSecurity() {
-    var requestId = document.getElementById("requestIdSecurity").value;
+    var requestId = document.getElementById("requestSecurityId").value;
     var decision = "reject";
     var observation = document.getElementById("securityObservation").value;
 
-    // Trimitere cerere Ajax către ruta "/request/security-decision/{requestId}"
+    // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
     $.ajax({
         url: "/request/security-decision/" + requestId,
         type: "POST",
         data: { decision: decision, observation: observation },
         success: function(response) {
             // Succes - gestionează răspunsul
-            alert("Cererea a fost respinsă cu succes! (Securitate)");
+            alert("Cererea a fost respinsă cu succes!");
             // Închide fereastra modală
-            $('#securityRejectModal').modal('hide');
-            window.location.reload();
+            $('#securityRejectModalLabel').modal('hide');
+             window.location.reload();
         },
         error: function(xhr, status, error) {
             // Eroare - gestionează eroarea
-            alert("A apărut o eroare la respingerea cererii (Securitate): " + error);
+            alert("A apărut o eroare la respingerea cererii:", error);
             // Închide fereastra modală
-            $('#securityRejectModal').modal('hide');
+            $('#securityRejectModalLabel').modal('hide');
         }
     });
 }

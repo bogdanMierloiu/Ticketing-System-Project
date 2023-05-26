@@ -110,7 +110,7 @@
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
                 </span>
                 </div>
-                <div th:if="${!request.isApprovedByStructureChief}">
+                <div th:if="${!request.isApprovedByStructureChief}" class="text-center">
                     <form id="decisionForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
@@ -134,17 +134,16 @@
             <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
         </span>
                 </div>
-                <div th:if="${!request.isApprovedBySecurityStructure}">
-                    <form id="decisionFormSecurity"
-                          th:action="@{/request/security-decision/{requestId}(requestId=${request.id})}"
+                <div th:if="${!request.isApprovedBySecurityStructure}" class="text-center">
+                    <form id="decisionSecurityForm"
+                          th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
-                        <select class="form-select" id="decisionSecurity" name="decision"
-                                onchange="onDecisionChangeSecurity()">
+                        <select class="form-select" id="securityDecision" name="decision" onchange="onDecisionChangeSecurity()">
                             <option>Autorizează</option>
                             <option value="approve">APROBA</option>
                             <option value="reject">RESPINGE</option>
                         </select>
-                        <input type="hidden" id="requestIdSecurity" name="requestId" th:value="${request.id}">
+                        <input type="hidden" id="requestSecurityId" name="requestId" th:value="${request.id}">
                     </form>
                 </div>
             </td>
@@ -193,12 +192,12 @@
 </footer>
 
 <!-- Modal pentru șeful structurii -->
-<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel"
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="structureRejectModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rejectModalLabel">Motivul respingerii</h5>
+                <h5 class="modal-title" id="structureRejectModalLabel">Motivul respingerii</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -214,20 +213,19 @@
     </div>
 </div>
 
-
 <!-- Modal pentru structura de securitate -->
-<div class="modal fade" id="securityRejectModal" tabindex="-1" role="dialog" aria-labelledby="securityRejectModalLabel"
+<div class="modal fade" id="rejectModalForSecurity" tabindex="-1" role="dialog" aria-labelledby="securityRejectModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="securityRejectModalLabel">Motivul respingerii (Securitate)</h5>
+                <h5 class="modal-title" id="securityRejectModalLabel">Motivul respingerii</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" id="securityObservation" class="form-control" placeholder="Motivul respingerii (Securitate)" required>
+                <input type="text" id="securityObservation" class="form-control" placeholder="Motivul respingerii" required>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Anulează</button>
@@ -236,6 +234,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script th:src="@{/js/script.js}" type="text/javascript"></script>
