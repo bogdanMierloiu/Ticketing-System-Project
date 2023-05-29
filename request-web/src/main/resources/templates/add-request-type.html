@@ -66,8 +66,8 @@
                 <h2 class="text-center mb-4">Adaugare tip de solicitare</h2>
                 <form class="needs-validation" th:action="@{/request/admin/add-request-type}" method="post">
                     <div class="mb-3">
-                        <label class="form-label">Denumire grad profesional:</label>
-                        <input type="text" class="form-control" name="requestName" pattern="^[A-Za-z ]+$" required>
+                        <label class="form-label">Denumire tip solicitare:</label>
+                        <input type="text" class="form-control" name="requestName" pattern="^[A-Za-z -]+$" required>
                     </div>
                     <button type="submit" class="btn btn-success">Adauga</button>
                 </form>

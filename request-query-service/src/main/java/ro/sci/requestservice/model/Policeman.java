@@ -32,13 +32,10 @@ public class Policeman {
     @Column(nullable = false)
     private String personalNumber;
 
-    @Column(nullable = false)
     private String certificate;
 
-    @Column(nullable = false)
     private LocalDate certificateValidFrom;
 
-    @Column(nullable = false)
     private LocalDate certificateValidUntil;
 
     private String phoneNumber;

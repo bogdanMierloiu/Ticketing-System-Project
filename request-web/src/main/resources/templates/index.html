@@ -176,10 +176,10 @@
 
             <!-- STATUS -->
             <td>
-                <span th:if="${request.status.name() == 'In_lucru'}" style="font-style: italic; color:green;">In lucru</span>
+                <span th:if="${request.status.name() == 'In_lucru'}" style="font-style: italic; color:blue;">In lucru</span>
                 <span th:if="${request.status.name() == 'Deschisa'}" style="font-style: italic; color:darkgoldenrod;">Deschisa</span>
-                <span th:if="${request.status.name() == 'Respinsa'}" style="font-style: italic; color:red;">Respinsa</span>
-                <span th:if="${request.status.name() == 'Finalizata'}" style="font-style: italic; color:blue;">Finalizata</span>
+                <span th:if="${request.status.name() == 'Respinsa'}" style="font-style: italic; color:green;">Finalizata</span>
+                <span th:if="${request.status.name() == 'Finalizata'}" style="font-style: italic; color:green;">Finalizata</span>
             </td>
             <!-- BUTTON -->
             <td>

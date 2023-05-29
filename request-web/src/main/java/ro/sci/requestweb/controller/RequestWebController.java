@@ -24,7 +24,7 @@ public class RequestWebController {
 
     @GetMapping
     public String indexPage(Model model) {
-        model.addAttribute("requests", requestService.getAllRequestsInProgress());
+        model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }

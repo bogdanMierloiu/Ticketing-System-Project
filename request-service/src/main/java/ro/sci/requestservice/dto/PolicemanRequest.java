@@ -23,13 +23,10 @@ public class PolicemanRequest {
     @NotBlank
     private String personalNumber; //
 
-    @NotBlank
     private String certificate; //
 
-    @NotBlank
     private LocalDate certificateValidFrom; //
 
-    @NotBlank
     private LocalDate certificateValidUntil;   //
 
     private String phoneNumber;  //

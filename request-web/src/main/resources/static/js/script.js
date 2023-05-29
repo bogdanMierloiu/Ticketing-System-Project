@@ -1,3 +1,19 @@
+                                // MAGIC THINGS
+
+
+function togglePolicemanAuthorization() {
+    var requestTypeSelect = document.getElementById("requestType");
+    var selectedOption = requestTypeSelect.options[requestTypeSelect.selectedIndex].text;
+    var policemanAuthorizationDiv = document.getElementById("policemanAuthorization");
+
+    if (selectedOption === "solicitare cont intrapol-b") {
+        policemanAuthorizationDiv.style.display = "block";
+    } else {
+        policemanAuthorizationDiv.style.display = "none";
+    }
+}
+
+
 function populateDepartments() {
     var selectedSubunitStructureId = document.getElementById("structuresDropdown").value;
 

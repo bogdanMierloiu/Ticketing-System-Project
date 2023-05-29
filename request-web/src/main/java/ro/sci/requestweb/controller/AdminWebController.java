@@ -134,7 +134,7 @@ public class AdminWebController {
     public RedirectView addRank(@ModelAttribute RankRequest request, Model model) {
         rankService.addRank(request);
         model.addAttribute("ranks", rankService.getAllRanks());
-        return new RedirectView("/request/admin/ranks");
+        return new RedirectView("/request/admin/all-ranks");
     }
 
     // ----------------------------------  IT SPECIALISTS -------------------------------------------------
@@ -180,7 +180,7 @@ public class AdminWebController {
     public RedirectView addRequestType(@ModelAttribute RequestTypeReq request, Model model) {
         requestTypeService.addRequestType(request);
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
-        return new RedirectView("/request/admin/request-types");
+        return new RedirectView("/request/admin/all-request-type");
     }
 
     // ----------------------------------  POLICEMEN ------------------------------------------------------
