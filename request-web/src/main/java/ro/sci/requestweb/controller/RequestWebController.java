@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.PolicemanRequest;
 import ro.sci.requestweb.dto.RequestResponse;
@@ -19,7 +20,6 @@ public class RequestWebController {
     private final RankService rankService;
     private final PoliceStructureService policeStructureService;
     private final RequestTypeService requestTypeService;
-    private final DepartmentService departmentService;
     private final ItSpecialistService itSpecialistService;
 
     @GetMapping
@@ -46,10 +46,9 @@ public class RequestWebController {
     }
 
     @PostMapping("/add-request")
-    public String addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
+    public RedirectView addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
         requestService.addRequest(accountRequest);
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:/request";
+        return new RedirectView("/request");
     }
 
     @GetMapping("/search-by-name")
@@ -64,24 +63,6 @@ public class RequestWebController {
         RequestResponse[] allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
         model.addAttribute("requests", allRequestsByPolicemanId);
         return "requests-for-policeman";
-    }
-
-    // POLICE STRUCTURE
-
-    @GetMapping("/structure-chief-approve/{requestId}")
-    public String structureChiefApprove(@PathVariable("requestId") Long requestId, Model model, HttpServletRequest request) {
-        requestService.structureChiefApprove(requestId);
-        String referer = request.getHeader("referer");
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + referer;
-    }
-
-    @GetMapping("structure-chief-reject/{requestId}")
-    public String structureChiefReject(@PathVariable("requestId") Long requestId, @RequestParam("observation") String observation, Model model, HttpServletRequest request) {
-        requestService.structureChiefReject(requestId, observation);
-        String referer = request.getHeader("referer");
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + referer;
     }
 
 

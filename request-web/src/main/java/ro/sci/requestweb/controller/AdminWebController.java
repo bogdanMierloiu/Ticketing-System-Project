@@ -1,11 +1,8 @@
 package ro.sci.requestweb.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +12,6 @@ import ro.sci.requestweb.service.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,8 +27,6 @@ public class AdminWebController {
     private final RequestTypeService requestTypeService;
     private final PolicemanService policemanService;
 
-    // Cache
-    private final CacheManager cacheManager;
 
     @GetMapping
     public String indexPage(Model model) {
@@ -210,17 +203,7 @@ public class AdminWebController {
         return ResponseEntity.ok(Arrays.asList(departments));
     }
 
-    // ------------------------------------ CACHE --------------------------------------------------
 
-    public void inspectCache() {
-        Cache cache = cacheManager.getCache("structures");
-        if (cache != null && cache.getNativeCache() instanceof ConcurrentMapCache concurrentMapCache) {
-            ConcurrentMap<Object, Object> cacheMap = concurrentMapCache.getNativeCache();
-            for (Map.Entry<Object, Object> entry : cacheMap.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
-            }
-        }
-    }
 
 
 

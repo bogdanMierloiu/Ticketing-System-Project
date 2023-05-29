@@ -131,7 +131,13 @@ function submitDecisionForm() {
 function submitRejectForm() {
     var requestId = document.getElementById("requestId").value;
     var decision = "reject";
-    var observation = document.getElementById("observation").value;
+    var observation = document.getElementById("observation").value.trim();
+
+    if(observation === ""){
+    // Mesaj de eroare pt observation gol
+    alert("Va rugam sa completati motivul respingerii:")
+    return;
+    }
 
     // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
     $.ajax({
@@ -197,7 +203,13 @@ function submitDecisionFormSecurity() {
 function submitRejectFormSecurity() {
     var requestId = document.getElementById("requestSecurityId").value;
     var decision = "reject";
-    var observation = document.getElementById("securityObservation").value;
+    var observation = document.getElementById("securityObservation").value.trim();
+
+    if(observation === ""){
+        // Mesaj de eroare pt observation gol
+        alert("Va rugam sa completati motivul respingerii:")
+        return;
+        }
 
     // Trimitere cerere Ajax către ruta "/request/security-decision/{requestId}"
     $.ajax({
@@ -267,8 +279,14 @@ function submitDecisionFormIT() {
 function submitRejectFormIT() {
     var requestId = document.getElementById("requestITId").value;
     var decision = "reject";
-    var observation = document.getElementById("itObservation").value;
+    var observation = document.getElementById("itObservation").value.trim();
     var itSpecialistId = 0;
+
+    if(observation === ""){
+        // Mesaj de eroare pt observation gol
+        alert("Va rugam sa completati motivul respingerii:")
+        return;
+        }
 
 
     // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"

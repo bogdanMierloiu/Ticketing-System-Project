@@ -21,6 +21,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getAllRequests());
     }
 
+
     @GetMapping("/policeman/{id}")
     public ResponseEntity<List<RequestResponse>> getAllByPolicemanId(@PathVariable("id") Long policemanId) {
         return ResponseEntity.ok(requestService.getAllByPolicemanId(policemanId));
