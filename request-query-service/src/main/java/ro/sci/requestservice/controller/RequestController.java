@@ -21,6 +21,12 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getAllRequests());
     }
 
+    @GetMapping("/all-requests-in-progress")
+    public ResponseEntity<List<RequestResponse>> findNonFinalizedAndRecentRejectedRequests() {
+        return ResponseEntity.ok(requestService.findNonFinalizedAndRecentRejectedRequests());
+    }
+
+
 
     @GetMapping("/policeman/{id}")
     public ResponseEntity<List<RequestResponse>> getAllByPolicemanId(@PathVariable("id") Long policemanId) {

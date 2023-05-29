@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 
@@ -36,6 +37,7 @@ public class AdminWebController {
     @GetMapping("/open-tickets")
     public String getAllRequests(Model model) {
         model.addAttribute("requests", requestService.getAllRequests());
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
 
@@ -55,10 +57,10 @@ public class AdminWebController {
 
     @PostMapping("/add-structure")
     @CachePut("structures")
-    public String addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
+    public RedirectView addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
         policeStructureService.addPoliceStructure(policeStructureRequest);
         model.addAttribute("structures", policeStructureService.getAllStructures());
-        return "structures";
+        return new RedirectView("/request/admin/all-structures");
     }
 
     // --------------------------------------  SUBUNITS ------------------------------------------------------
@@ -129,10 +131,10 @@ public class AdminWebController {
 
     @PostMapping("/add-rank")
     @CachePut("ranks")
-    public String addRank(@ModelAttribute RankRequest request, Model model){
+    public RedirectView addRank(@ModelAttribute RankRequest request, Model model) {
         rankService.addRank(request);
         model.addAttribute("ranks", rankService.getAllRanks());
-        return "ranks";
+        return new RedirectView("/request/admin/ranks");
     }
 
     // ----------------------------------  IT SPECIALISTS -------------------------------------------------
@@ -144,18 +146,19 @@ public class AdminWebController {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "it-specialists";
     }
+
     @GetMapping("/add-specialist-form")
-    public String addSpecialistForm(Model model){
+    public String addSpecialistForm(Model model) {
         model.addAttribute("ranks", rankService.getAllRanks());
         return "add-specialist-form";
     }
 
     @PostMapping("add-specialist")
     @CachePut("specialists")
-    public String addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model){
+    public RedirectView addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model) {
         itSpecialistService.addSpecialist(request);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-        return "it-specialists";
+        return new RedirectView("/request/admin/all-specialists");
     }
 
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
@@ -174,10 +177,10 @@ public class AdminWebController {
 
     @PostMapping("/add-request-type")
     @CachePut("request-types")
-    public String addRequestType(@ModelAttribute RequestTypeReq request, Model model){
+    public RedirectView addRequestType(@ModelAttribute RequestTypeReq request, Model model) {
         requestTypeService.addRequestType(request);
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
-        return "request-types";
+        return new RedirectView("/request/admin/request-types");
     }
 
     // ----------------------------------  POLICEMEN ------------------------------------------------------
@@ -192,19 +195,18 @@ public class AdminWebController {
 
 
     @GetMapping("/show-subunits-script/{policeStructureId}")
+    @Cacheable("subunits")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId) {
         PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         return ResponseEntity.ok(Arrays.asList(subunits));
     }
 
     @GetMapping("/show-departments-script/{subunitId}")
+    @Cacheable("departments")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId) {
         DepartmentResponse[] departments = departmentService.getBySubunit(subunitId);
         return ResponseEntity.ok(Arrays.asList(departments));
     }
-
-
-
 
 
 }

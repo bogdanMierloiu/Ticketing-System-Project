@@ -33,6 +33,18 @@ public class RequestService {
         return requestResponses;
     }
 
+    public List<RequestResponse> findNonFinalizedAndRecentRejectedRequests() {
+
+        List<Request> requests = requestRepo.findNonFinalizedRequestsOrderByCreatedAtDesc();
+
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return requestResponses;
+    }
+
     public RequestResponse findById(Long requestId) {
         return requestMapper.map(
                 requestRepo.findById(requestId).orElseThrow(
@@ -41,7 +53,7 @@ public class RequestService {
         );
     }
 
-    public List<RequestResponse> getAllByPolicemanId(Long id){
+    public List<RequestResponse> getAllByPolicemanId(Long id) {
         List<Request> requests = requestRepo.findAllByPolicemanId(id);
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
@@ -51,7 +63,7 @@ public class RequestService {
         return requestResponses;
     }
 
-    public List<RequestResponse> getAllByPolicemanName(String name){
+    public List<RequestResponse> getAllByPolicemanName(String name) {
         String[] nameParts = name.split(" ");
 
         String lastName = nameParts[0];

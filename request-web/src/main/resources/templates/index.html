@@ -110,7 +110,8 @@
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
                 </span>
                 </div>
-                <div th:if="${!request.isApprovedByStructureChief}" class="text-center">
+                <div th:if="${!request.isApprovedByStructureChief && request.status.name() != 'Respinsa'}"
+                     class="text-center">
                     <form id="decisionForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
@@ -135,7 +136,8 @@
             <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon -->
         </span>
                 </div>
-                <div th:if="${!request.isApprovedBySecurityStructure}" class="text-center">
+                <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
+                     class="text-center">
                     <form id="decisionSecurityForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
@@ -157,7 +159,7 @@
                     <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
                 <span th:unless="${request.isApprovedByITChief}">
                      <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
-                <div th:if="${!request.isApprovedByITChief}" class="text-center">
+                <div th:if="${!request.isApprovedByITChief && request.status.name() != 'Respinsa'}" class="text-center">
                     <form id="decisionITForm"
                           th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
                           method="post">
@@ -174,9 +176,10 @@
 
             <!-- STATUS -->
             <td>
-                <span th:if="${request.status == 'In_lucru'}" style="font-style: italic;">In lucru</span>
-                <span th:if="${request.status != 'In_lucru'}" style="font-style: italic;"
-                      th:text="${#strings.replace(request.status, '_', ' ')}"></span>
+                <span th:if="${request.status.name() == 'In_lucru'}" style="font-style: italic; color:green;">In lucru</span>
+                <span th:if="${request.status.name() == 'Deschisa'}" style="font-style: italic; color:darkgoldenrod;">Deschisa</span>
+                <span th:if="${request.status.name() == 'Respinsa'}" style="font-style: italic; color:red;">Respinsa</span>
+                <span th:if="${request.status.name() == 'Finalizata'}" style="font-style: italic; color:blue;">Finalizata</span>
             </td>
             <!-- BUTTON -->
             <td>

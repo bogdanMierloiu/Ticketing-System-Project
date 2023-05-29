@@ -12,9 +12,17 @@ public class RequestService {
 
     private final WebClient.Builder webClientBuilder;
 
-        public RequestResponse[] getAllRequests() {
+    public RequestResponse[] getAllRequests() {
         return webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/all-requests")
+                .retrieve()
+                .bodyToMono(RequestResponse[].class)
+                .block();
+    }
+
+    public RequestResponse[] getAllRequestsInProgress() {
+        return webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/all-requests-in-progress")
                 .retrieve()
                 .bodyToMono(RequestResponse[].class)
                 .block();
