@@ -125,23 +125,20 @@
                             <label for="certificate" class="form-label">Autorizatie serie/nr:</label>
                             <input id="certificate" type="text" class="form-control"
                                    placeholder="MAI/12345"
-                                   th:field="*{accountRequest.policemanRequest.certificate}"
-                                   th:required="${requestType == 'solicitare cont intrapol-b'}">
+                                   th:field="*{accountRequest.policemanRequest.certificate}">                                  >
                             <div class="invalid-feedback">Campul este obligatoriu.</div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="certificateValidFrom" class="form-label">Valabila de la:</label>
                                 <input id="certificateValidFrom" type="date" class="form-control"
-                                       th:field="*{accountRequest.policemanRequest.certificateValidFrom}"
-                                       th:required="${requestType == 'solicitare cont intrapol-b'}">
+                                       th:field="*{accountRequest.policemanRequest.certificateValidFrom}">
                                 <div class="invalid-feedback">Campul este obligatoriu.</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="certificateValidUntil" class="form-label">Valabila pana la:</label>
                                 <input id="certificateValidUntil" type="date" class="form-control"
-                                       th:field="*{accountRequest.policemanRequest.certificateValidUntil}"
-                                       th:required="${requestType == 'solicitare cont intrapol-b'}">
+                                       th:field="*{accountRequest.policemanRequest.certificateValidUntil}">
                                 <div class="invalid-feedback">Campul este obligatoriu.</div>
                             </div>
                         </div>

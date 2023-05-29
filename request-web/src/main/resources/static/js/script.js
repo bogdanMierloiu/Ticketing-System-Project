@@ -8,8 +8,14 @@ function togglePolicemanAuthorization() {
 
     if (selectedOption === "solicitare cont intrapol-b") {
         policemanAuthorizationDiv.style.display = "block";
+        document.getElementById('certificate').required = true;
+        document.getElementById('certificateValidFrom').required = true;
+        document.getElementById('certificateValidUntil').required = true;
     } else {
         policemanAuthorizationDiv.style.display = "none";
+        document.getElementById('certificate').required = false;
+        document.getElementById('certificateValidFrom').required = false;
+        document.getElementById('certificateValidUntil').required = false;
     }
 }
 
