@@ -91,7 +91,7 @@ window.addEventListener("DOMContentLoaded", setInitialDate);
 
 function onDecisionChange() {
     var decision = document.getElementById("decision").value;
-    var observationContainer = document.getElementById("observationContainer");
+
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
@@ -158,7 +158,6 @@ function submitRejectForm() {
 
 function onDecisionChangeSecurity() {
     var decision = document.getElementById("securityDecision").value;
-    var observationContainer = document.getElementById("observationContainer");
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
@@ -226,12 +225,7 @@ function submitRejectFormSecurity() {
 
 function onDecisionChangeIT() {
     var decision = document.getElementById("itDecision").value;
-    var observationContainer = document.getElementById("observationContainer");
 
-
-    // DE STERS
-    console.log(decision);
-    console.log(observationContainer);
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
@@ -242,19 +236,21 @@ function onDecisionChangeIT() {
         // Golește câmpul de observații
         document.getElementById("itObservation").value = "";
         // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
-        submitDecisionFormIT();
+        $('#specialistAssign').modal('show');
     }
 }
 
 function submitDecisionFormIT() {
     var requestId = document.getElementById("requestITId").value;
         var decision = document.getElementById("itDecision").value;
+        var observation = "";
+        var itSpecialistId = document.getElementById("itSpecialistId").value;
 
         // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
         $.ajax({
             url: "/request/it-decision/" + requestId,
             type: "POST",
-            data: { decision: decision },
+            data: { decision: decision, observation: observation, itSpecialistId: itSpecialistId},
             success: function(response) {
                 // Succes - gestionează răspunsul
                 alert("Cererea a fost aprobată cu succes!");
@@ -274,11 +270,6 @@ function submitRejectFormIT() {
     var observation = document.getElementById("itObservation").value;
     var itSpecialistId = 0;
 
-    // DE STERS
-    console.log(requestId);
-    console.log(decision);
-    console.log(observation)
-    console.log(itSpecialistId)
 
     // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
     $.ajax({

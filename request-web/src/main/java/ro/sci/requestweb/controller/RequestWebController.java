@@ -20,10 +20,12 @@ public class RequestWebController {
     private final PoliceStructureService policeStructureService;
     private final RequestTypeService requestTypeService;
     private final DepartmentService departmentService;
+    private final ItSpecialistService itSpecialistService;
 
     @GetMapping
     public String indexPage(Model model) {
         model.addAttribute("requests", requestService.getAllRequests());
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
 
@@ -128,7 +130,7 @@ public class RequestWebController {
                                    Model model,
                                    HttpServletRequest request) {
         if ("approve".equals(decision)) {
-            requestService.itApprove(requestId,itSpecialistId);
+            requestService.itApprove(requestId, itSpecialistId);
         } else if ("reject".equals(decision)) {
             requestService.itReject(requestId, observation);
         }
@@ -136,7 +138,6 @@ public class RequestWebController {
         model.addAttribute("requests", requestService.getAllRequests());
         return "redirect:" + referer;
     }
-
 
 
 }
