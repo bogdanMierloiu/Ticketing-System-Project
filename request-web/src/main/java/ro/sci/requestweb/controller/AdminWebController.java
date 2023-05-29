@@ -1,6 +1,11 @@
 package ro.sci.requestweb.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +15,8 @@ import ro.sci.requestweb.service.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +32,9 @@ public class AdminWebController {
     private final RequestTypeService requestTypeService;
     private final PolicemanService policemanService;
 
+    // Cache
+    private final CacheManager cacheManager;
+
     @GetMapping
     public String indexPage(Model model) {
         return "admin";
@@ -39,6 +49,7 @@ public class AdminWebController {
     // --------------------------------------  STRUCTURES ------------------------------------------------------
 
     @GetMapping("/all-structures")
+    @Cacheable("structures")
     public String viewAllStructures(Model model) {
         model.addAttribute("structures", policeStructureService.getAllStructures());
         return "structures";
@@ -50,6 +61,7 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-structure")
+    @CachePut("structures")
     public String addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
         policeStructureService.addPoliceStructure(policeStructureRequest);
         model.addAttribute("structures", policeStructureService.getAllStructures());
@@ -59,6 +71,7 @@ public class AdminWebController {
     // --------------------------------------  SUBUNITS ------------------------------------------------------
 
     @GetMapping("/show-subunits/{policeStructureId}")
+    @Cacheable("subunits")
     public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
         PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         model.addAttribute("subunits", subunits);
@@ -73,6 +86,7 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-subunit")
+    @CachePut("subunits")
     public String addSubunit(@ModelAttribute PoliceStructureSubunitRequest structureRequest, Model model) {
         policeStructureSubunitService.addSubunitStructure(structureRequest);
         model.addAttribute("subunits", policeStructureSubunitService.getStructuresByPoliceStation(structureRequest.getPoliceStructureId()));
@@ -83,6 +97,7 @@ public class AdminWebController {
     // --------------------------------------  DEPARTMENTS ------------------------------------------------------
 
     @GetMapping("/show-departments/{subunitId}")
+    @Cacheable("departments")
     public String viewDepartmentsForSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
         model.addAttribute("subunit", policeStructureSubunitService.findById(subunitId));
         model.addAttribute("departments", departmentService.getBySubunit(subunitId));
@@ -97,6 +112,7 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-department")
+    @CachePut("departments")
     public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
         departmentService.addDepartment(departmentRequest);
         model.addAttribute("subunit", policeStructureSubunitService.findById(departmentRequest.getPoliceStructureSubunitId()));
@@ -107,6 +123,7 @@ public class AdminWebController {
     // --------------------------------------  RANKS ------------------------------------------------------
 
     @GetMapping("/all-ranks")
+    @Cacheable("ranks")
     public String viewAllRanks(Model model) {
         model.addAttribute("ranks", rankService.getAllRanks());
         return "ranks";
@@ -118,6 +135,7 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-rank")
+    @CachePut("ranks")
     public String addRank(@ModelAttribute RankRequest request, Model model){
         rankService.addRank(request);
         model.addAttribute("ranks", rankService.getAllRanks());
@@ -128,6 +146,7 @@ public class AdminWebController {
 
 
     @GetMapping("/all-specialists")
+    @Cacheable("specialists")
     public String viewAllSpecialists(Model model) {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "it-specialists";
@@ -139,6 +158,7 @@ public class AdminWebController {
     }
 
     @PostMapping("add-specialist")
+    @CachePut("specialists")
     public String addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model){
         itSpecialistService.addSpecialist(request);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -148,6 +168,7 @@ public class AdminWebController {
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
 
     @GetMapping("/all-request-type")
+    @CachePut("request-types")
     public String viewAllRequestType(Model model) {
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "request-types";
@@ -159,6 +180,7 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-request-type")
+    @CachePut("request-types")
     public String addRequestType(@ModelAttribute RequestTypeReq request, Model model){
         requestTypeService.addRequestType(request);
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
@@ -187,6 +209,19 @@ public class AdminWebController {
         DepartmentResponse[] departments = departmentService.getBySubunit(subunitId);
         return ResponseEntity.ok(Arrays.asList(departments));
     }
+
+    // ------------------------------------ CACHE --------------------------------------------------
+
+    public void inspectCache() {
+        Cache cache = cacheManager.getCache("structures");
+        if (cache != null && cache.getNativeCache() instanceof ConcurrentMapCache concurrentMapCache) {
+            ConcurrentMap<Object, Object> cacheMap = concurrentMapCache.getNativeCache();
+            for (Map.Entry<Object, Object> entry : cacheMap.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        }
+    }
+
 
 
 }
