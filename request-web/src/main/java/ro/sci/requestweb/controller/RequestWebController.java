@@ -73,6 +73,24 @@ public class RequestWebController {
     }
 
 
+    @GetMapping("/show-requests-for-police-structure/{policeStructureId}")
+    public String searchByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+        RequestResponse[] allRequestsByPoliceStructure = requestService.getAllRequestsByPoliceStructure(policeStructureId);
+        model.addAttribute("requests", allRequestsByPoliceStructure);
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
+    }
+
+    @GetMapping("/show-requests-for-police-subunit/{subunitId}")
+    public String searchByPoliceSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
+        RequestResponse[] allRequestsByPoliceSubunit = requestService.getAllRequestsByPoliceSubunit(subunitId);
+        model.addAttribute("requests", allRequestsByPoliceSubunit);
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
+    }
+
+
+
     // POLICE STRUCTURE
     @PostMapping("/structure-chief-decision/{requestId}")
     public String structureChiefDecision(@PathVariable("requestId") Long requestId,

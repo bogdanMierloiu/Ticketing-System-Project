@@ -49,6 +49,20 @@ public class RequestService {
                 .bodyToMono(RequestResponse[].class)
                 .block();
     }
+    public RequestResponse[] getAllRequestsByPoliceStructure(Long policeStructureId) {
+        return webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/police-structure/{policeStructureId}", policeStructureId)
+                .retrieve()
+                .bodyToMono(RequestResponse[].class)
+                .block();
+    }
+    public RequestResponse[] getAllRequestsByPoliceSubunit(Long subunitId) {
+        return webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/police-subunit/{subunitId}", subunitId)
+                .retrieve()
+                .bodyToMono(RequestResponse[].class)
+                .block();
+    }
 
     public RequestResponse findById(Long requestId) {
         return webClientBuilder.build().get()

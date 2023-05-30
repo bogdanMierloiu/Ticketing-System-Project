@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Structuri de politie</title>
+    <title>Account Request Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
@@ -59,42 +59,74 @@
     </div>
 </nav>
 
+
 <div class="content-wrap">
-    <!--  Button -->
-    <div>
-        <form th:action="@{/request/admin/add-structure-form}">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga structura de politie</button>
-        </form>
-    </div>
-    <!--  Tabel -->
-    <div th:if="${#lists.isEmpty(structures)}">
+
+    <!--   Table start -->
+    <div th:if="${#lists.isEmpty(requests)}">
         <h5>Nu exista inregistrari</h5>
     </div>
-    <table th:if="${not #lists.isEmpty(structures)}" class="table table-hover text-center">
+
+    <table class="table table-hover text-center">
         <thead>
         <tr>
-            <th>Denumire structura de politie</th>
-            <th></th>
+            <th>Tip solicitare</th>
+            <th>Politist</th>
+            <th>Structura</th>
+            <th>Aprobat sef structura</th>
+            <th>Aprobat structura securitate</th>
+            <th>Aprobat sef SCI</th>
+            <th>Status</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="structure: ${structures}">
+        <tr th:each="request: ${requests}">
             <td>
-                <span th:text="${structure.structureName}"></span>
+                <span th:text="${request.getRequestTypeResponse.getRequestName()}"></span>
             </td>
             <td>
-                <form th:action="@{/request/admin/show-subunits/{policeStructureId}(policeStructureId=${structure.id})}">
-                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Afiseaza subunitatile de politie
-                    </button>
-                </form>
+                 <span>
+                     <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>
+                     <span th:text="${' ' + request.getPolicemanResponse.lastName + ' '
+                                          + request.getPolicemanResponse.firstName
+                     + (request.getPolicemanResponse.firstNameSecondary != null ? ' ' + request.getPolicemanResponse.firstNameSecondary : '')}"></span>
+                </span>
             </td>
             <td>
-                <form th:action="@{/request/show-requests-for-police-structure/{policeStructureId}(policeStructureId=${structure.id})}">
-                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Afiseaza solicitarile
-                    </button>
+                <span th:text="${request.getPolicemanResponse.getPoliceStructure.getStructureName}"></span>
+            </td>
+            <td>
+                    <span th:if="${request.isApprovedByStructureChief}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                <span th:unless="${request.isApprovedByStructureChief}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+                <div>
+                    <form th:action="@{/request/structure-chief-approve/{requestId}(requestId=${request.id})}">
+                        <input type="hidden" name="requestId" th:value="${request.id}">
+                        <button class="btn btn-outline-info btn-sm my-2 my-sm-0" type="submit">Aproba</button>
+                    </form>
+                </div>
+            </td>
+            <td>
+                    <span th:if="${request.isApprovedBySecurityStructure}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                <span th:unless="${request.isApprovedBySecurityStructure}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+            </td>
+            <td>
+                    <span th:if="${request.isApprovedByITChief}">
+                    <i class="fas fa-check-circle text-success"></i> <!-- Green checkmark icon --></span>
+                <span th:unless="${request.isApprovedByITChief}">
+                     <i class="fas fa-times-circle text-danger"></i> <!-- Red cross icon --> </span>
+            </td>
+            <td>
+                <span th:text="${request.status}"></span>
+            </td>
+            <td>
+                <form th:action="@{/request/find/{requestId}(requestId=${request.id})}">
+                    <input type="hidden" name="requestId" th:value="${request.id}">
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Deschide</button>
                 </form>
             </td>
         </tr>

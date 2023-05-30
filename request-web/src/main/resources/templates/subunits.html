@@ -95,6 +95,13 @@
                     </button>
                 </form>
             </td>
+            <td>
+                <form th:action="@{/request/show-requests-for-police-subunit/{subunitId}(subunitId=${subunit.id})}">
+                    <input type="hidden" name="subunitId" th:value="${subunit.id}">
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Afiseaza solicitarile
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
