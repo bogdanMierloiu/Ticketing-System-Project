@@ -26,11 +26,19 @@ public class RequestController {
         return ResponseEntity.ok(requestService.findNonFinalizedAndRecentRejectedRequests());
     }
 
-
-
     @GetMapping("/policeman/{id}")
     public ResponseEntity<List<RequestResponse>> getAllByPolicemanId(@PathVariable("id") Long policemanId) {
         return ResponseEntity.ok(requestService.getAllByPolicemanId(policemanId));
+    }
+
+    @GetMapping("/police-structure/{id}")
+    public ResponseEntity<List<RequestResponse>> getAllByPoliceStructure(@PathVariable("id") Long structureId) {
+        return ResponseEntity.ok(requestService.getAllByPoliceStructure(structureId));
+    }
+
+    @GetMapping("/police-subunit/{id}")
+    public ResponseEntity<List<RequestResponse>> getAllByPoliceSubunit(@PathVariable("id") Long subunitId) {
+        return ResponseEntity.ok(requestService.getAllByPoliceSubunit(subunitId));
     }
 
     @GetMapping("/search-by-name")
@@ -38,7 +46,6 @@ public class RequestController {
         List<RequestResponse> requests = requestService.getAllByPolicemanName(name);
         return ResponseEntity.ok(requests);
     }
-
 
     @GetMapping("/find/{requestId}")
     public ResponseEntity<RequestResponse> findById(@PathVariable("requestId") Long requestId) {

@@ -63,6 +63,25 @@ public class RequestService {
         return requestResponses;
     }
 
+    public List<RequestResponse> getAllByPoliceStructure(Long id) {
+        List<Request> requests = requestRepo.findAllByPoliceStructure(id);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return requestResponses;
+    }
+    public List<RequestResponse> getAllByPoliceSubunit(Long id) {
+        List<Request> requests = requestRepo.findAllByPoliceSubunit(id);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return requestResponses;
+    }
+
     public List<RequestResponse> getAllByPolicemanName(String name) {
         String[] nameParts = name.split(" ");
 
@@ -85,6 +104,10 @@ public class RequestService {
         }
         return requestResponses;
     }
+
+
+
+    // UTILS
 
 
     private RequestType getRequestTypeById(Long requestTypeId) {

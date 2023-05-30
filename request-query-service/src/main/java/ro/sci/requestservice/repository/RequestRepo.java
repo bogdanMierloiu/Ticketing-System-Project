@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface RequestRepo extends JpaRepository<Request, Long> {
 
-    @Query("Select r from Request r Order By r.createdAt desc LIMIT 200")
+    @Query("Select r from Request r Order By r.createdAt DESC")
     public List<Request> findAllOrderByCreatedAtDesc();
 
-    @Query("SELECT r FROM Request r WHERE r.status != 'Finalizata' ORDER BY r.createdAt DESC LIMIT 100")
+    @Query("SELECT r FROM Request r WHERE r.status != 'Finalizata' ORDER BY r.createdAt DESC")
     public List<Request> findNonFinalizedRequestsOrderByCreatedAtDesc();
 
 
@@ -26,6 +26,13 @@ public interface RequestRepo extends JpaRepository<Request, Long> {
     public List<Request> findAllByPolicemanName(@Param("lastName") String lastName,
                                                 @Param("firstName") String firstName,
                                                 @Param("firstNameSecondary") String firstNameSecondary);
+
+    @Query("Select r from Request r where r.policeman.policeStructure.id = :id")
+    public List<Request> findAllByPoliceStructure(@Param("id") Long id);
+
+    @Query("Select r from Request r where r.policeman.policeStructureSubunit.id = :id")
+    public List<Request> findAllByPoliceSubunit(@Param("id") Long id);
+
 
 
 

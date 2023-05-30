@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RequestService {
 
@@ -32,7 +33,7 @@ public class RequestService {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
-    @Transactional
+
     public RequestResponse add(AccountRequest accountRequest) {
         Request request = requestMapper.map(accountRequest);
         Policeman policeman = policemanService.add(accountRequest.getPolicemanRequest());
@@ -67,6 +68,7 @@ public class RequestService {
 
 
     // Structure Chief Decisions
+
     public void structureChiefApprove(Long requestId) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
@@ -122,10 +124,14 @@ public class RequestService {
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if (requestToAssign.getIsApprovedBySecurityStructure()) {
             requestToAssign.setIsApprovedByITChief(true);
+            requestToAssign.setItChiefAppAt(LocalDateTime.now());
             requestToAssign.setStatus(Status.In_lucru);
             requestToAssign.setObservation(requestToAssign.getObservation() + "\n" +
                     "Aprobat de Serviciul Comunicatii si Informatica la data de " +
-                    requestToAssign.getSecurityStructAppAt().format(dateTimeFormatter));
+                    requestToAssign.getItChiefAppAt().format(dateTimeFormatter)
+                    + " si repartizata catre " +
+                    requestToAssign.getItSpecialist().getLastName() + " " +
+                    requestToAssign.getItSpecialist().getFirstName());
             requestToAssign.setItSpecialist(itSpecialistToAssign);
             requestRepo.save(requestToAssign);
         } else {
@@ -148,8 +154,9 @@ public class RequestService {
     public void finalize(Long requestId) {
         Request requestToFinalize = findById(requestId);
         requestToFinalize.setStatus(Status.Finalizata);
+        requestToFinalize.setSolvedAt(LocalDateTime.now());
         requestToFinalize.setObservation(requestToFinalize.getObservation() + "\n" +
-                "Finalizata la data de " + LocalDateTime.now().format(dateTimeFormatter) +
+                "Finalizata la data de " + requestToFinalize.getSolvedAt().format(dateTimeFormatter) +
                 " de catre " +
                 requestToFinalize.getItSpecialist().getLastName() + " " +
                 requestToFinalize.getItSpecialist().getFirstName());
