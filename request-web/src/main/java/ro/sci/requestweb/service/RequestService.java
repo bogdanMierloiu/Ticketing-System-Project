@@ -147,4 +147,16 @@ public class RequestService {
                 .toBodilessEntity()
                 .block();
     }
+
+    public void finalize(Long requestId) {
+        webClientBuilder.build().patch()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-service")
+                        .path("/api/v1/request/finalize/{requestId}")
+                        .build(requestId))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
 }

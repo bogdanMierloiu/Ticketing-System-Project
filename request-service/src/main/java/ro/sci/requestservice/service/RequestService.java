@@ -143,6 +143,18 @@ public class RequestService {
         requestRepo.save(requestToReject);
     }
 
+    // FINALIZE
+
+    public void finalize(Long requestId) {
+        Request requestToFinalize = findById(requestId);
+        requestToFinalize.setStatus(Status.Finalizata);
+        requestToFinalize.setObservation(requestToFinalize.getObservation() + "\n" +
+                "Finalizata la data de " + LocalDateTime.now().format(dateTimeFormatter) +
+                " de catre " +
+                requestToFinalize.getItSpecialist().getLastName() + " " +
+                requestToFinalize.getItSpecialist().getFirstName());
+        requestRepo.save(requestToFinalize);
+    }
 
     // UTILS
 

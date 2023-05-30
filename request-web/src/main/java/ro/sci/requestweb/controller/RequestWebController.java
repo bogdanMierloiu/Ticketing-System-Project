@@ -35,6 +35,13 @@ public class RequestWebController {
         return "request-print";
     }
 
+    @PostMapping("/finalize/{requestId}")
+    public RedirectView finalizeRequest(@PathVariable("requestId") Long requestId, Model model) {
+        requestService.finalize(requestId);
+        model.addAttribute("request", requestService.findById(requestId));
+        return new RedirectView("/request/find/{requestId}");
+    }
+
     @GetMapping("/add-request-form")
     public String addRequestForm(Model model) {
         model.addAttribute("accountRequest", new AccountRequest());

@@ -66,14 +66,20 @@ public class RequestController {
     }
 
 
-
-
     // SPECIALISTS
 
     @PatchMapping("/assign-specialist/{requestId}/{itSpecialistId}")
     public ResponseEntity<String> assignSpecialist(@PathVariable("requestId") Long requestId, @PathVariable("itSpecialistId") Long specialistId) {
         requestService.assignSpecialist(requestId, specialistId);
         return ResponseEntity.ok("Assigned successfully");
+    }
+
+    // FINALIZE
+
+    @PatchMapping("/finalize/{requestId}")
+    public ResponseEntity<String> finalizeRequest(@PathVariable("requestId") Long requestId) {
+        requestService.finalize(requestId);
+        return ResponseEntity.ok("Finalized successfully");
     }
 
 }

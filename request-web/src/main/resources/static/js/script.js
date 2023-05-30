@@ -287,7 +287,7 @@ function submitDecisionFormIT() {
             data: { decision: decision, observation: observation, itSpecialistId: itSpecialistId},
             success: function(response) {
                 // Succes - gestionează răspunsul
-                alert("Cererea a fost aprobată cu succes!");
+                alert("Cererea a fost aprobata si repartizata cu succes!");
                 // Refresh pagina
                 window.location.reload();
             },
