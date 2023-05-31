@@ -1,5 +1,10 @@
                                 // MAGIC THINGS
 
+window.addEventListener("DOMContentLoaded", setInitialDate);
+if (window.location.pathname.includes("add-request")) {
+    // Apelăm funcția populatePoliceStructures() doar pe pagina de add-request
+    populateStructures();
+}
 
 function togglePolicemanAuthorization() {
     var requestTypeSelect = document.getElementById("requestType");
@@ -19,8 +24,38 @@ function togglePolicemanAuthorization() {
     }
 }
 
+function populateStructures() {
+    var selectedStructureId = document.getElementById("policeStructureDropDown").getAttribute("th:field");
+    if (selectedStructureId !== "") {
+        fetch("/request/admin/show-structures-script")
+            .then(response => response.json())
+            .then(data => {
+                let structuresDropdown = document.getElementById("policeStructureDropDown");
+                structuresDropdown.innerHTML = "";
+
+                let defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "Selectati structura de politie";
+                structuresDropdown.appendChild(defaultOption);
+
+                data.map(function(structure) {
+                    let option = document.createElement("option");
+                    option.value = structure.id;
+                    option.text = structure.structureName;
+                    return option;
+                }).forEach(function(option) {
+                    structuresDropdown.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Eroare la obținerea structurilor de poliție:", error);
+            });
+    }
+}
+
+
 function populateSubunits() {
-    var selectedStructureId = document.getElementById("policeStructure").value;
+    var selectedStructureId = document.getElementById("policeStructureDropDown").value;
 
     if (selectedStructureId !== "") {
         // Realizează o cerere către server pentru a obține subunitățile
@@ -106,7 +141,7 @@ function setInitialDate(){
       document.getElementById("currentDate").value = formattedDate;
 }
 
-window.addEventListener("DOMContentLoaded", setInitialDate);
+
 
 // AUTORIZATION POLICE STRUCTURE CHIEF
 

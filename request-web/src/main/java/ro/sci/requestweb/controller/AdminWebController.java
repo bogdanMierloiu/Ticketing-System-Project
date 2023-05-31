@@ -208,5 +208,12 @@ public class AdminWebController {
         return ResponseEntity.ok(Arrays.asList(departments));
     }
 
+    @GetMapping("/show-structures-script")
+    @Cacheable("structures")
+    public ResponseEntity<List<PoliceStructureResponse>> viewPoliceStructuresScript() {
+        PoliceStructureResponse[] structures = policeStructureService.getAllStructures();
+        return ResponseEntity.ok(Arrays.asList(structures));
+    }
+
 
 }
