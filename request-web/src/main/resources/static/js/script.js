@@ -19,45 +19,6 @@ function togglePolicemanAuthorization() {
     }
 }
 
-
-function populateDepartments() {
-    var selectedSubunitStructureId = document.getElementById("structuresDropdown").value;
-
-    if (selectedSubunitStructureId !== "") {
-        // Realizează o cerere către server pentru a obține departamentele
-        fetch("/request/admin/show-departments-script/" + selectedSubunitStructureId)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                let departmentDropdown = document.getElementById("departmentDropdown");
-                departmentDropdown.innerHTML = "";
-
-                let defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.text = "Selectati linia de munca";
-                departmentDropdown.appendChild(defaultOption);
-
-                data.map(function(department) {
-                    let option = document.createElement("option");
-                    option.value = department.id;
-                    option.text = department.departmentName;
-                    return option;
-                }).forEach(function(option) {
-                    departmentDropdown.appendChild(option);
-                });
-
-                // Actualizează valoarea câmpului policemanRequest.departmentId cu id-ul departamentului selectat
-                let selectedDepartmentId = departmentDropdown.value;
-                document.getElementById("departmentDropdown").setAttribute("th:value", selectedDepartmentId);
-            })
-            .catch(error => {
-                console.error("Eroare la obținerea departamentelor:", error);
-            });
-    }
-}
-
-
-
 function populateSubunits() {
     var selectedStructureId = document.getElementById("policeStructure").value;
 
@@ -88,10 +49,48 @@ function populateSubunits() {
 
                 // Actualizează valoarea câmpului policemanRequest.policeStructureSubunitId cu id-ul subunității selectate
                 let selectedStructureSubunitId = structuresDropdown.value; // Modificați "selectedStructureId" în "selectedStructureSubunitId"
-                document.getElementById("structuresDropdown").setAttribute("th:value", selectedStructureSubunitId); // Modificați "departmentDropdown" în "structuresDropdown"
+                document.getElementById("structuresDropdown").value = selectedStructureSubunitId;
             })
             .catch(error => {
                 console.error("Eroare la obținerea subunităților:", error);
+            });
+    }
+}
+
+
+
+function populateDepartments() {
+    var selectedSubunitStructureId = document.getElementById("structuresDropdown").value;
+
+    if (selectedSubunitStructureId !== "") {
+        // Realizează o cerere către server pentru a obține departamentele
+        fetch("/request/admin/show-departments-script/" + selectedSubunitStructureId)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                let departmentDropdown = document.getElementById("departmentDropdown");
+                departmentDropdown.innerHTML = "";
+
+                let defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "Selectati linia de munca";
+                departmentDropdown.appendChild(defaultOption);
+
+                data.map(function(department) {
+                    let option = document.createElement("option");
+                    option.value = department.id;
+                    option.text = department.departmentName;
+                    return option;
+                }).forEach(function(option) {
+                    departmentDropdown.appendChild(option);
+                });
+
+                // Actualizează valoarea câmpului policemanRequest.departmentId cu id-ul departamentului selectat
+                let selectedDepartmentId = departmentDropdown.value;
+                document.getElementById("departmentDropdown").value = selectedDepartmentId;
+            })
+            .catch(error => {
+                console.error("Eroare la obținerea departamentelor:", error);
             });
     }
 }

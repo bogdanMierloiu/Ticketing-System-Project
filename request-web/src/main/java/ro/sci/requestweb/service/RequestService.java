@@ -1,10 +1,12 @@
 package ro.sci.requestweb.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.RequestResponse;
+import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class RequestService {
                 .bodyToMono(RequestResponse[].class)
                 .block();
     }
+
     public RequestResponse[] getAllRequestsByPoliceStructure(Long policeStructureId) {
         return webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/police-structure/{policeStructureId}", policeStructureId)
@@ -56,6 +59,7 @@ public class RequestService {
                 .bodyToMono(RequestResponse[].class)
                 .block();
     }
+
     public RequestResponse[] getAllRequestsByPoliceSubunit(Long subunitId) {
         return webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/police-subunit/{subunitId}", subunitId)
@@ -72,11 +76,14 @@ public class RequestService {
                 .block();
     }
 
-    public void addRequest(AccountRequest request) {
+    public void addRequest(AccountRequest request) throws AlreadyHaveThisRequestException {
         webClientBuilder.build().post()
                 .uri("lb://request-service/api/v1/request")
                 .bodyValue(request)
                 .retrieve()
+                .onStatus(HttpStatus.FORBIDDEN::equals, clientResponse -> {
+                    throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
+                })
                 .toBodilessEntity()
                 .block();
     }

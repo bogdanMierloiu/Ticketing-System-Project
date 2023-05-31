@@ -1,18 +1,20 @@
 package ro.sci.requestweb.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.PolicemanRequest;
 import ro.sci.requestweb.dto.RequestResponse;
+import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.service.*;
 
 @Controller
 @RequiredArgsConstructor
+@SessionAttributes("user")
 @RequestMapping("/request")
 public class RequestWebController {
 
@@ -23,9 +25,14 @@ public class RequestWebController {
     private final ItSpecialistService itSpecialistService;
 
     @GetMapping
-    public String indexPage(Model model) {
+    public String indexPage(Model model, HttpSession session) {
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+
+//        System.out.println("session: '\n' ");
+//        Object user = session.getAttribute("user");
+//        System.out.println(user.toString());
+
         return "index";
     }
 
@@ -36,10 +43,10 @@ public class RequestWebController {
     }
 
     @PostMapping("/finalize/{requestId}")
-    public RedirectView finalizeRequest(@PathVariable("requestId") Long requestId, Model model) {
+    public String finalizeRequest(@PathVariable("requestId") Long requestId, Model model) {
         requestService.finalize(requestId);
         model.addAttribute("request", requestService.findById(requestId));
-        return new RedirectView("/request/find/{requestId}");
+        return "request-print";
     }
 
     @GetMapping("/add-request-form")
@@ -53,23 +60,36 @@ public class RequestWebController {
     }
 
     @PostMapping("/add-request")
-    public RedirectView addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
-        requestService.addRequest(accountRequest);
-        return new RedirectView("/request");
+    public String addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
+        try {
+            requestService.addRequest(accountRequest);
+            return "redirect:/request";
+        } catch (AlreadyHaveThisRequestException exception) {
+            model.addAttribute("accountRequest", accountRequest);
+            model.addAttribute("policemanRequest", new PolicemanRequest());
+            model.addAttribute("ranks", rankService.getAllRanks());
+            model.addAttribute("structures", policeStructureService.getAllStructures());
+            model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+            model.addAttribute("errorMessage", "Pentru acest politist, exista deja o solicitare" +
+                    " de acelasi tip in lucru. Va rugam asteptati solutionarea acesteia!");
+            return "add-request";
+        }
     }
 
     @GetMapping("/search-by-name")
     public String searchByName(@RequestParam String name, Model model) {
         RequestResponse[] allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
         model.addAttribute("requests", allRequestsByPolicemanName);
-        return "requests-for-policeman";
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
     }
 
     @GetMapping("/show-requests-for-policeman/{policemanId}")
     public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model) {
         RequestResponse[] allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
         model.addAttribute("requests", allRequestsByPolicemanId);
-        return "requests-for-policeman";
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
     }
 
 
@@ -88,7 +108,6 @@ public class RequestWebController {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
-
 
 
     // POLICE STRUCTURE

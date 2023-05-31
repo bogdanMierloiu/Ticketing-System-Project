@@ -1,7 +1,3 @@
-.error-message {
-    color: red
-}
-
 html, body {
     height: 100%;
 
@@ -88,7 +84,10 @@ p {
     width: 150px; /* Lățimea dorită pentru select */
 }
 
-
+.error-message {
+    color: red;
+    font-weight: bold;
+}
 
 
 

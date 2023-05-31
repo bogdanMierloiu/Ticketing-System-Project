@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestservice.dto.AccountRequest;
-import ro.sci.requestservice.dto.RequestResponse;
+import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.service.RequestService;
 
 
@@ -17,9 +17,14 @@ public class RequestController {
     private final RequestService requestService;
 
     @PostMapping
-    public ResponseEntity<RequestResponse> add(@RequestBody AccountRequest accountRequest) {
-        return new ResponseEntity<>(requestService.add(accountRequest), HttpStatus.OK);
+    public ResponseEntity<?> add(@RequestBody AccountRequest accountRequest) {
+        try {
+            return new ResponseEntity<>(requestService.add(accountRequest), HttpStatus.OK);
+        } catch (AlreadyHaveThisRequestException exception) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Already have this request type in progress!");
+        }
     }
+
 
     // POLICE STRUCTURE
 

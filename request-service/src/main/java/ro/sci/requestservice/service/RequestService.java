@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.AccountRequest;
 import ro.sci.requestservice.dto.RequestResponse;
+import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.mapper.RequestMapper;
@@ -34,9 +35,11 @@ public class RequestService {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
 
-    public RequestResponse add(AccountRequest accountRequest) {
+    public RequestResponse add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
         Request request = requestMapper.map(accountRequest);
         Policeman policeman = policemanService.add(accountRequest.getPolicemanRequest());
+        hasAlreadyThisRequestType(accountRequest.getRequestTypeId(), policeman);
+
         request.setPoliceman(policeman);
         request.setStatus(Status.Deschisa);
         request.setObservation(accountRequest.getObservation());
@@ -123,6 +126,7 @@ public class RequestService {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if (requestToAssign.getIsApprovedBySecurityStructure()) {
+            requestToAssign.setItSpecialist(itSpecialistToAssign);
             requestToAssign.setIsApprovedByITChief(true);
             requestToAssign.setItChiefAppAt(LocalDateTime.now());
             requestToAssign.setStatus(Status.In_lucru);
@@ -132,7 +136,6 @@ public class RequestService {
                     + " si repartizata catre " +
                     requestToAssign.getItSpecialist().getLastName() + " " +
                     requestToAssign.getItSpecialist().getFirstName());
-            requestToAssign.setItSpecialist(itSpecialistToAssign);
             requestRepo.save(requestToAssign);
         } else {
             throw new UnsupportedOperationException("The request is not approved by security structure");
@@ -176,5 +179,17 @@ public class RequestService {
                 () -> new NotFoundException("The IT Specialist with id " + itSpecialistId + " not found")
         );
     }
+
+    private void hasAlreadyThisRequestType(Long requestTypeId, Policeman policeman) throws AlreadyHaveThisRequestException {
+        RequestType requestTypeRequested = getRequestTypeById(requestTypeId);
+        for (Request request : policeman.getRequests()) {
+            if (request.getStatus() == Status.In_lucru || request.getStatus() == Status.Deschisa) {
+                if (requestTypeRequested.equals(request.getRequestType())) {
+                    throw new AlreadyHaveThisRequestException("Already have this request type in progress!");
+                }
+            }
+        }
+    }
+
 
 }
