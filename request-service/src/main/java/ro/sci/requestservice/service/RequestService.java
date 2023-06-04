@@ -8,6 +8,7 @@ import ro.sci.requestservice.dto.AccountRequest;
 import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.exception.NotFoundException;
+import ro.sci.requestservice.exception.UnsupportedOperationException;
 import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.mapper.RequestMapper;
 import ro.sci.requestservice.model.*;
@@ -95,7 +96,7 @@ public class RequestService {
 
     // Security Structure Decisions
 
-    public void securityStructureApprove(Long requestId) {
+    public void securityStructureApprove(Long requestId) throws UnsupportedOperationException {
         Request requestToApprove = findById(requestId);
         if (requestToApprove.getIsApprovedByStructureChief()) {
             requestToApprove.setIsApprovedBySecurityStructure(true);

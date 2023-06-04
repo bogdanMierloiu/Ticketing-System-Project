@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestservice.dto.AccountRequest;
 import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
+import ro.sci.requestservice.exception.UnsupportedOperationException;
 import ro.sci.requestservice.service.RequestService;
 
 
@@ -21,7 +22,7 @@ public class RequestController {
         try {
             return new ResponseEntity<>(requestService.add(accountRequest), HttpStatus.OK);
         } catch (AlreadyHaveThisRequestException exception) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Already have this request type in progress!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Already have this request type in progress!");
         }
     }
 
@@ -42,11 +43,17 @@ public class RequestController {
 
     // SECURITY STRUCTURE
     @PatchMapping("/security-approve/{requestId}")
-    public ResponseEntity<String> securityApprove(@PathVariable("requestId") Long requestId) {
-        requestService.securityStructureApprove(requestId);
-        return ResponseEntity.ok("Approved successfully");
+    public ResponseEntity<?> securityApprove(@PathVariable("requestId") Long requestId) {
+        try {
+            requestService.securityStructureApprove(requestId);
+            return ResponseEntity.ok("Approved successfully");
+        } catch (UnsupportedOperationException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The request is not " +
+                    "approved by chief of police structure ");
+        }
     }
 
+    //
     @PutMapping("/security-reject/{requestId}")
     public ResponseEntity<String> securityReject(@PathVariable("requestId") Long requestId, @RequestParam String observation) {
         requestService.securityStructureReject(requestId, observation);

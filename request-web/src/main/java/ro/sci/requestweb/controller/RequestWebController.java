@@ -29,6 +29,7 @@ public class RequestWebController {
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
 
+
 //        System.out.println("session: '\n' ");
 //        Object user = session.getAttribute("user");
 //        System.out.println(user.toString());
@@ -54,7 +55,6 @@ public class RequestWebController {
         model.addAttribute("accountRequest", new AccountRequest());
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
-//        model.addAttribute("structures", policeStructureService.getAllStructures());
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "add-request";
     }
@@ -68,7 +68,6 @@ public class RequestWebController {
             model.addAttribute("accountRequest", accountRequest);
             model.addAttribute("policemanRequest", new PolicemanRequest());
             model.addAttribute("ranks", rankService.getAllRanks());
-//            model.addAttribute("structures", policeStructureService.getAllStructures());
             model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
             model.addAttribute("errorMessage", "Pentru acest politist, exista deja o solicitare" +
                     " de acelasi tip in lucru. Va rugam asteptati solutionarea acesteia!");
@@ -145,7 +144,8 @@ public class RequestWebController {
         return "redirect:" + referer;
     }
 
-    // IT STRUCTURE
+
+// IT STRUCTURE
 
     @PostMapping("/it-decision/{requestId}")
     public String securityDecision(@PathVariable("requestId") Long requestId,

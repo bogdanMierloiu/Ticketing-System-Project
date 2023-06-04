@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
+import ro.sci.requestweb.exception.UnsupportedOperationException;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +82,7 @@ public class RequestService {
                 .uri("lb://request-service/api/v1/request")
                 .bodyValue(request)
                 .retrieve()
-                .onStatus(HttpStatus.FORBIDDEN::equals, clientResponse -> {
+                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
                     throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
                 })
                 .toBodilessEntity()
@@ -117,7 +118,7 @@ public class RequestService {
 
     // SECURITY STRUCTURE
 
-    public void securityApprove(Long requestId) {
+    public void securityApprove(Long requestId) throws UnsupportedOperationException {
         webClientBuilder.build().patch()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("lb")
@@ -125,9 +126,13 @@ public class RequestService {
                         .path("/api/v1/request/security-approve/{requestId}")
                         .build(requestId))
                 .retrieve()
+                .onStatus(HttpStatus.BAD_REQUEST::equals, clientResponse -> {
+                    throw new UnsupportedOperationException("Solicitarea nu este aprobata de seful structurii de politie emitente!");
+                })
                 .toBodilessEntity()
                 .block();
     }
+
 
     public void securityReject(Long requestId, String observation) {
         webClientBuilder.build().put()
