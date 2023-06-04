@@ -45,9 +45,15 @@ public class RequestWebController {
 
     @PostMapping("/finalize/{requestId}")
     public String finalizeRequest(@PathVariable("requestId") Long requestId, Model model) {
-        requestService.finalize(requestId);
-        model.addAttribute("request", requestService.findById(requestId));
-        return "request-print";
+        try {
+            requestService.finalize(requestId);
+            model.addAttribute("request", requestService.findById(requestId));
+            return "request-print";
+        } catch (Exception exception) {
+            model.addAttribute("request", requestService.findById(requestId));
+            model.addAttribute("errorMessage", exception.getMessage());
+            return "request-print";
+        }
     }
 
     @GetMapping("/add-request-form")

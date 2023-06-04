@@ -111,14 +111,18 @@ public class RequestService {
         }
     }
 
-    public void securityStructureReject(Long requestId, String observation) {
+    public void securityStructureReject(Long requestId, String observation) throws UnsupportedOperationException {
         Request requestToReject = findById(requestId);
-        requestToReject.setIsApprovedBySecurityStructure(false);
-        requestToReject.setStatus(Status.Respinsa);
-        requestToReject.setObservation(requestToReject.getObservation() + "\n" +
-                "Respinsa de structura de securitate la data de " +
-                LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
-        requestRepo.save(requestToReject);
+        if (requestToReject.getIsApprovedByStructureChief()) {
+            requestToReject.setIsApprovedBySecurityStructure(false);
+            requestToReject.setStatus(Status.Respinsa);
+            requestToReject.setObservation(requestToReject.getObservation() + "\n" +
+                    "Respinsa de structura de securitate la data de " +
+                    LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
+            requestRepo.save(requestToReject);
+        } else {
+            throw new UnsupportedOperationException("The request is not approved by chief of police structure");
+        }
     }
 
     // IT STRUCTURE
@@ -155,8 +159,9 @@ public class RequestService {
 
     // FINALIZE
 
-    public void finalize(Long requestId) {
+    public void finalize(Long requestId) throws UnsupportedOperationException {
         Request requestToFinalize = findById(requestId);
+        checkApprovalBeforeFinalize(requestToFinalize);
         requestToFinalize.setStatus(Status.Finalizata);
         requestToFinalize.setSolvedAt(LocalDateTime.now());
         requestToFinalize.setObservation(requestToFinalize.getObservation() + "\n" +
@@ -191,6 +196,29 @@ public class RequestService {
             }
         }
     }
+
+    private void checkApprovalBeforeFinalize(Request requestToCheck) throws UnsupportedOperationException {
+        StringBuilder errorMessage = new StringBuilder("Solicitarea nu este aprobata de:");
+
+        if (!requestToCheck.getIsApprovedByStructureChief()) {
+            errorMessage.append(" seful structurii de politie emitente,");
+        }
+        if (!requestToCheck.getIsApprovedBySecurityStructure()) {
+            errorMessage.append(" de structura de securitate,");
+        }
+        if (!requestToCheck.getIsApprovedByITChief()) {
+            errorMessage.append(" de Serviciul Comunicatii si Informatica,");
+        }
+
+        // Eliminăm ultima virgulă și adăugăm semnul de exclamare la final
+        if (errorMessage.charAt(errorMessage.length() - 1) == ',') {
+            errorMessage.deleteCharAt(errorMessage.length() - 1);
+        }
+        errorMessage.append("!");
+
+        throw new UnsupportedOperationException(errorMessage.toString());
+    }
+
 
 
 }

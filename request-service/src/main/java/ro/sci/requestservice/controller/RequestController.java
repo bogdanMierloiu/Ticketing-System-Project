@@ -53,11 +53,15 @@ public class RequestController {
         }
     }
 
-    //
     @PutMapping("/security-reject/{requestId}")
-    public ResponseEntity<String> securityReject(@PathVariable("requestId") Long requestId, @RequestParam String observation) {
-        requestService.securityStructureReject(requestId, observation);
-        return ResponseEntity.ok("Rejected successfully");
+    public ResponseEntity<?> securityReject(@PathVariable("requestId") Long requestId, @RequestParam String observation) {
+        try {
+            requestService.securityStructureReject(requestId, observation);
+            return ResponseEntity.ok("Rejected successfully");
+        } catch (UnsupportedOperationException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The request is not " +
+                    "approved by chief of police structure ");
+        }
     }
 
 
@@ -89,9 +93,13 @@ public class RequestController {
     // FINALIZE
 
     @PatchMapping("/finalize/{requestId}")
-    public ResponseEntity<String> finalizeRequest(@PathVariable("requestId") Long requestId) {
-        requestService.finalize(requestId);
-        return ResponseEntity.ok("Finalized successfully");
+    public ResponseEntity<?> finalizeRequest(@PathVariable("requestId") Long requestId) {
+        try {
+            requestService.finalize(requestId);
+            return ResponseEntity.ok("Finalized successfully");
+        } catch (UnsupportedOperationException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+        }
     }
 
 }

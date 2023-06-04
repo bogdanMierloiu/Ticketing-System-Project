@@ -134,7 +134,7 @@ public class RequestService {
     }
 
 
-    public void securityReject(Long requestId, String observation) {
+    public void securityReject(Long requestId, String observation) throws UnsupportedOperationException {
         webClientBuilder.build().put()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("lb")
@@ -143,6 +143,9 @@ public class RequestService {
                         .queryParam("observation", observation)
                         .build(requestId))
                 .retrieve()
+                .onStatus(HttpStatus.BAD_REQUEST::equals, clientResponse -> {
+                    throw new UnsupportedOperationException("Solicitarea nu este aprobata de seful structurii de politie emitente!");
+                })
                 .toBodilessEntity()
                 .block();
     }
@@ -174,7 +177,7 @@ public class RequestService {
                 .block();
     }
 
-    public void finalize(Long requestId) {
+    public void finalize(Long requestId) throws UnsupportedOperationException {
         webClientBuilder.build().patch()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("lb")
@@ -182,6 +185,8 @@ public class RequestService {
                         .path("/api/v1/request/finalize/{requestId}")
                         .build(requestId))
                 .retrieve()
+                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> clientResponse.bodyToMono(String.class)
+                        .flatMap(errorBody -> reactor.core.publisher.Mono.error(new UnsupportedOperationException(errorBody))))
                 .toBodilessEntity()
                 .block();
     }

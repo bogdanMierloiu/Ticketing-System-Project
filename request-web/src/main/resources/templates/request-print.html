@@ -23,8 +23,12 @@
             <button class="finalize-button btn btn-success my-2 my-sm-0">Finalizează</button>
         </form>
     </div>
-</div>
+    <div>
+        <span class="error-message-in-print-page" style="color: red; font-weight: bold" th:if="${errorMessage}"
+              th:text="${errorMessage}"></span>
+    </div>
 
+</div>
 
 <div class="header">
     <h1>

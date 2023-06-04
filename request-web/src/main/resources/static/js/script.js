@@ -251,21 +251,17 @@ function submitDecisionFormSecurity() {
         },
         error: function (xhr, status, error) {
             // Verificați răspunsul de eroare și tratați eroarea specifică
-            console.log("XHR STATUS:", xhr.status);
-            console.log("Error: ", error);
             if (xhr.status === 500) {
-                // Eroare de solicitare nevalidă (Bad Request)
                 var errorMessage = xhr.responseText;
                 if (errorMessage.includes("Solicitarea nu este aprobata de seful structurii de politie emitente!")) {
                     // Tratați excepția în funcție de nevoile dvs.
                     alert("Solicitarea nu este aprobata de seful structurii de politie emitente!");
                 } else {
                     // Alte erori specifice
-                    alert("A apărut o eroare: " + errorMessage);
+                    alert("A apărut o eroare");
                 }
+                window.location.reload();
             }
-            // Refresh pagina
-            window.location.reload();
         }
     });
 }
@@ -295,10 +291,19 @@ function submitRejectFormSecurity() {
         },
         error: function (xhr, status, error) {
             // Eroare - gestionează eroarea
-            alert("A apărut o eroare la respingerea cererii:", error);
-            // Închide fereastra modală
-            $('#securityRejectModalLabel').modal('hide');
-            window.location.reload();
+            if (xhr.status === 500) {
+                var errorMessage = xhr.responseText;
+                if (errorMessage.includes("Solicitarea nu este aprobata de seful structurii de politie emitente!")) {
+                    // Tratați excepția în funcție de nevoile dvs.
+                    alert("Solicitarea nu este aprobata de seful structurii de politie emitente!");
+                } else {
+                    // Alte erori specifice
+                    alert("A apărut o eroare");
+                }
+                // Închide fereastra modală
+                $('#securityRejectModalLabel').modal('hide');
+                window.location.reload();
+            }
         }
     });
 }

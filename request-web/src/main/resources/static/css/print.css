@@ -51,4 +51,9 @@ body {
         .finalize-button{
             display:none;
         }
+        .error-message-in-print-page {
+            display: none;
+            color: red;
+            font-weight: bold;
+        }
     }
