@@ -201,24 +201,23 @@ public class RequestService {
         StringBuilder errorMessage = new StringBuilder("Solicitarea nu este aprobata de:");
 
         if (!requestToCheck.getIsApprovedByStructureChief()) {
-            errorMessage.append(" seful structurii de politie emitente,");
+            errorMessage.append(" Seful structurii de Politie emitente,");
         }
         if (!requestToCheck.getIsApprovedBySecurityStructure()) {
-            errorMessage.append(" de structura de securitate,");
+            errorMessage.append(" Structura de securitate,");
         }
         if (!requestToCheck.getIsApprovedByITChief()) {
-            errorMessage.append(" de Serviciul Comunicatii si Informatica,");
+            errorMessage.append(" Serviciul Comunicatii si Informatica,");
         }
 
         // Eliminăm ultima virgulă și adăugăm semnul de exclamare la final
         if (errorMessage.charAt(errorMessage.length() - 1) == ',') {
             errorMessage.deleteCharAt(errorMessage.length() - 1);
+            errorMessage.append("!");
+            throw new UnsupportedOperationException(errorMessage.toString());
         }
-        errorMessage.append("!");
 
-        throw new UnsupportedOperationException(errorMessage.toString());
     }
-
 
 
 }

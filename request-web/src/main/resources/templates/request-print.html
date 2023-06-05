@@ -126,7 +126,8 @@
 
 <div class="field">
     <span class="span-section">STATUS:</span>
-    <span class="field-value" th:text="${request.status}"></span>
+    <span th:if="${request.status.name() == 'In_lucru'}">In lucru</span>
+    <span class="field-value" th:text="${request.status.name() != 'In_lucru' ? request.status.name() : ''}"></span>
 </div>
 
 
