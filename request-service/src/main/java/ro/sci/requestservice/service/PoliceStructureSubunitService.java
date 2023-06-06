@@ -2,6 +2,7 @@ package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.PoliceStructureSubunitRequest;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.model.PoliceStructure;
@@ -12,6 +13,7 @@ import ro.sci.requestservice.repository.PoliceStructureSubunitRepo;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PoliceStructureSubunitService {
 
     private final PoliceStructureSubunitRepo policeStructureSubunitRepo;

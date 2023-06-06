@@ -15,13 +15,14 @@ import ro.sci.requestservice.repository.RankRepo;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ItSpecialistService {
 
     private final ItSpecialistRepo itSpecialistRepo;
     private final RankRepo rankRepo;
     private final ItSpecialistMapper itSpecialistMapper;
 
-    @Transactional
+
     public ItSpecialistResponse add(ItSpecialistRequest specialistRequest) {
         ItSpecialist itSpecialist = new ItSpecialist();
         itSpecialist.setFirstName(specialistRequest.getFirstName());

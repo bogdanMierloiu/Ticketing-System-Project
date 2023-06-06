@@ -13,12 +13,13 @@ import ro.sci.requestservice.repository.PoliceStructureSubunitRepo;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class DepartmentService {
 
     private final DepartmentRepo departmentRepo;
     private final PoliceStructureSubunitRepo policeStructureSubunitRepoRepo;
 
-    @Transactional
+
     public void add(DepartmentRequest departmentRequest) {
         Department departmentToSave = new Department();
         departmentToSave.setDepartmentName(departmentRequest.getDepartmentName());

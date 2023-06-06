@@ -10,11 +10,12 @@ import ro.sci.requestservice.repository.RankRepo;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RankService {
 
     private final RankRepo rankRepo;
 
-    @Transactional
+
     public void add(RankRequest rankRequest) {
         Rank rank = new Rank();
         rank.setRankName(rankRequest.getRankName());

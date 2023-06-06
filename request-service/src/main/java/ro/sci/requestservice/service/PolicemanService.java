@@ -2,14 +2,18 @@ package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.PolicemanRequest;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.model.*;
 import ro.sci.requestservice.repository.*;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PolicemanService {
 
     private final PolicemanRepo policemanRepo;
@@ -41,6 +45,7 @@ public class PolicemanService {
 
             return policemanRepo.save(policeman);
         } else {
+            checkPolicemanFields(policemanFromDB, policemanRequest);
             return policemanFromDB;
         }
     }
@@ -71,6 +76,58 @@ public class PolicemanService {
 
     private Policeman policemanExists(PolicemanRequest policemanRequest) {
         return policemanRepo.findByPersonalNumber(policemanRequest.getPersonalNumber());
+    }
+
+    private void checkPolicemanFields(Policeman policemanFromDB, PolicemanRequest policemanRequest) {
+        boolean hasChanges = false;
+        if (!(policemanRequest.getCertificate() == null)) {
+            if (!Objects.equals(policemanFromDB.getCertificate(), policemanRequest.getCertificate())) {
+                policemanFromDB.setCertificate(policemanRequest.getCertificate());
+                policemanFromDB.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
+                policemanFromDB.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
+                hasChanges = true;
+            }
+        }
+        if (!Objects.equals(policemanFromDB.getPhoneNumber(), policemanRequest.getPhoneNumber())) {
+            policemanFromDB.setPhoneNumber(policemanRequest.getPhoneNumber());
+            hasChanges = true;
+        }
+        if (!Objects.equals(policemanFromDB.getPhoneNumberPolice(), policemanRequest.getPhoneNumberPolice())) {
+            policemanFromDB.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
+            hasChanges = true;
+        }
+        if (!Objects.equals(policemanFromDB.getEmail(), policemanRequest.getEmail())) {
+            policemanFromDB.setEmail(policemanRequest.getEmail());
+            hasChanges = true;
+        }
+
+        Rank rank = getRankById(policemanRequest.getRankId());
+        if (!Objects.equals(policemanFromDB.getRank(), rank)) {
+            policemanFromDB.setRank(rank);
+            hasChanges = true;
+        }
+
+        PoliceStructure policeStructure = getPoliceStructureById(policemanRequest.getPoliceStructureId());
+        if (!Objects.equals(policemanFromDB.getPoliceStructure(), policeStructure)) {
+            policemanFromDB.setPoliceStructure(policeStructure);
+            hasChanges = true;
+        }
+
+        PoliceStructureSubunit policeStructureSubunit = getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId());
+        if (!Objects.equals(policemanFromDB.getPoliceStructureSubunit(), policeStructureSubunit)) {
+            policemanFromDB.setPoliceStructureSubunit(policeStructureSubunit);
+            hasChanges = true;
+        }
+
+        Department department = getDepartmentById(policemanRequest.getDepartmentId());
+        if (!Objects.equals(policemanFromDB.getDepartment(), department)) {
+            policemanFromDB.setDepartment(department);
+            hasChanges = true;
+        }
+
+        if (hasChanges) {
+            policemanRepo.save(policemanFromDB);
+        }
     }
 
 
