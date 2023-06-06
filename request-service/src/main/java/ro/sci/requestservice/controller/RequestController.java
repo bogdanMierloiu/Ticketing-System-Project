@@ -48,7 +48,7 @@ public class RequestController {
             requestService.securityStructureApprove(requestId);
             return ResponseEntity.ok("Approved successfully");
         } catch (UnsupportedOperationException exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The request is not " +
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
                     "approved by chief of police structure ");
         }
     }
@@ -59,7 +59,7 @@ public class RequestController {
             requestService.securityStructureReject(requestId, observation);
             return ResponseEntity.ok("Rejected successfully");
         } catch (UnsupportedOperationException exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The request is not " +
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
                     "approved by chief of police structure ");
         }
     }
@@ -70,8 +70,13 @@ public class RequestController {
     @PutMapping("/it-approve/{requestId}/{itSpecialistId}")
     public ResponseEntity<String> itApproveAssign(@PathVariable("requestId") Long requestId,
                                                   @PathVariable("itSpecialistId") Long itSpecialistId) {
-        requestService.assignSpecialist(requestId, itSpecialistId);
-        return ResponseEntity.ok("Assigned successfully");
+        try {
+            requestService.assignSpecialist(requestId, itSpecialistId);
+            return ResponseEntity.ok("Assigned successfully");
+        } catch (UnsupportedOperationException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Solicitarea nu este aprobata de structura de securitate");
+        }
+
     }
 
     @PutMapping("/it-reject/{requestId}")

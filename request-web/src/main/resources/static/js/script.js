@@ -314,7 +314,6 @@ function submitRejectFormSecurity() {
 function onDecisionChangeIT() {
     var decision = document.getElementById("itDecision").value;
 
-
     if (decision === "reject") {
         // Afiseaza fereastra modală
         $('#rejectModalForIT').modal('show');
@@ -346,9 +345,20 @@ function submitDecisionFormIT() {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
-            alert("A apărut o eroare la aprobarea cererii:", error);
-        }
+            if (xhr.status === 500) {
+               var errorMessage = xhr.responseText;
+               if (errorMessage.includes("Solicitarea nu este aprobata de structura de securitate!")) {
+               // Tratați excepția în funcție de nevoile dvs.
+               alert("Solicitarea nu este aprobata de structura de securitate!");
+               } else {
+               // Alte erori specifice
+               alert("A apărut o eroare");
+                   }
+                // Închide fereastra modală
+                $('#specialistAssign').modal('hide');
+                window.location.reload();
+                }
+            }
     });
 }
 

@@ -127,7 +127,7 @@ public class RequestService {
 
     // IT STRUCTURE
 
-    public void assignSpecialist(Long requestId, Long itSpecialistId) {
+    public void assignSpecialist(Long requestId, Long itSpecialistId) throws UnsupportedOperationException {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if (requestToAssign.getIsApprovedBySecurityStructure()) {

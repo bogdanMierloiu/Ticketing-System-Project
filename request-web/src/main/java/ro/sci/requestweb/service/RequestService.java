@@ -126,7 +126,7 @@ public class RequestService {
                         .path("/api/v1/request/security-approve/{requestId}")
                         .build(requestId))
                 .retrieve()
-                .onStatus(HttpStatus.BAD_REQUEST::equals, clientResponse -> {
+                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
                     throw new UnsupportedOperationException("Solicitarea nu este aprobata de seful structurii de politie emitente!");
                 })
                 .toBodilessEntity()
@@ -143,7 +143,7 @@ public class RequestService {
                         .queryParam("observation", observation)
                         .build(requestId))
                 .retrieve()
-                .onStatus(HttpStatus.BAD_REQUEST::equals, clientResponse -> {
+                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
                     throw new UnsupportedOperationException("Solicitarea nu este aprobata de seful structurii de politie emitente!");
                 })
                 .toBodilessEntity()
@@ -160,6 +160,9 @@ public class RequestService {
                         .path("/api/v1/request/it-approve/{requestId}/{itSpecialistId}")
                         .build(requestId, itSpecialistId))
                 .retrieve()
+                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
+                    throw new UnsupportedOperationException("Solicitarea nu este aprobata de structura de securitate!");
+                })
                 .toBodilessEntity()
                 .block();
     }
