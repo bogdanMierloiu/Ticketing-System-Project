@@ -17,12 +17,15 @@
     <div>
         <button class="print-button btn btn-info my-2 my-sm-0" onclick="window.print()">Printează</button>
     </div>
-    <div th:if="${request.status.name() != 'Finalizata'}" style="padding-top:3px;">
-        <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}" method="post">
-            <input type="hidden" th:value="${request.id}" name="requestId">
-            <button class="finalize-button btn btn-success my-2 my-sm-0">Finalizează</button>
-        </form>
+    <div th:if="${isApproved == true}">
+        <div th:if="${request.status.name() != 'Finalizata'}" style="padding-top:3px;">
+            <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}" method="post">
+                <input type="hidden" th:value="${request.id}" name="requestId">
+                <button class="finalize-button btn btn-success my-2 my-sm-0">Finalizează</button>
+            </form>
+        </div>
     </div>
+
     <div>
         <span class="error-message-in-print-page" style="color: red; font-weight: bold" th:if="${errorMessage}"
               th:text="${errorMessage}"></span>

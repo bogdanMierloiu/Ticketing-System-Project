@@ -2,6 +2,17 @@
 
 window.addEventListener("DOMContentLoaded", setInitialDate);
 
+function setInitialDate() {
+    // Obține data curentă
+    var currentDate = new Date();
+
+    // Formatează data într-un format compatibil cu LocalDate din Java
+    var formattedDate = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' + ('0' + currentDate.getDate()).slice(-2);
+
+    // Setează valoarea câmpului de introducere a datei la data curentă
+    document.getElementById("currentDate").value = formattedDate;
+}
+
 if (window.location.pathname.includes("add-request")) {
     // Apelăm funcția populatePoliceStructures() doar pe pagina de add-request
     populateStructures();
@@ -130,23 +141,11 @@ function populateDepartments() {
     }
 }
 
-function setInitialDate() {
-    // Obține data curentă
-    var currentDate = new Date();
-
-    // Formatează data într-un format compatibil cu LocalDate din Java
-    var formattedDate = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' + ('0' + currentDate.getDate()).slice(-2);
-
-    // Setează valoarea câmpului de introducere a datei la data curentă
-    document.getElementById("currentDate").value = formattedDate;
-}
-
 
 // AUTORIZATION POLICE STRUCTURE CHIEF
 
-function onDecisionChange() {
-    var decision = document.getElementById("decision").value;
-
+function onDecisionChange(requestId) {
+    var decision = document.getElementById("decision-" + requestId).value;
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
@@ -161,11 +160,10 @@ function onDecisionChange() {
     }
 }
 
-function submitDecisionForm() {
-    var requestId = document.getElementById("requestId").value;
-    var decision = document.getElementById("decision").value;
+function submitDecisionForm(requestId) {
+    var decision = document.getElementById("decision-" + requestId).value;
 
-    // Trimitere cerere Ajax către ruta "/structure-chief-decision/{requestId}"
+    // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
     $.ajax({
         url: "/request/structure-chief-decision/" + requestId,
         type: "POST",
@@ -179,18 +177,19 @@ function submitDecisionForm() {
         error: function (xhr, status, error) {
             // Eroare - gestionează eroarea
             alert("A apărut o eroare la aprobarea cererii:", error);
+            window.location.reload();
         }
     });
 }
 
-function submitRejectForm() {
-    var requestId = document.getElementById("requestId").value;
+
+function submitRejectForm(requestId) {
     var decision = "reject";
-    var observation = document.getElementById("observation").value.trim();
+    var observation = document.getElementById("observation-" + requestId).value.trim();
 
     if (observation === "") {
-        // Mesaj de eroare pt observation gol
-        alert("Va rugam sa completati motivul respingerii:")
+        // Mesaj de eroare pentru observație goală
+        alert("Vă rugăm să completați motivul respingerii:");
         return;
     }
 
@@ -216,10 +215,11 @@ function submitRejectForm() {
     });
 }
 
+
 // AUTORIZATION SECURITY STRUCTURE
 
-function onDecisionChangeSecurity() {
-    var decision = document.getElementById("securityDecision").value;
+function onDecisionChangeSecurity(requestId) {
+    var decision = document.getElementById("securityDecision-" + requestId).value;
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
@@ -228,15 +228,14 @@ function onDecisionChangeSecurity() {
         // Ascunde fereastra modală
         $('#rejectModalForSecurity').modal('hide');
         // Golește câmpul de observații
-        document.getElementById("observation").value = "";
+        document.getElementById("securityObservation-" + requestId).value = "";
         // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
-        submitDecisionFormSecurity();
+        submitDecisionFormSecurity(requestId);
     }
 }
 
-function submitDecisionFormSecurity() {
-    var requestId = document.getElementById("requestSecurityId").value;
-    var decision = document.getElementById("securityDecision").value;
+function submitDecisionFormSecurity(requestId) {
+    var decision = document.getElementById("securityDecision-" + requestId).value;
 
     // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
     $.ajax({
@@ -266,14 +265,13 @@ function submitDecisionFormSecurity() {
     });
 }
 
-function submitRejectFormSecurity() {
-    var requestId = document.getElementById("requestSecurityId").value;
+function submitRejectFormSecurity(requestId) {
     var decision = "reject";
-    var observation = document.getElementById("securityObservation").value.trim();
+    var observation = document.getElementById("securityObservation-" + requestId).value.trim();
 
     if (observation === "") {
-        // Mesaj de eroare pt observation gol
-        alert("Va rugam sa completati motivul respingerii:")
+        // Mesaj de eroare pentru observație goală
+        alert("Vă rugăm să completați motivul respingerii:");
         return;
     }
 
@@ -309,77 +307,74 @@ function submitRejectFormSecurity() {
 }
 
 
+
 // IT STRUCTURE
 
-function onDecisionChangeIT() {
-    var decision = document.getElementById("itDecision").value;
+function onDecisionChangeIT(element) {
+    var decision = element.value;
+    var requestId = element.parentElement.querySelector('[name="requestId"]').value;
+    console.log(decision);
+    console.log(requestId);
 
-    if (decision === "reject") {
-        // Afiseaza fereastra modală
-        $('#rejectModalForIT').modal('show');
-    } else if (decision === "approve") {
-        // Ascunde fereastra modală
-        $('#rejectModalForIT').modal('hide');
-        // Golește câmpul de observații
-        document.getElementById("itObservation").value = "";
-        // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
-        $('#specialistAssign').modal('show');
-    }
+     if (decision === "reject") {
+            // Setează valoarea requestId în atributul data-request-id al modalului
+            document.getElementById("rejectModalForIT").setAttribute("data-request-id", requestId);
+            // Afiseaza fereastra modală
+            $('#rejectModalForIT').modal('show');
+        } else if (decision === "approve") {
+            // Setează valoarea requestId în atributul data-request-id al modalului
+            document.getElementById("specialistAssign").setAttribute("data-request-id", requestId);
+            // Ascunde fereastra modală
+            $('#rejectModalForIT').modal('hide');
+            // Golește câmpul de observații
+            document.getElementById("itObservation").value = "";
+            // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
+            $('#specialistAssign').modal('show');
+        }
 }
 
 function submitDecisionFormIT() {
-    var requestId = document.getElementById("requestITId").value;
-    var decision = document.getElementById("itDecision").value;
+    var decision = "approve";
     var observation = "";
     var itSpecialistId = document.getElementById("itSpecialistId").value;
-
-    // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
-    $.ajax({
-        url: "/request/it-decision/" + requestId,
-        type: "POST",
-        data: {decision: decision, observation: observation, itSpecialistId: itSpecialistId},
-        success: function (response) {
-            // Succes - gestionează răspunsul
-            alert("Cererea a fost aprobata si repartizata cu succes!");
-            // Refresh pagina
-            window.location.reload();
-        },
-        error: function (xhr, status, error) {
-            if (xhr.status === 500) {
-               var errorMessage = xhr.responseText;
-               if (errorMessage.includes("Solicitarea nu este aprobata de structura de securitate!")) {
-               // Tratați excepția în funcție de nevoile dvs.
-               alert("Solicitarea nu este aprobata de structura de securitate!");
-               } else {
-               // Alte erori specifice
-               alert("A apărut o eroare");
-                   }
-                // Închide fereastra modală
-                $('#specialistAssign').modal('hide');
-                window.location.reload();
-                }
-            }
-    });
-}
-
-function submitRejectFormIT() {
-    var requestId = document.getElementById("requestITId").value;
-    var decision = "reject";
-    var observation = document.getElementById("itObservation").value.trim();
-    var itSpecialistId = 0;
-
-    if (observation === "") {
-        // Mesaj de eroare pt observation gol
-        alert("Va rugam sa completati motivul respingerii:")
-        return;
-    }
+    var requestId = document.getElementById("specialistAssign").getAttribute("data-request-id");
 
 
     // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
     $.ajax({
         url: "/request/it-decision/" + requestId,
         type: "POST",
-        data: {decision: decision, observation: observation, itSpecialistId: itSpecialistId},
+        data: { decision: decision, observation: observation, itSpecialistId: itSpecialistId },
+        success: function (response) {
+            // Succes - gestionează răspunsul
+            alert("Cererea a fost aprobată și repartizată cu succes!");
+            // Refresh pagina
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            // Eroare - gestionează eroarea
+            alert("A apărut o eroare la aprobarea cererii: " + error);
+        }
+    });
+}
+
+function submitRejectFormIT() {
+    var decision = "reject";
+    var observation = document.getElementById("itObservation").value.trim();
+    var itSpecialistId = 0;
+    var requestId = document.getElementById("rejectModalForIT").getAttribute("data-request-id");
+
+    if (observation === "") {
+        // Mesaj de eroare pentru observație goală
+        alert("Vă rugăm să completați motivul respingerii.");
+        return;
+    }
+
+    // Trimitere cerere Ajax către ruta "/request/it-decision/{requestId}"
+    $.ajax({
+        url: "/request/it-decision/" + requestId,
+        type: "POST",
+        data: { decision: decision, observation: observation, itSpecialistId: itSpecialistId },
         success: function (response) {
             // Succes - gestionează răspunsul
             alert("Cererea a fost respinsă cu succes!");
@@ -389,11 +384,11 @@ function submitRejectFormIT() {
         },
         error: function (xhr, status, error) {
             // Eroare - gestionează eroarea
-            alert("A apărut o eroare la respingerea cererii:", error);
+            alert("A apărut o eroare la respingerea cererii: " + error);
             // Închide fereastra modală
             $('#rejectModalForIT').modal('hide');
+            window.location.reload();
         }
     });
 }
-
 

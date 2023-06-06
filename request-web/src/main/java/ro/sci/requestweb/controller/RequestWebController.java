@@ -39,7 +39,12 @@ public class RequestWebController {
 
     @GetMapping("/find/{requestId}")
     public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
-        model.addAttribute("request", requestService.findById(requestId));
+        RequestResponse requestResponse = requestService.findById(requestId);
+        boolean isApproved = requestResponse.getIsApprovedByStructureChief() &&
+                requestResponse.getIsApprovedBySecurityStructure() &&
+                requestResponse.getIsApprovedByITChief();
+        model.addAttribute("isApproved", isApproved);
+        model.addAttribute("request", requestResponse);
         return "request-print";
     }
 
