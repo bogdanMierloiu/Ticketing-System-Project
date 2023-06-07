@@ -294,19 +294,15 @@ function submitRejectFormSecurity() {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
             if (xhr.status === 500) {
                 var errorMessage = xhr.responseText;
                 if (errorMessage.includes("Solicitarea nu este aprobata de seful structurii de politie emitente!")) {
-                    // Tratați excepția în funcție de nevoile dvs.
-                    alert("Solicitarea nu este aprobata de seful structurii de politie emitente!");
-                } else {
-                    // Alte erori specifice
-                    alert("A apărut o eroare");
-                }
-                // Închide fereastra modală
-                $('#securityRejectModalLabel').modal('hide');
-                window.location.reload();
+                 alert("Solicitarea nu este aprobata de seful structurii de politie emitente!");
+            } else {
+               alert("A apărut o eroare");
+            }
+            $('#securityRejectModalLabel').modal('hide');
+            window.location.reload();
             }
         }
     });
@@ -358,10 +354,17 @@ function submitDecisionFormIT() {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
-            alert("A apărut o eroare la aprobarea cererii: " + error);
+            if (xhr.status === 500) {
+              var errorMessage = xhr.responseText;
+              if (errorMessage.includes("Solicitarea nu este aprobata de structura de securitate!")) {
+                  alert("Solicitarea nu este aprobata de structura de securitate!");
+              } else {
+                  alert("A apărut o eroare");
+              }
+            window.location.reload();
         }
-    });
+    }
+});
 }
 
 function submitRejectFormIT() {
@@ -389,9 +392,14 @@ function submitRejectFormIT() {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
-            alert("A apărut o eroare la respingerea cererii: " + error);
-            // Închide fereastra modală
+            if (xhr.status === 500) {
+                var errorMessage = xhr.responseText;
+                if (errorMessage.includes("Solicitarea nu este aprobata de structura de securitate!")) {
+                    alert("Solicitarea nu este aprobata de structura de securitate!");
+                } else {
+                    alert("A apărut o eroare");
+                }
+            }
             $('#rejectModalForIT').modal('hide');
             window.location.reload();
         }
