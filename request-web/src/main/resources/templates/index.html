@@ -113,16 +113,16 @@
                 </div>
                 <div th:if="${!request.isApprovedByStructureChief && request.status.name() != 'Respinsa'}"
                      class="text-center">
-                    <form id="decisionForm"
-                          th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
-                          method="post">
-                        <select class="form-select narrow-select" id="'decision-' + ${request.id}" name="decision"
-                                onchange="onDecisionChange(${request.id})">
+                    <form id="'decisionPoliceStructureForm-'+ ${request.id}" method="post">
+                        <select class="form-select narrow-select" id="'policeStructureDecision-' + ${request.id}"
+                                name="decision"
+                                onchange="onPoliceStructureDecisionChange(this)">
                             <option>Autorizează</option>
                             <option value="approve">APROBA</option>
                             <option value="reject">RESPINGE</option>
                         </select>
-                        <input type="hidden" id="requestId" name="requestId" th:value="${request.id}">
+                        <input type="hidden" id="'requestPoliceStructureId-'+${request.id}" name="requestId"
+                               th:value="${request.id}">
                     </form>
 
                 </div>
@@ -140,7 +140,7 @@
                 </div>
                 <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
                      class="text-center">
-                    <form id="decisionSecurityForm-' + ${request.id}" method="post">
+                    <form id="'decisionSecurityForm-' + ${request.id}" method="post">
                         <select class="form-select narrow-select" id="'securityDecision-' + ${request.id}"
                                 name="decision" onchange="onDecisionChangeSecurity(this)">
                             <option>Autorizează</option>
@@ -213,7 +213,7 @@
 </footer>
 
 <!-- Modal pentru șeful structurii -->
-<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="structureRejectModalLabel"
+<div class="modal fade" id="rejectPoliceStructureModal" tabindex="-1" role="dialog" aria-labelledby="structureRejectModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -224,7 +224,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" id="observation" class="form-control" required>
+                <input type="text" id="policeStructureObservation" class="form-control" required>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Anulează</button>
@@ -293,7 +293,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <select class="form-select" id="itSpecialistId" name="itSpecialistId" onchange="submitDecisionFormIT(this)">
+                <select class="form-select" id="itSpecialistId" name="itSpecialistId"
+                        onchange="submitDecisionFormIT(this)">
                     <option value="">Selectati lucratorul</option>
                     <option th:each="specialist : ${specialists}" th:value="${specialist.id}"
                             th:text="${specialist.lastName + ' ' + specialist.firstName}"></option>

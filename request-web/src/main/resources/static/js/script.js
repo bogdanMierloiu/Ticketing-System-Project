@@ -144,30 +144,32 @@ function populateDepartments() {
 
 // AUTORIZATION POLICE STRUCTURE CHIEF
 
-function onDecisionChange(requestId) {
-    var decision = document.getElementById("decision-" + requestId).value;
+function onPoliceStructureDecisionChange(element) {
+    var decision = element.value;
+    var requestId = element.parentElement.querySelector('[name="requestId"]').value;
 
     if (decision === "reject") {
-        // Afiseaza fereastra modală
-        $('#rejectModal').modal('show');
+        $('#rejectPoliceStructureModal').modal('show');
+        document.getElementById("rejectPoliceStructureModal").setAttribute("data-request-id", requestId);
     } else if (decision === "approve") {
         // Ascunde fereastra modală
-        $('#rejectModal').modal('hide');
+        $('#rejectPoliceStructureModal').modal('hide');
         // Golește câmpul de observații
-        document.getElementById("observation").value = "";
+        document.getElementById("policeStructureObservation").value = "";
         // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
-        submitDecisionForm();
+        submitDecisionForm(requestId);
     }
 }
 
 function submitDecisionForm(requestId) {
-    var decision = document.getElementById("decision-" + requestId).value;
+    var decision = "approve";
+    var observation = "";
 
     // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
     $.ajax({
         url: "/request/structure-chief-decision/" + requestId,
         type: "POST",
-        data: {decision: decision},
+        data: {decision: decision, observation: observation},
         success: function (response) {
             // Succes - gestionează răspunsul
             alert("Cererea a fost aprobată cu succes!");
@@ -175,7 +177,6 @@ function submitDecisionForm(requestId) {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
             alert("A apărut o eroare la aprobarea cererii:", error);
             window.location.reload();
         }
@@ -183,9 +184,10 @@ function submitDecisionForm(requestId) {
 }
 
 
-function submitRejectForm(requestId) {
+function submitRejectForm() {
     var decision = "reject";
-    var observation = document.getElementById("observation-" + requestId).value.trim();
+    var observation = document.getElementById("policeStructureObservation").value.trim();
+    var requestId = document.getElementById("rejectPoliceStructureModal").getAttribute("data-request-id");
 
     if (observation === "") {
         // Mesaj de eroare pentru observație goală
@@ -206,11 +208,8 @@ function submitRejectForm(requestId) {
             window.location.reload();
         },
         error: function (xhr, status, error) {
-            // Eroare - gestionează eroarea
-            alert("A apărut o eroare la respingerea cererii:", error);
-            // Închide fereastra modală
-            $('#rejectModal').modal('hide');
-            window.location.reload();
+          alert("A apărut o eroare la aprobarea cererii:", error);
+          window.location.reload();
         }
     });
 }
@@ -307,7 +306,6 @@ function submitRejectFormSecurity() {
         }
     });
 }
-
 
 
 // IT STRUCTURE
