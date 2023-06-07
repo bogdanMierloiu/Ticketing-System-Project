@@ -1,13 +1,17 @@
 package ro.sci.requestservice.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import ro.sci.requestservice.model.Status;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class RequestResponse {
 
     private Long id;

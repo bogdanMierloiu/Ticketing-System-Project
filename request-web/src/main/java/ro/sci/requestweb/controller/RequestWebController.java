@@ -29,10 +29,12 @@ public class RequestWebController {
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
 
-
-//        System.out.println("session: '\n' ");
-//        Object user = session.getAttribute("user");
-//        System.out.println(user.toString());
+        // Obține utilizatorul din sesiune
+        Object user = session.getAttribute("user");
+        if (user != null) {
+            // Preia informațiile despre utilizator și adaugă-le în model
+            model.addAttribute("user", user);
+        }
 
         return "index";
     }
@@ -40,9 +42,7 @@ public class RequestWebController {
     @GetMapping("/find/{requestId}")
     public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
         RequestResponse requestResponse = requestService.findById(requestId);
-        boolean isApproved = requestResponse.getIsApprovedByStructureChief() &&
-                requestResponse.getIsApprovedBySecurityStructure() &&
-                requestResponse.getIsApprovedByITChief();
+        boolean isApproved = isFullyApproved(requestResponse);
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
         return "request-print";
@@ -71,7 +71,7 @@ public class RequestWebController {
     }
 
     @PostMapping("/add-request")
-    public String addStructure(@ModelAttribute AccountRequest accountRequest, Model model) {
+    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model) {
         try {
             requestService.addRequest(accountRequest);
             return "redirect:/request";
@@ -132,9 +132,7 @@ public class RequestWebController {
         } else if ("reject".equals(decision)) {
             requestService.structureChiefReject(requestId, observation);
         }
-        String referer = request.getHeader("referer");
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + referer;
+        return "redirect:" + getReferer(request);
     }
 
     // SECURITY STRUCTURE
@@ -150,9 +148,7 @@ public class RequestWebController {
         } else if ("reject".equals(decision)) {
             requestService.securityReject(requestId, observation);
         }
-        String referer = request.getHeader("referer");
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + referer;
+        return "redirect:" + getReferer(request);
     }
 
 
@@ -170,10 +166,20 @@ public class RequestWebController {
         } else if ("reject".equals(decision)) {
             requestService.itReject(requestId, observation);
         }
-        String referer = request.getHeader("referer");
-        model.addAttribute("requests", requestService.getAllRequests());
-        return "redirect:" + referer;
+        return "redirect:" + getReferer(request);
     }
 
+
+// UTILS
+    private boolean isFullyApproved(RequestResponse requestResponse) {
+        return requestResponse.getIsApprovedByStructureChief() &&
+                requestResponse.getIsApprovedBySecurityStructure() &&
+                requestResponse.getIsApprovedByITChief();
+    }
+
+    private String getReferer(HttpServletRequest request) {
+        String referer = request.getHeader("referer");
+        return (referer != null) ? referer : "/";
+    }
 
 }
