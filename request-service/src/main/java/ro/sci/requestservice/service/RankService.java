@@ -11,6 +11,7 @@ import ro.sci.requestservice.repository.RankRepo;
 @Service
 @RequiredArgsConstructor
 @Transactional
+
 public class RankService {
 
     private final RankRepo rankRepo;

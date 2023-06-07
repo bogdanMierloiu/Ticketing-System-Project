@@ -7,7 +7,8 @@ import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.service.RequestService;
 
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v2/request")
@@ -17,40 +18,52 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping("/all-requests")
-    public ResponseEntity<List<RequestResponse>> getAllRequests() {
-        return ResponseEntity.ok(requestService.getAllRequests());
+    public ResponseEntity<List<RequestResponse>> getAllRequests() throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.getAllRequests();
+        List<RequestResponse> requests = future.get();
+        return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/all-requests-in-progress")
-    public ResponseEntity<List<RequestResponse>> findNonFinalizedAndRecentRejectedRequests() {
-        return ResponseEntity.ok(requestService.findNonFinalizedAndRecentRejectedRequests());
+    public ResponseEntity<List<RequestResponse>> findNonFinalizedAndRecentRejectedRequests() throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.findNonFinalizedAndRecentRejectedRequests();
+        List<RequestResponse> requests = future.get();
+        return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/policeman/{id}")
-    public ResponseEntity<List<RequestResponse>> getAllByPolicemanId(@PathVariable("id") Long policemanId) {
-        return ResponseEntity.ok(requestService.getAllByPolicemanId(policemanId));
+    public ResponseEntity<List<RequestResponse>> getAllByPolicemanId(@PathVariable("id") Long policemanId) throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.getAllByPolicemanId(policemanId);
+        List<RequestResponse> requests = future.get();
+        return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/police-structure/{id}")
-    public ResponseEntity<List<RequestResponse>> getAllByPoliceStructure(@PathVariable("id") Long structureId) {
-        return ResponseEntity.ok(requestService.getAllByPoliceStructure(structureId));
+    public ResponseEntity<List<RequestResponse>> getAllByPoliceStructure(@PathVariable("id") Long structureId) throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.getAllByPoliceStructure(structureId);
+        List<RequestResponse> requests = future.get();
+        return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/police-subunit/{id}")
-    public ResponseEntity<List<RequestResponse>> getAllByPoliceSubunit(@PathVariable("id") Long subunitId) {
-        return ResponseEntity.ok(requestService.getAllByPoliceSubunit(subunitId));
+    public ResponseEntity<List<RequestResponse>> getAllByPoliceSubunit(@PathVariable("id") Long subunitId) throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.getAllByPoliceSubunit(subunitId);
+        List<RequestResponse> requests = future.get();
+        return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/search-by-name")
-    public ResponseEntity<List<RequestResponse>> getAllByPolicemanName(@RequestParam String name) {
-        List<RequestResponse> requests = requestService.getAllByPolicemanName(name);
+    public ResponseEntity<List<RequestResponse>> getAllByPolicemanName(@RequestParam String name) throws ExecutionException, InterruptedException {
+        CompletableFuture<List<RequestResponse>> future = requestService.getAllByPolicemanName(name);
+        List<RequestResponse> requests = future.get();
         return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/find/{requestId}")
-    public ResponseEntity<RequestResponse> findById(@PathVariable("requestId") Long requestId) {
-        return ResponseEntity.ok(requestService.findById(requestId));
+    public ResponseEntity<RequestResponse> findById(@PathVariable("requestId") Long requestId) throws ExecutionException, InterruptedException {
+        CompletableFuture<RequestResponse> future = requestService.findById(requestId);
+        RequestResponse request = future.get();
+        return ResponseEntity.ok(request);
     }
-
 
 }

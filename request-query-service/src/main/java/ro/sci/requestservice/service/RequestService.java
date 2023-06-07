@@ -1,6 +1,7 @@
 package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.exception.NotFoundException;
@@ -12,7 +13,7 @@ import ro.sci.requestservice.repository.RequestTypeRepo;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -22,69 +23,72 @@ public class RequestService {
     private final RequestTypeRepo requestTypeRepo;
     private final RequestMapper requestMapper;
 
-
-    public List<RequestResponse> getAllRequests() {
+    @Async
+    public CompletableFuture<List<RequestResponse>> getAllRequests() {
         List<Request> requests = requestRepo.findAllOrderByCreatedAtDesc();
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
 
-    public List<RequestResponse> findNonFinalizedAndRecentRejectedRequests() {
-
+    @Async
+    public CompletableFuture<List<RequestResponse>> findNonFinalizedAndRecentRejectedRequests() {
         List<Request> requests = requestRepo.findNonFinalizedRequestsOrderByCreatedAtDesc();
-
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
 
-    public RequestResponse findById(Long requestId) {
-        return requestMapper.map(
-                requestRepo.findById(requestId).orElseThrow(
-                        () -> new NotFoundException("The request with id " + requestId + " not found")
-                )
+    @Async
+    public CompletableFuture<RequestResponse> findById(Long requestId) {
+        Request request = requestRepo.findById(requestId).orElseThrow(
+                () -> new NotFoundException("The request with id " + requestId + " not found")
         );
+        return CompletableFuture.completedFuture(requestMapper.map(request));
     }
 
-    public List<RequestResponse> getAllByPolicemanId(Long id) {
+    @Async
+    public CompletableFuture<List<RequestResponse>> getAllByPolicemanId(Long id) {
         List<Request> requests = requestRepo.findAllByPolicemanId(id);
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
 
-    public List<RequestResponse> getAllByPoliceStructure(Long id) {
+    @Async
+    public CompletableFuture<List<RequestResponse>> getAllByPoliceStructure(Long id) {
         List<Request> requests = requestRepo.findAllByPoliceStructure(id);
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
-    public List<RequestResponse> getAllByPoliceSubunit(Long id) {
+
+    @Async
+    public CompletableFuture<List<RequestResponse>> getAllByPoliceSubunit(Long id) {
         List<Request> requests = requestRepo.findAllByPoliceSubunit(id);
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
 
-    public List<RequestResponse> getAllByPolicemanName(String name) {
+    @Async
+    public CompletableFuture<List<RequestResponse>> getAllByPolicemanName(String name) {
         String[] nameParts = name.split(" ");
-
         String lastName = nameParts[0];
         String firstName = "";
         String firstNameSecondary = "";
@@ -96,25 +100,21 @@ public class RequestService {
         if (nameParts.length > 2) {
             firstNameSecondary = nameParts[2];
         }
+
         List<Request> requests = requestRepo.findAllByPolicemanName(lastName, firstName, firstNameSecondary);
         List<RequestResponse> requestResponses = new ArrayList<>();
         for (var request : requests) {
             RequestResponse requestResponse = requestMapper.map(request);
             requestResponses.add(requestResponse);
         }
-        return requestResponses;
+        return CompletableFuture.completedFuture(requestResponses);
     }
 
-
-
     // UTILS
-
 
     private RequestType getRequestTypeById(Long requestTypeId) {
         return requestTypeRepo.findById(requestTypeId).orElseThrow(
                 () -> new NotFoundException("The request type with id " + requestTypeId + " not found")
         );
     }
-
-
 }

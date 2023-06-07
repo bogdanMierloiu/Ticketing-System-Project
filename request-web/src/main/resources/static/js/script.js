@@ -1,6 +1,11 @@
 // MAGIC THINGS
 
-window.addEventListener("DOMContentLoaded", setInitialDate);
+window.addEventListener("DOMContentLoaded", function(){
+ var currentDateInput = document.getElementById("currentDate");
+ if(currentDateInput){
+ setInitialDate();
+ }
+});
 
 function setInitialDate() {
     // Obține data curentă
@@ -16,6 +21,7 @@ function setInitialDate() {
 if (window.location.pathname.includes("add-request")) {
     // Apelăm funcția populatePoliceStructures() doar pe pagina de add-request
     populateStructures();
+    setInitialDate();
 }
 
 function togglePolicemanAuthorization() {

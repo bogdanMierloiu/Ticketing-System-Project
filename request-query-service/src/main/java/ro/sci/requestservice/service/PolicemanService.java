@@ -18,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+
 public class PolicemanService {
 
     private final PolicemanRepo policemanRepo;

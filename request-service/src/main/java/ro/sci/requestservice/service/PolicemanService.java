@@ -14,6 +14,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Transactional
+
 public class PolicemanService {
 
     private final PolicemanRepo policemanRepo;

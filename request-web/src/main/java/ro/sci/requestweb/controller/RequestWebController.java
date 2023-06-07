@@ -6,11 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import ro.sci.requestweb.dto.AccountRequest;
+import ro.sci.requestweb.dto.ItSpecialistResponse;
 import ro.sci.requestweb.dto.PolicemanRequest;
 import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.service.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,10 +28,16 @@ public class RequestWebController {
     private final RequestTypeService requestTypeService;
     private final ItSpecialistService itSpecialistService;
 
-    @GetMapping
+    @GetMapping("/")
     public String indexPage(Model model, HttpSession session) {
-        model.addAttribute("requests", requestService.getAllRequests());
-        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        Flux<RequestResponse> requestsFlux = requestService.getAllRequests();
+        List<RequestResponse> requests = requestsFlux.collectList().block();
+
+        Flux<ItSpecialistResponse> specialistFlux = itSpecialistService.getAllSpecialists();
+        List<ItSpecialistResponse> specialists = specialistFlux.collectList().block();
+
+        model.addAttribute("requests", requests);
+        model.addAttribute("specialists", specialists);
 
         // Obține utilizatorul din sesiune
         Object user = session.getAttribute("user");
@@ -41,7 +51,8 @@ public class RequestWebController {
 
     @GetMapping("/find/{requestId}")
     public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
-        RequestResponse requestResponse = requestService.findById(requestId);
+        RequestResponse requestResponse = requestService.findById(requestId).block();
+        assert requestResponse != null;
         boolean isApproved = isFullyApproved(requestResponse);
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
@@ -88,7 +99,7 @@ public class RequestWebController {
 
     @GetMapping("/search-by-name")
     public String searchByName(@RequestParam String name, Model model) {
-        RequestResponse[] allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
+        Flux<RequestResponse> allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
         model.addAttribute("requests", allRequestsByPolicemanName);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -96,7 +107,7 @@ public class RequestWebController {
 
     @GetMapping("/show-requests-for-policeman/{policemanId}")
     public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model) {
-        RequestResponse[] allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
+        Flux<RequestResponse> allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
         model.addAttribute("requests", allRequestsByPolicemanId);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -105,7 +116,7 @@ public class RequestWebController {
 
     @GetMapping("/show-requests-for-police-structure/{policeStructureId}")
     public String searchByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
-        RequestResponse[] allRequestsByPoliceStructure = requestService.getAllRequestsByPoliceStructure(policeStructureId);
+        Flux<RequestResponse> allRequestsByPoliceStructure = requestService.getAllRequestsByPoliceStructure(policeStructureId);
         model.addAttribute("requests", allRequestsByPoliceStructure);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -113,7 +124,7 @@ public class RequestWebController {
 
     @GetMapping("/show-requests-for-police-subunit/{subunitId}")
     public String searchByPoliceSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
-        RequestResponse[] allRequestsByPoliceSubunit = requestService.getAllRequestsByPoliceSubunit(subunitId);
+        Flux<RequestResponse> allRequestsByPoliceSubunit = requestService.getAllRequestsByPoliceSubunit(subunitId);
         model.addAttribute("requests", allRequestsByPoliceSubunit);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -155,12 +166,12 @@ public class RequestWebController {
 // IT STRUCTURE
 
     @PostMapping("/it-decision/{requestId}")
-    public String securityDecision(@PathVariable("requestId") Long requestId,
-                                   @RequestParam("decision") String decision,
-                                   @RequestParam("itSpecialistId") Long itSpecialistId,
-                                   @RequestParam(value = "observation", required = false) String observation,
-                                   Model model,
-                                   HttpServletRequest request) {
+    public String itDecision(@PathVariable("requestId") Long requestId,
+                             @RequestParam("decision") String decision,
+                             @RequestParam("itSpecialistId") Long itSpecialistId,
+                             @RequestParam(value = "observation", required = false) String observation,
+                             Model model,
+                             HttpServletRequest request) {
         if ("approve".equals(decision)) {
             requestService.itApprove(requestId, itSpecialistId);
         } else if ("reject".equals(decision)) {
@@ -170,7 +181,7 @@ public class RequestWebController {
     }
 
 
-// UTILS
+    // UTILS
     private boolean isFullyApproved(RequestResponse requestResponse) {
         return requestResponse.getIsApprovedByStructureChief() &&
                 requestResponse.getIsApprovedBySecurityStructure() &&

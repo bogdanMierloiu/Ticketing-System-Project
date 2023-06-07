@@ -16,6 +16,7 @@ import ro.sci.requestservice.repository.ItSpecialistRepo;
 import ro.sci.requestservice.repository.RequestRepo;
 import ro.sci.requestservice.repository.RequestTypeRepo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -137,10 +138,12 @@ public class RequestService {
             requestToAssign.setStatus(Status.In_lucru);
             requestToAssign.setObservation(requestToAssign.getObservation() + "\n" +
                     "Aprobat de Serviciul Comunicatii si Informatica la data de " +
-                    requestToAssign.getItChiefAppAt().format(dateTimeFormatter)
+                    requestToAssign.getItChiefAppAt().format(dateTimeFormatter) + "\n"
                     + " si repartizata catre " +
                     requestToAssign.getItSpecialist().getLastName() + " " +
                     requestToAssign.getItSpecialist().getFirstName());
+            requestToAssign.setItStructRegNo(NumberGeneratorSCI.getNextNumber());
+            requestToAssign.setRegDateFromITStruct(LocalDate.now());
             requestRepo.save(requestToAssign);
         } else {
             throw new UnsupportedOperationException("The request is not approved by security structure");

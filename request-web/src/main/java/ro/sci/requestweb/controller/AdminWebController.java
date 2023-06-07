@@ -17,6 +17,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/request/admin")
+
 public class AdminWebController {
 
     private final RequestService requestService;
@@ -68,7 +69,7 @@ public class AdminWebController {
     @GetMapping("/show-subunits/{policeStructureId}")
     @Cacheable("subunits")
     public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
-        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
+        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId).block();
         model.addAttribute("subunits", subunits);
         model.addAttribute("structure", policeStructureService.getById(policeStructureId));
         return "subunits";
@@ -197,21 +198,24 @@ public class AdminWebController {
     @GetMapping("/show-subunits-script/{policeStructureId}")
     @Cacheable("subunits")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId) {
-        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
+        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId).block();
+        assert subunits != null;
         return ResponseEntity.ok(Arrays.asList(subunits));
     }
 
     @GetMapping("/show-departments-script/{subunitId}")
     @Cacheable("departments")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId) {
-        DepartmentResponse[] departments = departmentService.getBySubunit(subunitId);
+        DepartmentResponse[] departments = departmentService.getBySubunit(subunitId).block();
+        assert departments != null;
         return ResponseEntity.ok(Arrays.asList(departments));
     }
 
     @GetMapping("/show-structures-script")
     @Cacheable("structures")
     public ResponseEntity<List<PoliceStructureResponse>> viewPoliceStructuresScript() {
-        PoliceStructureResponse[] structures = policeStructureService.getAllStructures();
+        PoliceStructureResponse[] structures = policeStructureService.getAllStructures().block();
+        assert structures != null;
         return ResponseEntity.ok(Arrays.asList(structures));
     }
 

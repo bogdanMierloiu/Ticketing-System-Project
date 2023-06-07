@@ -10,7 +10,7 @@ import ro.sci.requestservice.repository.DepartmentRepo;
 import ro.sci.requestservice.repository.PoliceStructureRepo;
 
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +21,8 @@ public class DepartmentService {
     private final DepartmentMapper departmentMapper;
 
 
-    public List<DepartmentResponse> getBySubunitId(Long subunitId) {
-        return departmentMapper.map(departmentRepo.findByPoliceStructureSubunitId(subunitId));
+    public CompletableFuture<List<DepartmentResponse>> getBySubunitId(Long subunitId) {
+        return CompletableFuture.supplyAsync(() -> departmentMapper.map(departmentRepo.findByPoliceStructureSubunitId(subunitId)));
     }
 
 
@@ -33,3 +33,4 @@ public class DepartmentService {
     }
 
 }
+

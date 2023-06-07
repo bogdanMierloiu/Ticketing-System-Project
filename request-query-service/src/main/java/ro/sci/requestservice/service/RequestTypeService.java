@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+
 public class RequestTypeService {
 
     private final RequestTypeRepo requestTypeRepo;

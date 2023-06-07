@@ -53,7 +53,7 @@ public class Request {
 
     // IT Structure
 
-    private String itStructRegNo;
+    private Long itStructRegNo;
 
     private LocalDate regDateFromITStruct;
 
