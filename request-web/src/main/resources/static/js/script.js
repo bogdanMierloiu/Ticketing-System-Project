@@ -218,30 +218,35 @@ function submitRejectForm(requestId) {
 
 // AUTORIZATION SECURITY STRUCTURE
 
-function onDecisionChangeSecurity(requestId) {
-    var decision = document.getElementById("securityDecision-" + requestId).value;
+function onDecisionChangeSecurity(element) {
+    var decision = element.value;
+    var requestId = element.parentElement.querySelector('[name="requestId"]').value;
+
 
     if (decision === "reject") {
         // Afiseaza fereastra modală
+        document.getElementById("rejectModalForSecurity").setAttribute("data-request-id", requestId);
         $('#rejectModalForSecurity').modal('show');
     } else if (decision === "approve") {
         // Ascunde fereastra modală
         $('#rejectModalForSecurity').modal('hide');
         // Golește câmpul de observații
-        document.getElementById("securityObservation-" + requestId).value = "";
+        document.getElementById("securityObservation").value = "";
         // Trimitere cerere Ajax către ruta "/request/structure-chief-decision/{requestId}"
         submitDecisionFormSecurity(requestId);
     }
 }
 
 function submitDecisionFormSecurity(requestId) {
-    var decision = document.getElementById("securityDecision-" + requestId).value;
+    var decision = "approve";
+    var observation = "";
+
 
     // Trimitere cerere Ajax către ruta "/security-decision/{requestId}"
     $.ajax({
         url: "/request/security-decision/" + requestId,
         type: "POST",
-        data: {decision: decision},
+        data: {decision: decision, observation: observation},
         success: function (response) {
             // Succes - gestionează răspunsul
             alert("Solicitarea a fost aprobată cu succes!");
@@ -265,9 +270,10 @@ function submitDecisionFormSecurity(requestId) {
     });
 }
 
-function submitRejectFormSecurity(requestId) {
+function submitRejectFormSecurity() {
     var decision = "reject";
-    var observation = document.getElementById("securityObservation-" + requestId).value.trim();
+    var observation = document.getElementById("securityObservation").value.trim();
+    var requestId = document.getElementById("rejectModalForSecurity").getAttribute("data-request-id");
 
     if (observation === "") {
         // Mesaj de eroare pentru observație goală

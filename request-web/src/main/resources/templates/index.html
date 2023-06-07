@@ -140,11 +140,9 @@
                 </div>
                 <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
                      class="text-center">
-                    <form id="decisionSecurityForm"
-                          th:action="@{/request/structure-chief-decision/{requestId}(requestId=${request.id})}"
-                          method="post">
+                    <form id="decisionSecurityForm-' + ${request.id}" method="post">
                         <select class="form-select narrow-select" id="'securityDecision-' + ${request.id}"
-                                name="decision" onchange="onDecisionChangeSecurity(${request.id})">
+                                name="decision" onchange="onDecisionChangeSecurity(this)">
                             <option>Autorizează</option>
                             <option value="approve">APROBA</option>
                             <option value="reject">RESPINGE</option>
@@ -173,7 +171,6 @@
                         <input type="hidden" th:id="'requestITId-' + ${request.id}" name="requestId"
                                th:value="${request.id}">
                     </form>
-
                 </div>
             </td>
 
@@ -307,8 +304,8 @@
 </div>
 
 
-<script th:src="@{js/jquery-3.7.0.js}" type="text/javascript" th:attr="cache='no-cache'"></script>
-<script th:src="@{/js/script.js}" type="text/javascript" th:attr="cache='no-cache'"></script>
+<script th:src="@{js/jquery-3.7.0.js}" type="text/javascript"></script>
+<script th:src="@{/js/script.js}" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
