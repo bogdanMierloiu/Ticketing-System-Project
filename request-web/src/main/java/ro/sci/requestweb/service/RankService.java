@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import ro.sci.requestweb.dto.RankRequest;
 import ro.sci.requestweb.dto.RankResponse;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,11 +16,12 @@ public class RankService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public Mono<RankResponse[]> getAllRanks() {
-        return webClientBuilder.build().get()
+    public List<RankResponse> getAllRanks() {
+        Flux<RankResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/rank/all-ranks")
                 .retrieve()
-                .bodyToMono(RankResponse[].class);
+                .bodyToFlux(RankResponse.class);
+        return responseFlux.collectList().block();
     }
 
     @Async

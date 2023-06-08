@@ -20,10 +20,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Policeman policeman;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private RequestType requestType;
 
     @Column(columnDefinition = "VARCHAR(16)")
@@ -59,7 +59,7 @@ public class Request {
 
     private Boolean isApprovedByITChief;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ItSpecialist itSpecialist;
 
     private LocalDateTime createdAt;

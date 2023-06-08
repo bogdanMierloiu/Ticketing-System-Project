@@ -10,6 +10,7 @@ import ro.sci.requestservice.dto.PoliceStructureResponse;
 import ro.sci.requestservice.service.PoliceStructureService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -20,13 +21,15 @@ public class PoliceStructureController {
     private final PoliceStructureService policeStructureService;
 
     @GetMapping("/all-structures")
-    public ResponseEntity<List<PoliceStructureResponse>> getAllStructures() {
-        return ResponseEntity.ok(policeStructureService.getAllStructures());
+    public CompletableFuture<ResponseEntity<List<PoliceStructureResponse>>> getAllStructures() {
+        CompletableFuture<List<PoliceStructureResponse>> future = policeStructureService.getAllStructures();
+        return future.thenApply(ResponseEntity::ok);
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<PoliceStructureResponse> findById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(policeStructureService.findById(id));
+    public CompletableFuture<ResponseEntity<PoliceStructureResponse>> findById(@PathVariable("id") Long id) {
+        CompletableFuture<PoliceStructureResponse> future = policeStructureService.findById(id);
+        return future.thenApply(ResponseEntity::ok);
     }
 
 

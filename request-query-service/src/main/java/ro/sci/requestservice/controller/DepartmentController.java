@@ -11,7 +11,6 @@ import ro.sci.requestservice.service.DepartmentService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 
 @RestController
@@ -22,11 +21,9 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping("/{subunitId}")
-    public ResponseEntity<List<DepartmentResponse>> findBySubunit(@PathVariable("subunitId") Long subunitId) throws ExecutionException, InterruptedException {
+    public CompletableFuture<ResponseEntity<List<DepartmentResponse>>> findBySubunit(@PathVariable("subunitId") Long subunitId) {
         CompletableFuture<List<DepartmentResponse>> future = departmentService.getBySubunitId(subunitId);
-        List<DepartmentResponse> departments = future.get();
-        return ResponseEntity.ok(departments);
+        return future.thenApply(ResponseEntity::ok);
     }
-
 
 }

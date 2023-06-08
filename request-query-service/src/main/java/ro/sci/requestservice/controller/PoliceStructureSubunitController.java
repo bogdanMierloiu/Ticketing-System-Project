@@ -10,6 +10,7 @@ import ro.sci.requestservice.dto.PoliceStructureSubunitResponse;
 import ro.sci.requestservice.service.PoliceStructureSubunitService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -20,26 +21,23 @@ public class PoliceStructureSubunitController {
     private final PoliceStructureSubunitService policeStructureSubunitService;
 
     @GetMapping("/all-structures")
-    public ResponseEntity<List<PoliceStructureSubunitResponse>> getAllSubunitStructures() {
-        return ResponseEntity.ok(policeStructureSubunitService.getAllSubunitStructures());
+    public CompletableFuture<ResponseEntity<List<PoliceStructureSubunitResponse>>> getAllSubunitStructures() {
+        CompletableFuture<List<PoliceStructureSubunitResponse>> future = policeStructureSubunitService.getAllSubunitStructures();
+        return future.thenApply(ResponseEntity::ok);
     }
 
 
     @GetMapping("/find/{policeStructureId}")
-    public ResponseEntity<List<PoliceStructureSubunitResponse>> findByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId) {
-        return ResponseEntity.ok(policeStructureSubunitService.getByPoliceStructure(policeStructureId));
+    public CompletableFuture<ResponseEntity<List<PoliceStructureSubunitResponse>>> findByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId) {
+        CompletableFuture<List<PoliceStructureSubunitResponse>> future = policeStructureSubunitService.getByPoliceStructure(policeStructureId);
+        return future.thenApply(ResponseEntity::ok);
     }
 
     @GetMapping("/{subunitId}")
-    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("subunitId") Long subunitId) {
-        return ResponseEntity.ok(policeStructureSubunitService.findById(subunitId));
+    public CompletableFuture<ResponseEntity<PoliceStructureSubunitResponse>> findById(@PathVariable("subunitId") Long subunitId) {
+        CompletableFuture<PoliceStructureSubunitResponse> future = policeStructureSubunitService.findById(subunitId);
+        return future.thenApply(ResponseEntity::ok);
     }
-
-
-//    @GetMapping("/find/{id}")
-//    public ResponseEntity<PoliceStructureSubunitResponse> findById(@PathVariable("id") Long id) {
-//        return ResponseEntity.ok(policeStructureSubunitService.findById(id));
-//    }
 
 
 }

@@ -24,10 +24,10 @@ public class Rank {
     private String rankName;
 
 
-    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Policeman> policemen = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItSpecialist> itSpecialists = new ArrayList<>();
 
 

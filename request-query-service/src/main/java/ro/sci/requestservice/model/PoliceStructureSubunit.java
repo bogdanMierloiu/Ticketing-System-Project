@@ -20,14 +20,14 @@ public class PoliceStructureSubunit {
     private String subunitName;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Department> departments;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Policeman> policemen;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private PoliceStructure policeStructure;
 }

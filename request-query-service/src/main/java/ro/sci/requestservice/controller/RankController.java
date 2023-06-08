@@ -9,6 +9,7 @@ import ro.sci.requestservice.dto.RankResponse;
 import ro.sci.requestservice.service.RankService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -19,7 +20,8 @@ public class RankController {
     private final RankService rankService;
 
     @GetMapping("/all-ranks")
-    public ResponseEntity<List<RankResponse>> getAll() {
-        return ResponseEntity.ok(rankService.findAll());
+    public CompletableFuture<ResponseEntity<List<RankResponse>>> getAll() {
+        CompletableFuture<List<RankResponse>> future = rankService.findAll();
+        return future.thenApply(ResponseEntity::ok);
     }
 }

@@ -9,6 +9,7 @@ import ro.sci.requestservice.dto.PolicemanResponse;
 import ro.sci.requestservice.service.PolicemanService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -19,8 +20,9 @@ public class PolicemanController {
     private final PolicemanService policemanService;
 
     @GetMapping("/all-policemen")
-    public ResponseEntity<List<PolicemanResponse>> findAll(){
-        return ResponseEntity.ok(policemanService.findAll());
+    public CompletableFuture<ResponseEntity<List<PolicemanResponse>>> findAll() {
+        CompletableFuture<List<PolicemanResponse>> future = policemanService.findAll();
+        return future.thenApply(ResponseEntity::ok);
     }
 
 }

@@ -12,6 +12,8 @@ import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.exception.UnsupportedOperationException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RequestService {
@@ -19,23 +21,25 @@ public class RequestService {
     private final WebClient.Builder webClientBuilder;
     private final Object lock = new Object();
 
-    public Flux<RequestResponse> getAllRequests() {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequests() {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/all-requests")
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
-    public Flux<RequestResponse> getAllRequestsInProgress() {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequestsInProgress() {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/all-requests-in-progress")
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
 
-    public Flux<RequestResponse> getAllRequestsByPolicemanName(String name) {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequestsByPolicemanName(String name) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("lb")
                         .host("request-query-service")
@@ -44,34 +48,39 @@ public class RequestService {
                         .build())
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
-    public Flux<RequestResponse> getAllRequestsByPolicemanId(Long policemanId) {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequestsByPolicemanId(Long policemanId) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/policeman/{policemanId}", policemanId)
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
-    public Flux<RequestResponse> getAllRequestsByPoliceStructure(Long policeStructureId) {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequestsByPoliceStructure(Long policeStructureId) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/police-structure/{policeStructureId}", policeStructureId)
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
-    public Flux<RequestResponse> getAllRequestsByPoliceSubunit(Long subunitId) {
-        return webClientBuilder.build().get()
+    public List<RequestResponse> getAllRequestsByPoliceSubunit(Long subunitId) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/police-subunit/{subunitId}", subunitId)
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
     }
 
-    public Mono<RequestResponse> findById(Long requestId) {
-        return webClientBuilder.build().get()
+    public RequestResponse findById(Long requestId) {
+        Mono<RequestResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
                 .retrieve()
                 .bodyToMono(RequestResponse.class);
+        return mono.block();
     }
 
     @Async
@@ -205,6 +214,13 @@ public class RequestService {
                     .toBodilessEntity()
                     .block();
         }
+    }
+
+
+    // UTILS
+
+    private <T> List<T> collectToList(Flux<T> flux) {
+        return flux.collectList().block();
     }
 
 }

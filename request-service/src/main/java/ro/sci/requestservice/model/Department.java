@@ -24,10 +24,10 @@ public class Department {
     @Column(nullable = false)
     private String departmentName;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Policeman> policemen = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private PoliceStructureSubunit policeStructureSubunit;
 
 

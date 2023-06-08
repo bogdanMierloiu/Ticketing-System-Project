@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+     class="bi bi-check-circle-fill text-success" style="width: 20px; height: 20px;">
+    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.648 6.354l-6 6a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L9 13.293l5.646-5.647a.5.5 0 0 1 .708.708z"/>
+</svg> <!-- Green checkmark icon -->

@@ -22,12 +22,12 @@ public class PoliceStructureSubunit {
     @Column(nullable = false)
     private String subunitName;
 
-    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Department> departments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructureSubunit", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Policeman> policemen = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private PoliceStructure policeStructure;
 }

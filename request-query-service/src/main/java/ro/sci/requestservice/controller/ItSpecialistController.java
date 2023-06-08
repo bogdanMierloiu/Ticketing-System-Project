@@ -9,6 +9,7 @@ import ro.sci.requestservice.dto.ItSpecialistResponse;
 import ro.sci.requestservice.service.ItSpecialistService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
@@ -19,7 +20,8 @@ public class ItSpecialistController {
     private final ItSpecialistService itSpecialistService;
 
     @GetMapping("/all-specialists")
-    public ResponseEntity<List<ItSpecialistResponse>> getAll() {
-        return ResponseEntity.ok(itSpecialistService.findAll());
+    public CompletableFuture<ResponseEntity<List<ItSpecialistResponse>>> getAll() {
+        CompletableFuture<List<ItSpecialistResponse>> future = itSpecialistService.findAll();
+        return future.thenApply(ResponseEntity::ok);
     }
 }

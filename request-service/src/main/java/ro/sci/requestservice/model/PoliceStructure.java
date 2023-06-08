@@ -24,10 +24,10 @@ public class PoliceStructure {
     @Column(nullable = false)
     private String structureName;
 
-    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PoliceStructureSubunit> policeStructureSubunits = new ArrayList<>();
 
-    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "policeStructure", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Policeman> policemen = new ArrayList<>();
 
 

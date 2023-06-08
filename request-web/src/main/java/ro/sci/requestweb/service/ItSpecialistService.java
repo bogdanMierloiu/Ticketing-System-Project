@@ -9,17 +9,20 @@ import reactor.core.publisher.Flux;
 import ro.sci.requestweb.dto.ItSpecialistRequest;
 import ro.sci.requestweb.dto.ItSpecialistResponse;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ItSpecialistService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public Flux<ItSpecialistResponse> getAllSpecialists() {
-        return webClientBuilder.build().get()
+    public List<ItSpecialistResponse> getAllSpecialists() {
+        Flux<ItSpecialistResponse> responseFLux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/it-specialist/all-specialists")
                 .retrieve()
                 .bodyToFlux(ItSpecialistResponse.class);
+        return responseFLux.collectList().block();
     }
 
     @Async

@@ -20,7 +20,7 @@ public class ItSpecialist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Rank rank;
 
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class ItSpecialist {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "itSpecialist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "itSpecialist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Request> requests = new ArrayList<>();
 
 

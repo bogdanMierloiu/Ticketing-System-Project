@@ -21,7 +21,7 @@ public class RequestType {
 
     private String requestName;
 
-    @OneToMany(mappedBy = "requestType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "requestType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Request> requests;
 
 

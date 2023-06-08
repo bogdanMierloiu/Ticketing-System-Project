@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -69,7 +68,7 @@ public class AdminWebController {
     @GetMapping("/show-subunits/{policeStructureId}")
     @Cacheable("subunits")
     public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
-        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId).block();
+        List<PoliceStructureSubunitResponse> subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         model.addAttribute("subunits", subunits);
         model.addAttribute("structure", policeStructureService.getById(policeStructureId));
         return "subunits";
@@ -198,25 +197,25 @@ public class AdminWebController {
     @GetMapping("/show-subunits-script/{policeStructureId}")
     @Cacheable("subunits")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId) {
-        PoliceStructureSubunitResponse[] subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId).block();
+        List<PoliceStructureSubunitResponse> subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         assert subunits != null;
-        return ResponseEntity.ok(Arrays.asList(subunits));
+        return ResponseEntity.ok(subunits);
     }
 
     @GetMapping("/show-departments-script/{subunitId}")
     @Cacheable("departments")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId) {
-        DepartmentResponse[] departments = departmentService.getBySubunit(subunitId).block();
+        List<DepartmentResponse> departments = departmentService.getBySubunit(subunitId);
         assert departments != null;
-        return ResponseEntity.ok(Arrays.asList(departments));
+        return ResponseEntity.ok(departments);
     }
 
     @GetMapping("/show-structures-script")
     @Cacheable("structures")
     public ResponseEntity<List<PoliceStructureResponse>> viewPoliceStructuresScript() {
-        PoliceStructureResponse[] structures = policeStructureService.getAllStructures().block();
+        List<PoliceStructureResponse> structures = policeStructureService.getAllStructures();
         assert structures != null;
-        return ResponseEntity.ok(Arrays.asList(structures));
+        return ResponseEntity.ok(structures);
     }
 
 
