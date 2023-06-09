@@ -20,7 +20,8 @@ public class RequestController {
     @PostMapping
     public ResponseEntity<?> add(@RequestBody AccountRequest accountRequest) {
         try {
-            return new ResponseEntity<>(requestService.add(accountRequest), HttpStatus.OK);
+            requestService.add(accountRequest);
+            return ResponseEntity.ok("Request for: " + composeResponseForAddingRequest(accountRequest));
         } catch (AlreadyHaveThisRequestException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Already have this request type in progress!");
         }
@@ -32,13 +33,13 @@ public class RequestController {
     @PatchMapping("/structure-chief-approve/{requestId}")
     public ResponseEntity<String> structureChiefApprove(@PathVariable("requestId") Long requestId) {
         requestService.structureChiefApprove(requestId);
-        return ResponseEntity.ok("Approved successfully");
+        return ResponseEntity.ok("Approved successfully by structure chief!");
     }
 
     @PutMapping("/structure-chief-reject/{requestId}")
     public ResponseEntity<String> structureChiefReject(@PathVariable("requestId") Long requestId, @RequestParam("observation") String observation) {
         requestService.structureChiefReject(requestId, observation);
-        return ResponseEntity.ok("Rejected successfully");
+        return ResponseEntity.ok("Rejected successfully by structure chief because: " + observation);
     }
 
     // SECURITY STRUCTURE
@@ -46,7 +47,7 @@ public class RequestController {
     public ResponseEntity<?> securityApprove(@PathVariable("requestId") Long requestId) {
         try {
             requestService.securityStructureApprove(requestId);
-            return ResponseEntity.ok("Approved successfully");
+            return ResponseEntity.ok("Approved successfully by security structure!");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
                     "approved by chief of police structure ");
@@ -57,10 +58,10 @@ public class RequestController {
     public ResponseEntity<?> securityReject(@PathVariable("requestId") Long requestId, @RequestParam String observation) {
         try {
             requestService.securityStructureReject(requestId, observation);
-            return ResponseEntity.ok("Rejected successfully");
+            return ResponseEntity.ok("Rejected successfully by security structure!");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
-                    "approved by chief of police structure ");
+                    "approved by chief of police structure!");
         }
     }
 
@@ -72,7 +73,7 @@ public class RequestController {
                                                   @PathVariable("itSpecialistId") Long itSpecialistId) {
         try {
             requestService.assignSpecialist(requestId, itSpecialistId);
-            return ResponseEntity.ok("Assigned successfully");
+            return ResponseEntity.ok("Request approved and assigned successfully in SCI");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Solicitarea nu este aprobata de structura de securitate");
         }
@@ -83,17 +84,9 @@ public class RequestController {
     public ResponseEntity<String> itReject(@PathVariable("requestId") Long requestId,
                                            @RequestParam String observation) {
         requestService.itReject(requestId, observation);
-        return ResponseEntity.ok("Rejected successfully");
+        return ResponseEntity.ok("Request rejected successfully by SCI");
     }
 
-
-    // SPECIALISTS
-
-    @PatchMapping("/assign-specialist/{requestId}/{itSpecialistId}")
-    public ResponseEntity<String> assignSpecialist(@PathVariable("requestId") Long requestId, @PathVariable("itSpecialistId") Long specialistId) {
-        requestService.assignSpecialist(requestId, specialistId);
-        return ResponseEntity.ok("Assigned successfully");
-    }
 
     // FINALIZE
 
@@ -101,10 +94,17 @@ public class RequestController {
     public ResponseEntity<?> finalizeRequest(@PathVariable("requestId") Long requestId) {
         try {
             requestService.finalize(requestId);
-            return ResponseEntity.ok("Finalized successfully");
+            return ResponseEntity.ok("Request finalized successfully");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
         }
     }
 
+
+    //UTILS
+
+    private String composeResponseForAddingRequest(AccountRequest accountRequest) {
+        return accountRequest.getPolicemanRequest().getLastName() + " " + accountRequest.getPolicemanRequest().getLastName() +
+                " added successfully";
+    }
 }

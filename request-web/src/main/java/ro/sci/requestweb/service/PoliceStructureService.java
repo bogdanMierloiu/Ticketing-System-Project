@@ -1,6 +1,8 @@
 package ro.sci.requestweb.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PoliceStructureService {
 
     private final WebClient.Builder webClientBuilder;
@@ -35,10 +38,17 @@ public class PoliceStructureService {
 
     @Async
     public void addPoliceStructure(PoliceStructureRequest policeStructureRequest) {
+        clearStructureCache();
         webClientBuilder.build().post()
                 .uri("lb://request-service/api/v1/police-structure")
                 .bodyValue(policeStructureRequest)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    @CacheEvict(value = "structures", allEntries = true)
+    private void clearStructureCache() {
+        log.info("Structures cache cleaned successfully");
     }
 }

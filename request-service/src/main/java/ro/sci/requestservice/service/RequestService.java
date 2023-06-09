@@ -37,7 +37,7 @@ public class RequestService {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
 
-    public RequestResponse add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
+    public synchronized void add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
         Request request = requestMapper.map(accountRequest);
         Policeman policeman = policemanService.add(accountRequest.getPolicemanRequest());
         hasAlreadyThisRequestType(accountRequest.getRequestTypeId(), policeman);
@@ -61,8 +61,6 @@ public class RequestService {
         policeman.getRequests().add(savedRequest);
         RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
         requestResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
-
-        return requestResponse;
     }
 
     private Request findById(Long requestId) {
@@ -74,7 +72,7 @@ public class RequestService {
 
     // Structure Chief Decisions
 
-    public void structureChiefApprove(Long requestId) {
+    public synchronized void structureChiefApprove(Long requestId) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
         requestToApprove.setStatus(Status.In_lucru);
@@ -85,7 +83,7 @@ public class RequestService {
         requestRepo.save(requestToApprove);
     }
 
-    public void structureChiefReject(Long requestId, String observation) {
+    public synchronized void structureChiefReject(Long requestId, String observation) {
         Request requestToReject = findById(requestId);
         requestToReject.setIsApprovedByStructureChief(false);
         requestToReject.setStatus(Status.Respinsa);
@@ -97,7 +95,7 @@ public class RequestService {
 
     // Security Structure Decisions
 
-    public void securityStructureApprove(Long requestId) throws UnsupportedOperationException {
+    public synchronized void securityStructureApprove(Long requestId) throws UnsupportedOperationException {
         Request requestToApprove = findById(requestId);
         if (requestToApprove.getIsApprovedByStructureChief()) {
             requestToApprove.setIsApprovedBySecurityStructure(true);
@@ -112,7 +110,7 @@ public class RequestService {
         }
     }
 
-    public void securityStructureReject(Long requestId, String observation) throws UnsupportedOperationException {
+    public synchronized void securityStructureReject(Long requestId, String observation) throws UnsupportedOperationException {
         Request requestToReject = findById(requestId);
         if (requestToReject.getIsApprovedByStructureChief()) {
             requestToReject.setIsApprovedBySecurityStructure(false);
@@ -128,7 +126,7 @@ public class RequestService {
 
     // IT STRUCTURE
 
-    public void assignSpecialist(Long requestId, Long itSpecialistId) throws UnsupportedOperationException {
+    public synchronized void assignSpecialist(Long requestId, Long itSpecialistId) throws UnsupportedOperationException {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if (requestToAssign.getIsApprovedBySecurityStructure()) {
@@ -150,7 +148,7 @@ public class RequestService {
         }
     }
 
-    public void itReject(Long requestId, String observation) {
+    public synchronized void itReject(Long requestId, String observation) {
         Request requestToReject = findById(requestId);
         requestToReject.setIsApprovedByITChief(false);
         requestToReject.setStatus(Status.Respinsa);
@@ -162,7 +160,7 @@ public class RequestService {
 
     // FINALIZE
 
-    public void finalize(Long requestId) throws UnsupportedOperationException {
+    public synchronized void finalize(Long requestId) throws UnsupportedOperationException {
         Request requestToFinalize = findById(requestId);
         checkApprovalBeforeFinalize(requestToFinalize);
         requestToFinalize.setStatus(Status.Finalizata);

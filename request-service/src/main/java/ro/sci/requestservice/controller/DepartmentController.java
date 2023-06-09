@@ -1,7 +1,6 @@
 package ro.sci.requestservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +18,8 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @PostMapping
-    public ResponseEntity<String> add(@RequestBody DepartmentRequest departmentRequest) {
+    public ResponseEntity<?> add(@RequestBody DepartmentRequest departmentRequest) {
         departmentService.add(departmentRequest);
-        return new ResponseEntity<>("Added successfully", HttpStatus.OK);
+        return ResponseEntity.ok("Department: " + departmentRequest.getDepartmentName() + " added successfully !");
     }
 }

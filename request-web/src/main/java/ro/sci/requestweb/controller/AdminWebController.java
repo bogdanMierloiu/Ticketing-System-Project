@@ -43,8 +43,8 @@ public class AdminWebController {
 
     // --------------------------------------  STRUCTURES ------------------------------------------------------
 
-    @GetMapping("/all-structures")
     @Cacheable("structures")
+    @GetMapping("/all-structures")
     public String viewAllStructures(Model model) {
         model.addAttribute("structures", policeStructureService.getAllStructures());
         return "structures";
@@ -56,10 +56,8 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-structure")
-    @CachePut("structures")
     public RedirectView addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
         policeStructureService.addPoliceStructure(policeStructureRequest);
-        model.addAttribute("structures", policeStructureService.getAllStructures());
         return new RedirectView("/request/admin/all-structures");
     }
 
@@ -81,12 +79,11 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-subunit")
-    @CachePut("subunits")
-    public String addSubunit(@ModelAttribute PoliceStructureSubunitRequest structureRequest, Model model) {
-        policeStructureSubunitService.addSubunitStructure(structureRequest);
-        model.addAttribute("subunits", policeStructureSubunitService.getStructuresByPoliceStation(structureRequest.getPoliceStructureId()));
-        model.addAttribute("structure", policeStructureService.getById(structureRequest.getPoliceStructureId()));
-        return "subunits";
+    public RedirectView addSubunit(@ModelAttribute PoliceStructureSubunitRequest subunitRequest, Model model) {
+        policeStructureSubunitService.addSubunitStructure(subunitRequest);
+        Long policeStructureId = subunitRequest.getPoliceStructureId();
+        String redirectUrl = String.format("/request/admin/show-subunits/%d", policeStructureId);
+        return new RedirectView(redirectUrl);
     }
 
     // --------------------------------------  DEPARTMENTS ------------------------------------------------------

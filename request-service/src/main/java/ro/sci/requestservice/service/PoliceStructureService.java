@@ -11,7 +11,6 @@ import ro.sci.requestservice.repository.PoliceStructureRepo;
 @Service
 @RequiredArgsConstructor
 @Transactional
-
 public class PoliceStructureService {
 
     private final PoliceStructureRepo policeStructureRepo;

@@ -14,7 +14,6 @@ import ro.sci.requestservice.repository.PoliceStructureSubunitRepo;
 @Service
 @RequiredArgsConstructor
 @Transactional
-
 public class DepartmentService {
 
     private final DepartmentRepo departmentRepo;
@@ -27,9 +26,6 @@ public class DepartmentService {
         departmentToSave.setPoliceStructureSubunit(getPoliceStructureSubunitById(departmentRequest.getPoliceStructureSubunitId()));
         departmentRepo.save(departmentToSave);
     }
-
-
-
 
     private PoliceStructureSubunit getPoliceStructureSubunitById(Long id) {
         return policeStructureSubunitRepoRepo.findById(id).orElseThrow(() ->

@@ -23,7 +23,7 @@ public class PolicemanService {
     private final PoliceStructureSubunitRepo policeStructureSubunitRepo;
     private final DepartmentRepo departmentRepo;
 
-    public Policeman add(PolicemanRequest policemanRequest) {
+    public synchronized Policeman add(PolicemanRequest policemanRequest) {
         Policeman policemanFromDB = policemanExists(policemanRequest);
         if (policemanFromDB == null) {
             Policeman policeman = new Policeman();

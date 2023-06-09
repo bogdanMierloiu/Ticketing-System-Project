@@ -22,8 +22,8 @@ public class PoliceStructureController {
 
     @GetMapping("/all-structures")
     public CompletableFuture<ResponseEntity<List<PoliceStructureResponse>>> getAllStructures() {
-        CompletableFuture<List<PoliceStructureResponse>> future = policeStructureService.getAllStructures();
-        return future.thenApply(ResponseEntity::ok);
+        return policeStructureService.getAllStructures()
+                .thenApply(ResponseEntity::ok);
     }
 
     @GetMapping("/find/{id}")
