@@ -2,16 +2,21 @@ package ro.sci.requestweb.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ro.sci.requestweb.dto.AccountRequest;
+import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.PoliceStructureRequest;
 import ro.sci.requestweb.dto.PoliceStructureResponse;
+import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
+import ro.sci.requestweb.exception.InternalErrorException;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ import java.util.List;
 public class PoliceStructureService {
 
     private final WebClient.Builder webClientBuilder;
+
 
     public List<PoliceStructureResponse> getAllStructures() {
         Flux<PoliceStructureResponse> responseFlux = webClientBuilder.build().get()
@@ -37,18 +43,20 @@ public class PoliceStructureService {
     }
 
     @Async
-    public void addPoliceStructure(PoliceStructureRequest policeStructureRequest) {
-        clearStructureCache();
-        webClientBuilder.build().post()
-                .uri("lb://request-service/api/v1/police-structure")
-                .bodyValue(policeStructureRequest)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
+    public CompletableFuture<AsyncResponse<Void>> addPoliceStructure(PoliceStructureRequest policeStructureRequest) {
+        try {
+            webClientBuilder.build().post()
+                    .uri("lb://request-service/api/v1/police-structure")
+                    .bodyValue(policeStructureRequest)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null,e));
+        }
+
     }
 
-    @CacheEvict(value = "structures", allEntries = true)
-    private void clearStructureCache() {
-        log.info("Structures cache cleaned successfully");
-    }
+
 }

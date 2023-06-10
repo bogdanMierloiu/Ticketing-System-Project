@@ -38,7 +38,6 @@ public class PoliceStructureSubunitService {
 
     @Async
     public void addSubunitStructure(PoliceStructureSubunitRequest structureRequest) {
-        clearSubunitCache();
         webClientBuilder.build().post()
                 .uri("lb://request-service/api/v1/police-structure-subunit")
                 .bodyValue(structureRequest)
@@ -47,8 +46,5 @@ public class PoliceStructureSubunitService {
                 .block();
     }
 
-    @CacheEvict(value = "subunits", allEntries = true)
-    private void clearSubunitCache() {
-        log.info("Subunits cache cleaned successfully");
-    }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.AccountRequest;
+import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.PolicemanRequest;
 import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
@@ -16,6 +17,7 @@ import ro.sci.requestweb.service.RequestService;
 import ro.sci.requestweb.service.RequestTypeService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
@@ -77,19 +79,26 @@ public class RequestWebController {
 
     @PostMapping("/add-request")
     public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequest);
+        AsyncResponse<Void> response;
         try {
-            requestService.addRequest(accountRequest);
-            return "redirect:/request";
-        } catch (AlreadyHaveThisRequestException exception) {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+
+        if (response.getError() != null) {
             model.addAttribute("accountRequest", accountRequest);
             model.addAttribute("policemanRequest", new PolicemanRequest());
             model.addAttribute("ranks", rankService.getAllRanks());
             model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
-            model.addAttribute("errorMessage", "Pentru acest politist, exista deja o solicitare" +
-                    " de acelasi tip in lucru. Va rugam asteptati solutionarea acesteia!");
+            model.addAttribute("errorMessage", response.getError().getMessage());
             return "add-request";
         }
+
+        return "redirect:/request";
     }
+
 
     @GetMapping("/search-by-name")
     public String searchByName(@RequestParam String name, Model model) {

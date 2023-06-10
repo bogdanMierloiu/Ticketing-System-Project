@@ -31,7 +31,8 @@ public class DepartmentService {
                 .uri("lb://request-service/api/v1/department")
                 .body(BodyInserters.fromValue(departmentRequest))
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
 
 }

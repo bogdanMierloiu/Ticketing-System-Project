@@ -19,6 +19,7 @@ public class RequestTypeController {
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody RequestTypeReq requestTypeReq) {
+        requestTypeService.add(requestTypeReq);
         return ResponseEntity.ok("Request type: " + requestTypeReq.getRequestName() + " added successfully!");
     }
 }

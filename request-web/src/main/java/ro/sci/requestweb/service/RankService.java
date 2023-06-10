@@ -30,6 +30,7 @@ public class RankService {
                 .uri("lb://request-service/api/v1/rank")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
 }

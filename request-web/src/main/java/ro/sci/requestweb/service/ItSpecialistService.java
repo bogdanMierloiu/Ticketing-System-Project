@@ -31,6 +31,7 @@ public class ItSpecialistService {
                 .uri("lb://request-service/api/v1/it-specialist")
                 .body(BodyInserters.fromValue(request))
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
 }

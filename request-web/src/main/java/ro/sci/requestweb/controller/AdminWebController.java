@@ -1,6 +1,7 @@
 package ro.sci.requestweb.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,12 @@ import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/request/admin")
-
+@CacheConfig(cacheManager = "CacheManager")
 public class AdminWebController {
 
     private final RequestService requestService;
@@ -41,9 +43,9 @@ public class AdminWebController {
         return "index";
     }
 
+
     // --------------------------------------  STRUCTURES ------------------------------------------------------
 
-    @Cacheable("structures")
     @GetMapping("/all-structures")
     public String viewAllStructures(Model model) {
         model.addAttribute("structures", policeStructureService.getAllStructures());
@@ -51,20 +53,54 @@ public class AdminWebController {
     }
 
     @GetMapping("/add-structure-form")
-    public String addStructureForm() {
+    public String addStructureForm(Model model) {
         return "add-structure";
     }
 
+
     @PostMapping("/add-structure")
-    public RedirectView addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
-        policeStructureService.addPoliceStructure(policeStructureRequest);
-        return new RedirectView("/request/admin/all-structures");
+    public String addStructure(@ModelAttribute PoliceStructureRequest policeStructureRequest, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = policeStructureService.addPoliceStructure(policeStructureRequest);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage","A aparut o eroare in procesarea cererii dumneavoastra!");
+            return "add-structure";
+        }
+        return "redirect:/request/admin/all-structures";
+
     }
+
+    @PostMapping("/add-request")
+    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequest);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+
+        if (response.getError() != null) {
+            model.addAttribute("accountRequest", accountRequest);
+            model.addAttribute("policemanRequest", new PolicemanRequest());
+            model.addAttribute("ranks", rankService.getAllRanks());
+            model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+            model.addAttribute("errorMessage", "Pentru acest politist, exista deja o solicitare de acelasi tip in lucru. Va rugam asteptati solutionarea acesteia!");
+            return "add-request";
+        }
+
+        return "redirect:/request";
+    }
+
 
     // --------------------------------------  SUBUNITS ------------------------------------------------------
 
     @GetMapping("/show-subunits/{policeStructureId}")
-    @Cacheable("subunits")
     public String showSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
         List<PoliceStructureSubunitResponse> subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         model.addAttribute("subunits", subunits);
@@ -89,7 +125,6 @@ public class AdminWebController {
     // --------------------------------------  DEPARTMENTS ------------------------------------------------------
 
     @GetMapping("/show-departments/{subunitId}")
-    @Cacheable("departments")
     public String viewDepartmentsForSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
         model.addAttribute("subunit", policeStructureSubunitService.findById(subunitId));
         model.addAttribute("departments", departmentService.getBySubunit(subunitId));
@@ -104,18 +139,15 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-department")
-    @CachePut("departments")
-    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+    public RedirectView addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
         departmentService.addDepartment(departmentRequest);
-        model.addAttribute("subunit", policeStructureSubunitService.findById(departmentRequest.getPoliceStructureSubunitId()));
-        model.addAttribute("departments", departmentService.getBySubunit(departmentRequest.getPoliceStructureSubunitId()));
-        return "departments";
+        String redirectUrl = String.format("/request/admin/show-departments/%d", departmentRequest.getPoliceStructureSubunitId());
+        return new RedirectView(redirectUrl);
     }
 
     // --------------------------------------  RANKS ------------------------------------------------------
 
     @GetMapping("/all-ranks")
-    @Cacheable("ranks")
     public String viewAllRanks(Model model) {
         model.addAttribute("ranks", rankService.getAllRanks());
         return "ranks";
@@ -127,7 +159,6 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-rank")
-    @CachePut("ranks")
     public RedirectView addRank(@ModelAttribute RankRequest request, Model model) {
         rankService.addRank(request);
         model.addAttribute("ranks", rankService.getAllRanks());
@@ -138,7 +169,6 @@ public class AdminWebController {
 
 
     @GetMapping("/all-specialists")
-    @Cacheable("specialists")
     public String viewAllSpecialists(Model model) {
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "it-specialists";
@@ -151,7 +181,6 @@ public class AdminWebController {
     }
 
     @PostMapping("add-specialist")
-    @CachePut("specialists")
     public RedirectView addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model) {
         itSpecialistService.addSpecialist(request);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -161,7 +190,6 @@ public class AdminWebController {
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
 
     @GetMapping("/all-request-type")
-    @CachePut("request-types")
     public String viewAllRequestType(Model model) {
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "request-types";
@@ -173,10 +201,8 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-request-type")
-    @CachePut("request-types")
     public RedirectView addRequestType(@ModelAttribute RequestTypeReq request, Model model) {
         requestTypeService.addRequestType(request);
-        model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return new RedirectView("/request/admin/all-request-type");
     }
 
@@ -192,7 +218,6 @@ public class AdminWebController {
 
 
     @GetMapping("/show-subunits-script/{policeStructureId}")
-    @Cacheable("subunits")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId) {
         List<PoliceStructureSubunitResponse> subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         assert subunits != null;
@@ -200,7 +225,6 @@ public class AdminWebController {
     }
 
     @GetMapping("/show-departments-script/{subunitId}")
-    @Cacheable("departments")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId) {
         List<DepartmentResponse> departments = departmentService.getBySubunit(subunitId);
         assert departments != null;
@@ -208,7 +232,6 @@ public class AdminWebController {
     }
 
     @GetMapping("/show-structures-script")
-    @Cacheable("structures")
     public ResponseEntity<List<PoliceStructureResponse>> viewPoliceStructuresScript() {
         List<PoliceStructureResponse> structures = policeStructureService.getAllStructures();
         assert structures != null;

@@ -9,10 +9,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.RequestResponse;
+import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.exception.UnsupportedOperationException;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -84,17 +86,24 @@ public class RequestService {
     }
 
     @Async
-    public void addRequest(AccountRequest request) {
-        webClientBuilder.build().post()
-                .uri("lb://request-service/api/v1/request")
-                .bodyValue(request)
-                .retrieve()
-                .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
-                    throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
-                })
-                .toBodilessEntity()
-                .then();
+    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequest request) {
+        try {
+            webClientBuilder.build().post()
+                    .uri("lb://request-service/api/v1/request")
+                    .bodyValue(request)
+                    .retrieve()
+                    .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
+                        throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
+                    })
+                    .toBodilessEntity()
+                    .block();
+
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, null));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
     }
+
 
     // POLICE STRUCTURE
 

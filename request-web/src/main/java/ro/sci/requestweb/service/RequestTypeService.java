@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import ro.sci.requestweb.dto.PoliceStructureSubunitRequest;
 import ro.sci.requestweb.dto.RequestTypeReq;
 import ro.sci.requestweb.dto.RequestTypeResponse;
 
@@ -30,6 +31,9 @@ public class RequestTypeService {
                 .uri("lb://request-service/api/v1/request-type")
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .block();
     }
+
+
 }
