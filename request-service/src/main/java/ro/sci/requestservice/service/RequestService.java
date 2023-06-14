@@ -2,9 +2,11 @@ package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.AccountRequest;
+import ro.sci.requestservice.dto.AddRequestResult;
 import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.exception.NotFoundException;
@@ -19,6 +21,7 @@ import ro.sci.requestservice.repository.RequestTypeRepo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -36,31 +39,40 @@ public class RequestService {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
+    @Async
+    public CompletableFuture<AddRequestResult> add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
+        CompletableFuture<AddRequestResult> future = new CompletableFuture<>();
+        try {
+            Request request = requestMapper.map(accountRequest);
+            CompletableFuture<Policeman> futurePoliceman = policemanService.add(accountRequest.getPolicemanRequest());
+            Policeman policeman = futurePoliceman.join();
+            hasAlreadyThisRequestType(accountRequest.getRequestTypeId(), policeman);
 
-    public synchronized void add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
-        Request request = requestMapper.map(accountRequest);
-        Policeman policeman = policemanService.add(accountRequest.getPolicemanRequest());
-        hasAlreadyThisRequestType(accountRequest.getRequestTypeId(), policeman);
+            request.setPoliceman(policeman);
+            request.setStatus(Status.Deschisa);
+            request.setObservation(accountRequest.getObservation());
+            request.setRequestType(getRequestTypeById(accountRequest.getRequestTypeId()));
+            request.setRequestStructRegNo(accountRequest.getRequestStructRegNo());
+            request.setRegDateFromRequestStruct(accountRequest.getRegDateFromRequestStruct());
+            request.setIsApprovedByStructureChief(false);
+            request.setIsApprovedBySecurityStructure(false);
+            request.setIsApprovedByITChief(false);
 
-        request.setPoliceman(policeman);
-        request.setStatus(Status.Deschisa);
-        request.setObservation(accountRequest.getObservation());
-        request.setRequestType(getRequestTypeById(accountRequest.getRequestTypeId()));
-        request.setRequestStructRegNo(accountRequest.getRequestStructRegNo());
-        request.setRegDateFromRequestStruct(accountRequest.getRegDateFromRequestStruct());
-        request.setIsApprovedByStructureChief(false);
-        request.setIsApprovedBySecurityStructure(false);
-        request.setIsApprovedByITChief(false);
+            request.setCreatedAt(LocalDateTime.now());
+            String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
+            request.setObservation(!StringUtils.isEmpty(accountRequest.getObservation()) ? request.getObservation() + "\n" + obvToAdd :
+                    obvToAdd);
 
-        request.setCreatedAt(LocalDateTime.now());
-        String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
-        request.setObservation(!StringUtils.isEmpty(accountRequest.getObservation()) ? request.getObservation() + "\n" + obvToAdd :
-                obvToAdd);
+            Request savedRequest = requestRepo.save(request);
+            policeman.getRequests().add(savedRequest);
+            RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
+            requestResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
 
-        Request savedRequest = requestRepo.save(request);
-        policeman.getRequests().add(savedRequest);
-        RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
-        requestResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
+            future.complete(new AddRequestResult(true, null));
+        } catch (Exception e) {
+            future.complete(new AddRequestResult(false, e.getMessage()));
+        }
+        return future;
     }
 
     private Request findById(Long requestId) {
@@ -110,7 +122,8 @@ public class RequestService {
         }
     }
 
-    public synchronized void securityStructureReject(Long requestId, String observation) throws UnsupportedOperationException {
+    public synchronized void securityStructureReject(Long requestId, String observation) throws
+            UnsupportedOperationException {
         Request requestToReject = findById(requestId);
         if (requestToReject.getIsApprovedByStructureChief()) {
             requestToReject.setIsApprovedBySecurityStructure(false);
@@ -126,7 +139,8 @@ public class RequestService {
 
     // IT STRUCTURE
 
-    public synchronized void assignSpecialist(Long requestId, Long itSpecialistId) throws UnsupportedOperationException {
+    public synchronized void assignSpecialist(Long requestId, Long itSpecialistId) throws
+            UnsupportedOperationException {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
         if (requestToAssign.getIsApprovedBySecurityStructure()) {
@@ -187,7 +201,9 @@ public class RequestService {
         );
     }
 
-    private void hasAlreadyThisRequestType(Long requestTypeId, Policeman policeman) throws AlreadyHaveThisRequestException {
+    @Async
+    private void hasAlreadyThisRequestType(Long requestTypeId, Policeman policeman) throws
+            AlreadyHaveThisRequestException {
         RequestType requestTypeRequested = getRequestTypeById(requestTypeId);
         for (Request request : policeman.getRequests()) {
             if (request.getStatus() == Status.In_lucru || request.getStatus() == Status.Deschisa) {
@@ -198,6 +214,7 @@ public class RequestService {
         }
     }
 
+    @Async
     private void checkApprovalBeforeFinalize(Request requestToCheck) throws UnsupportedOperationException {
         StringBuilder errorMessage = new StringBuilder("Solicitarea nu este aprobata de:");
 

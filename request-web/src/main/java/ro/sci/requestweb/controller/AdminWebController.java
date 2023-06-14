@@ -2,8 +2,6 @@ package ro.sci.requestweb.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,35 +66,12 @@ public class AdminWebController {
             response = new AsyncResponse<>(null, e);
         }
         if (response.getError() != null) {
-            model.addAttribute("errorMessage","A aparut o eroare in procesarea cererii dumneavoastra!");
+            model.addAttribute("errorMessage", "A aparut o eroare in procesarea cererii dumneavoastra!");
             return "add-structure";
         }
         return "redirect:/request/admin/all-structures";
 
     }
-
-    @PostMapping("/add-request")
-    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model) {
-        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequest);
-        AsyncResponse<Void> response;
-        try {
-            response = asyncResponse.get();
-        } catch (Exception e) {
-            response = new AsyncResponse<>(null, e);
-        }
-
-        if (response.getError() != null) {
-            model.addAttribute("accountRequest", accountRequest);
-            model.addAttribute("policemanRequest", new PolicemanRequest());
-            model.addAttribute("ranks", rankService.getAllRanks());
-            model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
-            model.addAttribute("errorMessage", "Pentru acest politist, exista deja o solicitare de acelasi tip in lucru. Va rugam asteptati solutionarea acesteia!");
-            return "add-request";
-        }
-
-        return "redirect:/request";
-    }
-
 
     // --------------------------------------  SUBUNITS ------------------------------------------------------
 
@@ -115,11 +90,21 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-subunit")
-    public RedirectView addSubunit(@ModelAttribute PoliceStructureSubunitRequest subunitRequest, Model model) {
-        policeStructureSubunitService.addSubunitStructure(subunitRequest);
+    public String addSubunit(@ModelAttribute PoliceStructureSubunitRequest subunitRequest, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = policeStructureSubunitService.addSubunitStructure(subunitRequest);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage", "A aparut o eroare la adaugare!");
+            return "add-subunit";
+        }
         Long policeStructureId = subunitRequest.getPoliceStructureId();
         String redirectUrl = String.format("/request/admin/show-subunits/%d", policeStructureId);
-        return new RedirectView(redirectUrl);
+        return "redirect:" + redirectUrl;
     }
 
     // --------------------------------------  DEPARTMENTS ------------------------------------------------------
@@ -139,11 +124,22 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-department")
-    public RedirectView addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
-        departmentService.addDepartment(departmentRequest);
+    public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = departmentService.addDepartment(departmentRequest);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage", "A aparut o eroare la adaugare!");
+            return "add-department";
+        }
         String redirectUrl = String.format("/request/admin/show-departments/%d", departmentRequest.getPoliceStructureSubunitId());
-        return new RedirectView(redirectUrl);
+        return "redirect:" + redirectUrl;
     }
+
 
     // --------------------------------------  RANKS ------------------------------------------------------
 

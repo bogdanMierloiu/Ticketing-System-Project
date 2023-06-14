@@ -2,18 +2,14 @@ package ro.sci.requestweb.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.PoliceStructureRequest;
 import ro.sci.requestweb.dto.PoliceStructureResponse;
-import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
-import ro.sci.requestweb.exception.InternalErrorException;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -55,7 +51,6 @@ public class PoliceStructureService {
         } catch (Exception e) {
             return CompletableFuture.completedFuture(new AsyncResponse<>(null,e));
         }
-
     }
 
 

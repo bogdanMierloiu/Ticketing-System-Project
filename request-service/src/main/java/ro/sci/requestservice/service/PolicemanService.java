@@ -1,6 +1,7 @@
 package ro.sci.requestservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.PolicemanRequest;
@@ -9,6 +10,7 @@ import ro.sci.requestservice.model.*;
 import ro.sci.requestservice.repository.*;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -23,32 +25,35 @@ public class PolicemanService {
     private final PoliceStructureSubunitRepo policeStructureSubunitRepo;
     private final DepartmentRepo departmentRepo;
 
-    public synchronized Policeman add(PolicemanRequest policemanRequest) {
-        Policeman policemanFromDB = policemanExists(policemanRequest);
-        if (policemanFromDB == null) {
-            Policeman policeman = new Policeman();
-            policeman.setFirstName(policemanRequest.getFirstName().strip());
-            if (policemanRequest.getFirstNameSecondary() != null) {
-                policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().strip());
-            }
-            policeman.setLastName(policemanRequest.getLastName().strip());
-            policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
-            policeman.setCertificate(policemanRequest.getCertificate());
-            policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
-            policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
-            policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
-            policeman.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
-            policeman.setEmail(policemanRequest.getEmail());
-            policeman.setRank(getRankById(policemanRequest.getRankId()));
-            policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
-            policeman.setPoliceStructureSubunit(getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId()));
-            policeman.setDepartment(getDepartmentById(policemanRequest.getDepartmentId()));
+    @Async
+    public CompletableFuture<Policeman> add(PolicemanRequest policemanRequest) {
+        return CompletableFuture.supplyAsync(() -> {
+            Policeman policemanFromDB = policemanExists(policemanRequest);
+            if (policemanFromDB == null) {
+                Policeman policeman = new Policeman();
+                policeman.setFirstName(policemanRequest.getFirstName().strip());
+                if (policemanRequest.getFirstNameSecondary() != null) {
+                    policeman.setFirstNameSecondary(policemanRequest.getFirstNameSecondary().strip());
+                }
+                policeman.setLastName(policemanRequest.getLastName().strip());
+                policeman.setPersonalNumber(policemanRequest.getPersonalNumber());
+                policeman.setCertificate(policemanRequest.getCertificate());
+                policeman.setCertificateValidFrom(policemanRequest.getCertificateValidFrom());
+                policeman.setCertificateValidUntil(policemanRequest.getCertificateValidUntil());
+                policeman.setPhoneNumber(policemanRequest.getPhoneNumber());
+                policeman.setPhoneNumberPolice(policemanRequest.getPhoneNumberPolice());
+                policeman.setEmail(policemanRequest.getEmail());
+                policeman.setRank(getRankById(policemanRequest.getRankId()));
+                policeman.setPoliceStructure(getPoliceStructureById(policemanRequest.getPoliceStructureId()));
+                policeman.setPoliceStructureSubunit(getPoliceStructureSubunitById(policemanRequest.getPoliceStructureSubunitId()));
+                policeman.setDepartment(getDepartmentById(policemanRequest.getDepartmentId()));
 
-            return policemanRepo.save(policeman);
-        } else {
-            checkPolicemanFields(policemanFromDB, policemanRequest);
-            return policemanFromDB;
-        }
+                return policemanRepo.save(policeman);
+            } else {
+                checkPolicemanFields(policemanFromDB, policemanRequest);
+                return policemanFromDB;
+            }
+        });
     }
 
     private Rank getRankById(Long rankId) {
@@ -79,6 +84,7 @@ public class PolicemanService {
         return policemanRepo.findByPersonalNumber(policemanRequest.getPersonalNumber());
     }
 
+    @Async
     private void checkPolicemanFields(Policeman policemanFromDB, PolicemanRequest policemanRequest) {
         boolean hasChanges = false;
         if (!(policemanRequest.getCertificate() == null)) {

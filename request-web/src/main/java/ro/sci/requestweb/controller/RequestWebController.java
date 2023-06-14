@@ -10,7 +10,6 @@ import ro.sci.requestweb.dto.AccountRequest;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.PolicemanRequest;
 import ro.sci.requestweb.dto.RequestResponse;
-import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.service.ItSpecialistService;
 import ro.sci.requestweb.service.RankService;
 import ro.sci.requestweb.service.RequestService;
@@ -34,14 +33,6 @@ public class RequestWebController {
     public String indexPage(Model model, HttpSession session) {
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-
-        // Obține utilizatorul din sesiune
-        Object user = session.getAttribute("user");
-        if (user != null) {
-            // Preia informațiile despre utilizator și adaugă-le în model
-            model.addAttribute("user", user);
-        }
-
         return "index";
     }
 

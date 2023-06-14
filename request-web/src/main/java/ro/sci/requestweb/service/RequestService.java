@@ -86,7 +86,7 @@ public class RequestService {
     }
 
     @Async
-    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequest request) {
+    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequest request) throws AlreadyHaveThisRequestException {
         try {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/request")
@@ -97,7 +97,6 @@ public class RequestService {
                     })
                     .toBodilessEntity()
                     .block();
-
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, null));
         } catch (Exception e) {
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));

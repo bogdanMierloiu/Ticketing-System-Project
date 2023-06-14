@@ -9,6 +9,8 @@ import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.exception.UnsupportedOperationException;
 import ro.sci.requestservice.service.RequestService;
 
+import java.util.concurrent.CompletableFuture;
+
 
 @RestController
 @RequestMapping("/api/v1/request")
@@ -18,13 +20,24 @@ public class RequestController {
     private final RequestService requestService;
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody AccountRequest accountRequest) {
-        try {
-            requestService.add(accountRequest);
-            return ResponseEntity.ok("Request for: " + composeResponseForAddingRequest(accountRequest));
-        } catch (AlreadyHaveThisRequestException exception) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Already have this request type in progress!");
-        }
+    public CompletableFuture<ResponseEntity<String>> add(@RequestBody AccountRequest accountRequest) {
+        return requestService.add(accountRequest)
+                .thenApply(result -> {
+                    if (result.getSuccess()) {
+                        return ResponseEntity.ok("Request for " + composeResponseForAddingRequest(accountRequest));
+                    } else if (result.getErrorMessage().equals("Already have this request type in progress!")) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body(result.getErrorMessage());
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A aparut o eroare la procesarea cererii!");
+                    }
+                })
+                .exceptionally(ex -> {
+                    if (ex.getCause() instanceof AlreadyHaveThisRequestException) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getCause().getMessage());
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A aparut o eroare la procesarea cererii!");
+                    }
+                });
     }
 
 

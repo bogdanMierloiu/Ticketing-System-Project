@@ -10,7 +10,8 @@
 </head>
 <body>
 
-<div style="display:block;">
+<!-- BUTTONS & ERROR -->
+<div style="display:block; padding-bottom:20px">
     <div>
         <button class="print-button btn btn-info my-2 my-sm-0" onclick="window.print()">Printează</button>
     </div>
@@ -22,113 +23,132 @@
             </form>
         </div>
     </div>
-
     <div>
         <span class="error-message-in-print-page" style="color: red; font-weight: bold" th:if="${errorMessage}"
               th:text="${errorMessage}"></span>
     </div>
-
 </div>
 
+<!-- ANTET TABLE-->
+<table>
+    <tbody>
+    <tr>
+        <td><p>ROMANIA</p></td>
+        <td style="text-align: right; padding-right:15px;"><p>NESECRET</p></td>
+    </tr>
+    <tr>
+        <td><p>MINISTERUL AFACERILOR INTERNE</p></td>
+        <td style="text-align: right;">
+            <div>
+                <span th:text="${request.requestStructRegNo}"></span>
+                <label> / </label>
+                <span th:text="${#temporals.format(request.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
+            <img style="width:80px; height:80px;" th:src="@{/images/sigla.png}" alt="logo">
+            <p style="text-transform: uppercase;"><span
+                    th:text="${request.policemanResponse.policeStructure.structureName}"></span></p>
+            <p style="text-transform: uppercase;"><span
+                    th:text="${request.policemanResponse.policeStructureSubunit.subunitName}"></span></p>
+            <p style="text-transform: uppercase;"><span
+                    th:text="${request.policemanResponse.department.departmentName}"></span></p>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td style="text-align: right; padding-right: 30px">
+            <div th:if="${request.requestTypeResponse.requestName == 'solicitare cont igpr'}" class="aprobari">
+                <h5 style="font-weight:bold;">APROBAT</h5>
+                <p>SEFUL UNITATII</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div th:if="${request.requestTypeResponse.requestName == 'solicitare cont igpr'}" class="aprobari">
+                <h5 style="font-weight:bold;">APROBAT</h5>
+                <p>Seful nemijlocit</p>
+            </div>
+        </td>
+        <td></td>
+    </tr>
+
+    </tbody>
+</table>
+
+<!-- TITLE-->
 <div class="header">
-    <h1>
-        <span th:text="${request.requestTypeResponse.requestName}"></span>
-    </h1>
+    <h3 style="font-weight:bold;">
+        <span th:text="${'Raport ' +request.requestTypeResponse.requestName}"></span>
+    </h3>
 </div>
 
-<div class="field">
-    <span class="span-section"> INFORMATII SOLICITANT</span>
-    <hr class="line-style">
-    <div>
-        <label>Grad profesional:</label>
-        <span class="field-value" th:text="${request.policemanResponse.rank.rankName}"></span>
-    </div>
-    <div>
-        <label>Nume:</label>
-        <span class="field-value" th:text="${request.policemanResponse.lastName}"></span>
-    </div>
-    <div>
-        <label>Prenume:</label>
-        <span class="field-value"
-              th:text="${request.policemanResponse.firstName + ' ' + request.policemanResponse.firstNameSecondary}"></span>
-    </div>
-    <div>
-        <label>CNP:</label>
-        <span class="field-value" th:text="${request.policemanResponse.personalNumber}"></span>
-    </div>
-    <div>
-        <label>Autorizatie secret:</label>
-        <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
-        <label>valabila de la:</label>
-        <span class="field-value"
-              th:text="${#temporals.format(request.policemanResponse.certificateValidFrom, 'dd-MM-yyyy')}"></span>
-        <label>pana la:</label>
-        <span class="field-value"
-              th:text="${#temporals.format(request.policemanResponse.certificateValidUntil, 'dd-MM-yyyy')}"></span>
-    </div>
-    <div>
-        <label>Nr. de telefon mobil:</label>
-        <span class="field-value" th:text="${request.policemanResponse.phoneNumber}"></span>
-    </div>
-    <div>
-        <label>Nr. de telefon interior:</label>
-        <span class="field-value" th:text="${request.policemanResponse.phoneNumberPolice}"></span>
-    </div>
-    <div>
-        <label>Email:</label>
-        <span class="field-value" th:text="${request.policemanResponse.email}"></span>
-    </div>
-    <div>
-        <label>Structura de politie:</label>
-        <span class="field-value" th:text="${request.policemanResponse.policeStructure.structureName}"></span>
-    </div>
-    <div>
-        <label>Subunitatea de politie:</label>
-        <span class="field-value" th:text="${request.policemanResponse.policeStructureSubunit.subunitName}"></span>
-    </div>
-    <div>
-        <label>Linia de munca:</label>
-        <span class="field-value" th:text="${request.policemanResponse.department.departmentName}"></span>
-    </div>
-</div>
+<!-- CONTENT TABLE-->
+<table class="content-table">
+    <tr>
+        <td style="font-weight: bold;"><span>Date despre solicitant:</span></td>
+        <td>
+            <div>
+                <label>Grad profesional:</label>
+                <span class="field-value" th:text="${request.policemanResponse.rank.rankName}"></span>
+            </div>
+            <div>
+                <label>Nume:</label>
+                <span class="field-value" th:text="${request.policemanResponse.lastName}"></span>
+            </div>
+            <div>
+                <label>Prenume:</label>
+                <span class="field-value"
+                      th:text="${request.policemanResponse.firstName + ' ' + request.policemanResponse.firstNameSecondary}"></span>
+            </div>
+            <div>
+                <label>CNP:</label>
+                <span class="field-value" th:text="${request.policemanResponse.personalNumber}"></span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;"><span>Date contact:</span></td>
+        <td>
+            <div>
+                <label>Nr. de telefon mobil:</label>
+                <span class="field-value" th:text="${request.policemanResponse.phoneNumber}"></span>
+            </div>
+            <div>
+                <label>Nr. de telefon interior:</label>
+                <span class="field-value" th:text="${request.policemanResponse.phoneNumberPolice}"></span>
+            </div>
+            <hr class="line-style">
+            <div>
+                <label>Adresa de email:</label>
+                <span class="field-value" th:text="${request.policemanResponse.email}"></span>
+            </div>
+            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont intrapol-b'}">
+                <label>Autorizatie secret:</label>
+                <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
+                <label>valabila de la:</label>
+                <span class="field-value"
+                      th:text="${#temporals.format(request.policemanResponse.certificateValidFrom, 'dd-MM-yyyy')}"></span>
+                <label>pana la:</label>
+                <span class="field-value"
+                      th:text="${#temporals.format(request.policemanResponse.certificateValidUntil, 'dd-MM-yyyy')}"></span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;"><span>Observatii:</span></td>
+        <td>
+            <span class="field-value"><pre class="pre-styled" th:text="${request.observation}"></pre></span>
+        </td>
+    </tr>
 
-<div class="field">
-    <span class="span-section">NUMERE DE INREGISTRARE</span>
-    <hr class="line-style">
-    <div>
-        <label>Nr. inreg. unitatea solicitanta:</label>
-        <span class="field-value" th:text="${request.requestStructRegNo}"></span>
-        <label>din data de: </label>
-        <span class="field-value" th:text="${#temporals.format(request.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
-    </div>
-    <div>
-        <label>Nr. inreg. structura de securitate:</label>
-        <span class="field-value" th:text="${request.securityStructRegNo}"></span>
-        <label>din data de: </label>
-        <span class="field-value"
-              th:text="${#temporals.format(request.regDateFromSecurityStruct, 'dd-MM-yyyy')}"></span>
-    </div>
-    <div>
-        <label>Nr. inreg. SCI:</label>
-        <span class="field-value" th:text="${request.itStructRegNo}"></span>
-        <label>din data de: </label>
-        <span class="field-value" th:text="${#temporals.format(request.regDateFromITStruct, 'dd-MM-yyyy')}"></span>
-    </div>
-</div>
-
-<div class="field">
-    <hr class="line-style">
-    <span class="span-section">OBSERVATII:</span>
-    <span class="field-value">
-        <pre th:text="${request.observation}"></pre>
-    </span>
-</div>
-
-<div class="field">
-    <span class="span-section">STATUS:</span>
-    <span th:if="${request.status.name() == 'In_lucru'}">In lucru</span>
-    <span class="field-value" th:text="${request.status.name() != 'In_lucru' ? request.status.name() : ''}"></span>
-</div>
+</table>
 
 
 

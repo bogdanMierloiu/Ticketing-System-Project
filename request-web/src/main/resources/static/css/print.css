@@ -7,10 +7,17 @@ body {
     font-family: Times New Roman, sans-serif;
     margin: 20px;
 }
+.pre-styled{
+    font-family: Times New Roman, sans-serif;
+    font-size: 16px;
+    padding-left: 0px;
+}
 
 .header {
     text-align: center;
     margin-bottom: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
@@ -21,6 +28,62 @@ body {
     margin-bottom: 5px;
     padding-left: 10px;
     font-size: 16px;
+}
+
+.content-table{
+   padding-top: 20px;
+   border-collapse: collapse;
+}
+
+.content-table td, .content-table th {
+  border: 1px solid black;
+  padding-left: 5px;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+thead th:nth-child(1) {
+  width: 30%;
+}
+
+thead th:nth-child(2) {
+  width: 20%;
+}
+
+thead th:nth-child(3) {
+  width: 15%;
+}
+
+thead th:nth-child(4) {
+  width: 35%;
+}
+
+tr, td {
+padding: 0px;
+}
+
+p {
+    margin:0;
+}
+
+.antent {
+    padding-left: 10px;
+
+}
+
+.antet img {
+    width:80px;
+    height:80px;
+}
+
+.aprobari {
+    position:relative;
+    padding:5px;
 }
 
 .field label {
