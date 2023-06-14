@@ -50,7 +50,9 @@
     <tr>
         <td>
             <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
-            <img style="width:80px; height:80px;" th:src="@{/images/sigla.png}" alt="logo">
+            <div>
+                <img style="width:115px; height:80px; padding-left: 30px" th:src="@{/css/sigla.png}" alt="logo">
+            </div>
             <p style="text-transform: uppercase;"><span
                     th:text="${request.policemanResponse.policeStructure.structureName}"></span></p>
             <p style="text-transform: uppercase;"><span
@@ -67,7 +69,7 @@
             <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC_IGPR.RO'}"
                  class="aprobari">
                 <h5 style="font-weight:bold; padding-right: 10px; text-decoration: underline;">APROBAT</h5>
-                <p style="padding-right:9px">SEF UNITATE</p>
+                <p style="padding-right:7px">SEF UNITATE</p>
             </div>
         </td>
     </tr>
@@ -87,9 +89,8 @@
 
 <!-- TITLE-->
 <div class="header">
-    <h3 style="font-weight:bold;">
-        <span th:text="${'Raport ' +request.requestTypeResponse.requestName}"></span>
-    </h3>
+    <h5 style="font-weight:bold;">RAPORT</h5>
+    <h5 th:text="${request.requestTypeResponse.requestName}"></h5>
 </div>
 
 <!-- CONTENT TABLE-->
