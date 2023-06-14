@@ -62,6 +62,9 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <h2 class="text-center mb-4">Adaugare tip de solicitare</h2>
+                <span class="error-message" th:if="${errorMessage}">
+                        [[${errorMessage}]]
+                    </span>
                 <form class="needs-validation" th:action="@{/request/admin/add-request-type}" method="post">
                     <div class="mb-3">
                         <label class="form-label">Denumire tip solicitare:</label>

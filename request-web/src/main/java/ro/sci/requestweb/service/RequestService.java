@@ -224,9 +224,7 @@ public class RequestService {
         }
     }
 
-
     // UTILS
-
     private <T> List<T> collectToList(Flux<T> flux) {
         return flux.collectList().block();
     }

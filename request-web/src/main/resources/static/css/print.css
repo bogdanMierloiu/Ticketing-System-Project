@@ -1,6 +1,6 @@
 @page {
     size: A4;
-    margin: 20mm 25mm;
+    margin: 15mm 15mm;
 }
 
 body {
@@ -73,7 +73,6 @@ p {
 
 .antent {
     padding-left: 10px;
-
 }
 
 .antet img {
@@ -83,7 +82,7 @@ p {
 
 .aprobari {
     position:relative;
-    padding:5px;
+    padding:0px;
 }
 
 .field label {
@@ -119,4 +118,10 @@ p {
             color: red;
             font-weight: bold;
         }
-    }
+        .top-center {
+            display:none;
+        }
+        .bottom-center {
+        display:none
+        }
+ }

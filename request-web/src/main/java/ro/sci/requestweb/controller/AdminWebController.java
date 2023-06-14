@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 
@@ -91,6 +90,7 @@ public class AdminWebController {
 
     @PostMapping("/add-subunit")
     public String addSubunit(@ModelAttribute PoliceStructureSubunitRequest subunitRequest, Model model) {
+        Long policeStructureId = subunitRequest.getPoliceStructureId();
         CompletableFuture<AsyncResponse<Void>> asyncResponse = policeStructureSubunitService.addSubunitStructure(subunitRequest);
         AsyncResponse<Void> response;
         try {
@@ -99,10 +99,11 @@ public class AdminWebController {
             response = new AsyncResponse<>(null, e);
         }
         if (response.getError() != null) {
-            model.addAttribute("errorMessage", "A aparut o eroare la adaugare!");
+            model.addAttribute("structure", policeStructureService.getById(policeStructureId));
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
             return "add-subunit";
         }
-        Long policeStructureId = subunitRequest.getPoliceStructureId();
+
         String redirectUrl = String.format("/request/admin/show-subunits/%d", policeStructureId);
         return "redirect:" + redirectUrl;
     }
@@ -125,6 +126,7 @@ public class AdminWebController {
 
     @PostMapping("/add-department")
     public String addDepartment(@ModelAttribute DepartmentRequest departmentRequest, Model model) {
+        Long subunitId = departmentRequest.getPoliceStructureSubunitId();
         CompletableFuture<AsyncResponse<Void>> asyncResponse = departmentService.addDepartment(departmentRequest);
         AsyncResponse<Void> response;
         try {
@@ -133,10 +135,12 @@ public class AdminWebController {
             response = new AsyncResponse<>(null, e);
         }
         if (response.getError() != null) {
-            model.addAttribute("errorMessage", "A aparut o eroare la adaugare!");
+            model.addAttribute("departmentRequest", new DepartmentRequest());
+            model.addAttribute("subunit", policeStructureSubunitService.findById(subunitId));
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
             return "add-department";
         }
-        String redirectUrl = String.format("/request/admin/show-departments/%d", departmentRequest.getPoliceStructureSubunitId());
+        String redirectUrl = String.format("/request/admin/show-departments/%d", subunitId);
         return "redirect:" + redirectUrl;
     }
 
@@ -155,11 +159,21 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-rank")
-    public RedirectView addRank(@ModelAttribute RankRequest request, Model model) {
-        rankService.addRank(request);
-        model.addAttribute("ranks", rankService.getAllRanks());
-        return new RedirectView("/request/admin/all-ranks");
+    public String addRank(@ModelAttribute RankRequest request, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = rankService.addRank(request);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            return "add-rank";
+        }
+        return "redirect:/request/admin/all-ranks";
     }
+
 
     // ----------------------------------  IT SPECIALISTS -------------------------------------------------
 
@@ -177,10 +191,19 @@ public class AdminWebController {
     }
 
     @PostMapping("add-specialist")
-    public RedirectView addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model) {
-        itSpecialistService.addSpecialist(request);
-        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-        return new RedirectView("/request/admin/all-specialists");
+    public String addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = itSpecialistService.addSpecialist(request);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            return "add-specialist-form";
+        }
+        return "redirect:/request/admin/all-specialists";
     }
 
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
@@ -197,10 +220,21 @@ public class AdminWebController {
     }
 
     @PostMapping("/add-request-type")
-    public RedirectView addRequestType(@ModelAttribute RequestTypeReq request, Model model) {
-        requestTypeService.addRequestType(request);
-        return new RedirectView("/request/admin/all-request-type");
+    public String addRequestType(@ModelAttribute RequestTypeReq request, Model model) {
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestTypeService.addRequestType(request);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            return "add-request-type";
+        }
+        return "redirect:/request/admin/all-request-type";
     }
+
 
     // ----------------------------------  POLICEMEN ------------------------------------------------------
 

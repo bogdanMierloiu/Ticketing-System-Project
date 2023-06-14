@@ -5,11 +5,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import ro.sci.requestweb.dto.PoliceStructureSubunitRequest;
-import ro.sci.requestweb.dto.RequestTypeReq;
-import ro.sci.requestweb.dto.RequestTypeResponse;
+import ro.sci.requestweb.dto.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +25,18 @@ public class RequestTypeService {
     }
 
     @Async
-    public void addRequestType(RequestTypeReq request) {
-        webClientBuilder.build().post()
-                .uri("lb://request-service/api/v1/request-type")
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
+    public CompletableFuture<AsyncResponse<Void>> addRequestType(RequestTypeReq request) {
+        try {
+            webClientBuilder.build().post()
+                    .uri("lb://request-service/api/v1/request-type")
+                    .bodyValue(request)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
     }
 
 

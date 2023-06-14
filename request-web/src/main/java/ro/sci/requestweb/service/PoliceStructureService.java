@@ -21,7 +21,6 @@ public class PoliceStructureService {
 
     private final WebClient.Builder webClientBuilder;
 
-
     public List<PoliceStructureResponse> getAllStructures() {
         Flux<PoliceStructureResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/police-structure/all-structures")

@@ -61,24 +61,27 @@
         <td></td>
     </tr>
     <tr>
+        <!-- coloana goala -->
         <td></td>
         <td style="text-align: right; padding-right: 30px">
-            <div th:if="${request.requestTypeResponse.requestName == 'solicitare cont igpr'}" class="aprobari">
-                <h5 style="font-weight:bold;">APROBAT</h5>
-                <p>SEFUL UNITATII</p>
+            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC_IGPR.RO'}"
+                 class="aprobari">
+                <h5 style="font-weight:bold; padding-right: 10px; text-decoration: underline;">APROBAT</h5>
+                <p style="padding-right:9px">SEF UNITATE</p>
             </div>
         </td>
     </tr>
     <tr>
         <td>
-            <div th:if="${request.requestTypeResponse.requestName == 'solicitare cont igpr'}" class="aprobari">
-                <h5 style="font-weight:bold;">APROBAT</h5>
-                <p>Seful nemijlocit</p>
+            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC_IGPR.RO'}"
+                 class="aprobari">
+                <h5 style="font-weight:bold; text-decoration: underline; padding-left:10px">ROG APROBATI</h5>
+                <p style="padding-left:30px;">Seful nemijlocit</p>
             </div>
         </td>
+        <!-- coloana goala -->
         <td></td>
     </tr>
-
     </tbody>
 </table>
 
@@ -129,7 +132,7 @@
                 <label>Adresa de email:</label>
                 <span class="field-value" th:text="${request.policemanResponse.email}"></span>
             </div>
-            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont intrapol-b'}">
+            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces intrapol-b'}">
                 <label>Autorizatie secret:</label>
                 <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
                 <label>valabila de la:</label>
@@ -147,9 +150,21 @@
             <span class="field-value"><pre class="pre-styled" th:text="${request.observation}"></pre></span>
         </td>
     </tr>
-
+    <tr>
+        <td colspan="2" style="text-align: center;">
+            <div style="padding: 10px;">
+                <p>Declar că am luat la cunoștință despre prevederile Ghidului General de Securitate SIC_IGPR.RO</p>
+            </div>
+        </td>
+    </tr>
 </table>
 
+<div style="text-align: center; padding-top: 50px">
+    <p style="font-weight:bold;">SOLICITANT</p>
+    <p style="font-style:italic;" th:text="${request.policemanResponse.rank.rankName}"></p>
+    <p style="text-transform: uppercase;" class="field-value" th:text="${request.policemanResponse.lastName + ' ' +
+    request.policemanResponse.firstNameSecondary + ' ' + request.policemanResponse.firstName}"></p>
+</div>
 
 
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>

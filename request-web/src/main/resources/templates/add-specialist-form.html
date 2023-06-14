@@ -62,6 +62,9 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <h2 class="text-center mb-4">Adaugare lucrator SCI</h2>
+                <span class="error-message" th:if="${errorMessage}">
+                        [[${errorMessage}]]
+                    </span>
                 <form class="add-form" th:action="@{/request/admin/add-specialist}" method="post">
 
                     <!-- Rank -->
