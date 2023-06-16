@@ -6,14 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ro.sci.requestweb.dto.AccountRequest;
-import ro.sci.requestweb.dto.AsyncResponse;
-import ro.sci.requestweb.dto.PolicemanRequest;
-import ro.sci.requestweb.dto.RequestResponse;
-import ro.sci.requestweb.service.ItSpecialistService;
-import ro.sci.requestweb.service.RankService;
-import ro.sci.requestweb.service.RequestService;
-import ro.sci.requestweb.service.RequestTypeService;
+import ro.sci.requestweb.dto.*;
+import ro.sci.requestweb.service.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,8 +22,30 @@ public class RequestWebController {
     private final RankService rankService;
     private final RequestTypeService requestTypeService;
     private final ItSpecialistService itSpecialistService;
+    private final AuthenticationService authService;
+
 
     @GetMapping
+    public String authentication() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String authenticate(@ModelAttribute LoginRequest userAd, Model model, HttpSession session) {
+        try {
+            UserInSession user = authService.authentication(userAd.getUsername(), userAd.getPassword());
+            session.setAttribute("sessionUser", user);
+            model.addAttribute("sessionUser", user);
+            model.addAttribute("requests", requestService.getAllRequests());
+            model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+            return "index";
+        } catch (javax.naming.AuthenticationException e) {
+            model.addAttribute("errorMessage", "Username sau parola nu sunt valide!");
+            return "login";
+        }
+    }
+
+    @GetMapping("/index")
     public String indexPage(Model model, HttpSession session) {
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());

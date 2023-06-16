@@ -29,7 +29,7 @@ function togglePolicemanAuthorization() {
     var selectedOption = requestTypeSelect.options[requestTypeSelect.selectedIndex].text;
     var policemanAuthorizationDiv = document.getElementById("policemanAuthorization");
 
-    if (selectedOption === "Solicitare cont de acces intrapol-b") {
+    if (selectedOption === "Solicitare cont de acces Intrapol-b") {
         policemanAuthorizationDiv.style.display = "block";
         document.getElementById('certificate').required = true;
         document.getElementById('certificateValidFrom').required = true;
@@ -409,4 +409,19 @@ function submitRejectFormIT() {
         }
     });
 }
+
+
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    var showPasswordButton = document.getElementById("showPasswordButton");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        showPasswordButton.textContent = "Ascunde";
+    } else {
+        passwordInput.type = "password";
+        showPasswordButton.textContent = "Arata";
+    }
+}
+
 
