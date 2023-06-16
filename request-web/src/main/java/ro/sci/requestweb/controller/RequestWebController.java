@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
+import ro.sci.requestweb.exception.UserNotInSessionException;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -23,12 +24,10 @@ public class RequestWebController {
     private final ItSpecialistService itSpecialistService;
     private final AuthenticationService authService;
 
-
     @GetMapping
     public String authentication() {
         return "login";
     }
-
     @PostMapping("/login")
     public String authenticate(@ModelAttribute LoginRequest userAd, Model model, HttpSession session) {
         try {
@@ -46,15 +45,11 @@ public class RequestWebController {
 
     @GetMapping("/index")
     public String indexPage(Model model, HttpSession session) {
-        String verificationResult = verifyUserSession(session);
-        if (verificationResult.equals("Success")) {
-            model.addAttribute("requests", requestService.getAllRequests());
-            model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-            return "index";
-        }
-        else {
-            return verificationResult;
-        }
+        UserInSession userSession = getUserSession(session);
+        model.addAttribute("userSession", userSession);
+        model.addAttribute("requests", requestService.getAllRequests());
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
     }
 
     @GetMapping("/find/{requestId}")
@@ -81,7 +76,9 @@ public class RequestWebController {
     }
 
     @GetMapping("/add-request-form")
-    public String addRequestForm(Model model) {
+    public String addRequestForm(Model model, HttpSession session) {
+        UserInSession userSession = getUserSession(session);
+        model.addAttribute("userSession", userSession);
         model.addAttribute("accountRequest", new AccountRequest());
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
@@ -208,15 +205,15 @@ public class RequestWebController {
         return (referer != null) ? referer : "/";
     }
 
-    private String verifyUserSession(HttpSession session) {
-        UserInSession userSession = getUserSession(session);
+    private void verifyUserSession(HttpSession session) {
+        UserInSession userSession = (UserInSession) session.getAttribute("sessionUser");
         if (userSession == null) {
-            return "redirect:/request/login";
+            throw new UserNotInSessionException("Utilizatorul nu este autentificat!");
         }
-        return "Success";
     }
 
-    private UserInSession getUserSession(HttpSession session) {
+    private UserInSession getUserSession(HttpSession session) throws UserNotInSessionException {
+        verifyUserSession(session);
         return (UserInSession) session.getAttribute("sessionUser");
     }
 
