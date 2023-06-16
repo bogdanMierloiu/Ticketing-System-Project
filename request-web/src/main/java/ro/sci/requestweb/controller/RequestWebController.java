@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
-@SessionAttributes("user")
 @RequestMapping("/request")
 public class RequestWebController {
 
@@ -47,9 +46,15 @@ public class RequestWebController {
 
     @GetMapping("/index")
     public String indexPage(Model model, HttpSession session) {
-        model.addAttribute("requests", requestService.getAllRequests());
-        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-        return "index";
+        String verificationResult = verifyUserSession(session);
+        if (verificationResult.equals("Success")) {
+            model.addAttribute("requests", requestService.getAllRequests());
+            model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+            return "index";
+        }
+        else {
+            return verificationResult;
+        }
     }
 
     @GetMapping("/find/{requestId}")
@@ -202,5 +207,18 @@ public class RequestWebController {
         String referer = request.getHeader("referer");
         return (referer != null) ? referer : "/";
     }
+
+    private String verifyUserSession(HttpSession session) {
+        UserInSession userSession = getUserSession(session);
+        if (userSession == null) {
+            return "redirect:/request/login";
+        }
+        return "Success";
+    }
+
+    private UserInSession getUserSession(HttpSession session) {
+        return (UserInSession) session.getAttribute("sessionUser");
+    }
+
 
 }
