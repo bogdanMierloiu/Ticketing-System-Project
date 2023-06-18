@@ -51,8 +51,10 @@ public class RequestWebController {
 
     @GetMapping("/index")
     public String indexPage(Model model, HttpSession session) {
+
         UserInSession userSession = getUserSession(session);
         model.addAttribute("userSession", userSession);
+
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -83,8 +85,10 @@ public class RequestWebController {
 
     @GetMapping("/add-request-form")
     public String addRequestForm(Model model, HttpSession session) {
+
         UserInSession userSession = getUserSession(session);
         model.addAttribute("userSession", userSession);
+
         model.addAttribute("accountRequest", new AccountRequest());
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
