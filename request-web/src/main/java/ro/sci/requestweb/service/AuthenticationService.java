@@ -8,12 +8,14 @@ import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Hashtable;
 
 @Service
 public class AuthenticationService {
 
-    public UserInSession authentication(String name, String pass) throws AuthenticationException {
+    public UserInSession authentication(String name, String pass) throws NamingException {
         String ldapUrl = "ldap://192.168.168.25:389"; // Adresa IP sau numele de gazdă al serverului LDAP
         String searchBase = "DC=dgpmbpublic,DC=local"; // Baza de căutare în directorul LDAP
         String searchFilter = "(sAMAccountName=" + name.trim() + ")";
@@ -26,6 +28,7 @@ public class AuthenticationService {
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, name.trim() + "@dgpmbpublic.local");
         env.put(Context.SECURITY_CREDENTIALS, pass);
+
 
         UserInSession userDetails = new UserInSession();
 
@@ -64,10 +67,12 @@ public class AuthenticationService {
             }
 
             context.close();
+
         } catch (AuthenticationException e) {
             throw new AuthenticationException("LDAP authentication failed");
         } catch (NamingException e) {
             e.printStackTrace();
+            throw e;
         }
         return userDetails;
     }

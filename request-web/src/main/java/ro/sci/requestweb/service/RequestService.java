@@ -8,8 +8,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ro.sci.requestweb.dto.AccountRequest;
-import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.dto.AsyncResponse;
+import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.exception.UnsupportedOperationException;
 
@@ -23,9 +23,13 @@ public class RequestService {
     private final WebClient.Builder webClientBuilder;
     private final Object lock = new Object();
 
+    private final String key = "123abc";
+
+
     public List<RequestResponse> getAllRequests() {
         Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/all-requests")
+                .header("X-User-Roles", "SYSTEM")
                 .retrieve()
                 .bodyToFlux(RequestResponse.class);
         return collectToList(responseFlux);
@@ -80,6 +84,7 @@ public class RequestService {
     public RequestResponse findById(Long requestId) {
         Mono<RequestResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToMono(RequestResponse.class);
         return mono.block();

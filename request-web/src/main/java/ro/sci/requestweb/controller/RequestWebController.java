@@ -10,6 +10,8 @@ import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
 import ro.sci.requestweb.exception.UserNotInSessionException;
 
+import javax.naming.NamingException;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -28,6 +30,7 @@ public class RequestWebController {
     public String authentication() {
         return "login";
     }
+
     @PostMapping("/login")
     public String authenticate(@ModelAttribute LoginRequest userAd, Model model, HttpSession session) {
         try {
@@ -39,6 +42,9 @@ public class RequestWebController {
             return "index";
         } catch (javax.naming.AuthenticationException e) {
             model.addAttribute("errorMessage", "Username sau parola nu sunt valide!");
+            return "login";
+        } catch (NamingException e) {
+            model.addAttribute("errorMessage", "A aparut o eroare in procesul autentificarii!");
             return "login";
         }
     }
