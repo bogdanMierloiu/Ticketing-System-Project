@@ -8,15 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.service.*;
-import ro.sci.requestweb.exception.UserNotInSessionException;
 
-import javax.naming.NamingException;
-import java.net.ConnectException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
 @RequiredArgsConstructor
+@SessionAttributes("sessionUser")
 @RequestMapping("/request")
 public class RequestWebController {
 
@@ -24,59 +22,45 @@ public class RequestWebController {
     private final RankService rankService;
     private final RequestTypeService requestTypeService;
     private final ItSpecialistService itSpecialistService;
-    private final AuthenticationService authService;
+
 
     @GetMapping
-    public String authentication() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String authenticate(@ModelAttribute LoginRequest userAd, Model model, HttpSession session) {
-        try {
-            UserInSession user = authService.authentication(userAd.getUsername(), userAd.getPassword());
-            session.setAttribute("sessionUser", user);
-            model.addAttribute("sessionUser", user);
-            model.addAttribute("requests", requestService.getAllRequests());
-            model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
-            return "index";
-        } catch (javax.naming.AuthenticationException e) {
-            model.addAttribute("errorMessage", "Username sau parola nu sunt valide!");
-            return "login";
-        } catch (NamingException e) {
-            model.addAttribute("errorMessage", "A aparut o eroare in procesul autentificarii!");
-            return "login";
-        }
-    }
-
-    @GetMapping("/index")
     public String indexPage(Model model, HttpSession session) {
 
-        UserInSession userSession = getUserSession(session);
-        model.addAttribute("userSession", userSession);
+        UserInSession userSession = HomeController.getUserSession(session);
 
+        model.addAttribute("sessionUser", userSession);
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
 
     @GetMapping("/find/{requestId}")
-    public String viewRequest(@PathVariable("requestId") Long requestId, Model model) {
+    public String viewRequest(@PathVariable("requestId") Long requestId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+
         RequestResponse requestResponse = requestService.findById(requestId);
         assert requestResponse != null;
         boolean isApproved = isFullyApproved(requestResponse);
+
+        model.addAttribute("sessionUser", userSession);
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
         return "request-print";
     }
 
     @PostMapping("/finalize/{requestId}")
-    public String finalizeRequest(@PathVariable("requestId") Long requestId, Model model) {
+    public String finalizeRequest(@PathVariable("requestId") Long requestId, Model model, HttpSession session) {
+
+        UserInSession userSession = HomeController.getUserSession(session);
+
         try {
             requestService.finalize(requestId);
+            model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", requestService.findById(requestId));
             return "request-print";
         } catch (Exception exception) {
+            model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", requestService.findById(requestId));
             model.addAttribute("errorMessage", exception.getMessage());
             return "request-print";
@@ -86,9 +70,9 @@ public class RequestWebController {
     @GetMapping("/add-request-form")
     public String addRequestForm(Model model, HttpSession session) {
 
-        UserInSession userSession = getUserSession(session);
-        model.addAttribute("userSession", userSession);
+        UserInSession userSession = HomeController.getUserSession(session);
 
+        model.addAttribute("userSession", userSession);
         model.addAttribute("accountRequest", new AccountRequest());
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
@@ -97,7 +81,9 @@ public class RequestWebController {
     }
 
     @PostMapping("/add-request")
-    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model) {
+    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+
         CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequest);
         AsyncResponse<Void> response;
         try {
@@ -107,6 +93,7 @@ public class RequestWebController {
         }
 
         if (response.getError() != null) {
+            model.addAttribute("userSession", userSession);
             model.addAttribute("accountRequest", accountRequest);
             model.addAttribute("policemanRequest", new PolicemanRequest());
             model.addAttribute("ranks", rankService.getAllRanks());
@@ -120,16 +107,20 @@ public class RequestWebController {
 
 
     @GetMapping("/search-by-name")
-    public String searchByName(@RequestParam String name, Model model) {
+    public String searchByName(@RequestParam String name, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
+        model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPolicemanName);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
 
     @GetMapping("/show-requests-for-policeman/{policemanId}")
-    public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model) {
+    public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
+        model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPolicemanId);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -137,16 +128,20 @@ public class RequestWebController {
 
 
     @GetMapping("/show-requests-for-police-structure/{policeStructureId}")
-    public String searchByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model) {
+    public String searchByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPoliceStructure = requestService.getAllRequestsByPoliceStructure(policeStructureId);
+        model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPoliceStructure);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
 
     @GetMapping("/show-requests-for-police-subunit/{subunitId}")
-    public String searchByPoliceSubunit(@PathVariable("subunitId") Long subunitId, Model model) {
+    public String searchByPoliceSubunit(@PathVariable("subunitId") Long subunitId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPoliceSubunit = requestService.getAllRequestsByPoliceSubunit(subunitId);
+        model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPoliceSubunit);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
@@ -158,7 +153,6 @@ public class RequestWebController {
     public String structureChiefDecision(@PathVariable("requestId") Long requestId,
                                          @RequestParam("decision") String decision,
                                          @RequestParam(value = "observation", required = false) String observation,
-                                         Model model,
                                          HttpServletRequest request) {
         if ("approve".equals(decision)) {
             requestService.structureChiefApprove(requestId);
@@ -174,7 +168,6 @@ public class RequestWebController {
     public String securityDecision(@PathVariable("requestId") Long requestId,
                                    @RequestParam("decision") String decision,
                                    @RequestParam(value = "observation", required = false) String observation,
-                                   Model model,
                                    HttpServletRequest request) {
         if ("approve".equals(decision)) {
             requestService.securityApprove(requestId);
@@ -192,7 +185,6 @@ public class RequestWebController {
                              @RequestParam("decision") String decision,
                              @RequestParam("itSpecialistId") Long itSpecialistId,
                              @RequestParam(value = "observation", required = false) String observation,
-                             Model model,
                              HttpServletRequest request) {
         if ("approve".equals(decision)) {
             requestService.itApprove(requestId, itSpecialistId);
@@ -214,18 +206,5 @@ public class RequestWebController {
         String referer = request.getHeader("referer");
         return (referer != null) ? referer : "/";
     }
-
-    private void verifyUserSession(HttpSession session) {
-        UserInSession userSession = (UserInSession) session.getAttribute("sessionUser");
-        if (userSession == null) {
-            throw new UserNotInSessionException("Utilizatorul nu este autentificat!");
-        }
-    }
-
-    private UserInSession getUserSession(HttpSession session) throws UserNotInSessionException {
-        verifyUserSession(session);
-        return (UserInSession) session.getAttribute("sessionUser");
-    }
-
 
 }

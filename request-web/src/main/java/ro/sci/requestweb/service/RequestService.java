@@ -89,7 +89,6 @@ public class RequestService {
         Mono<RequestResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
                 .header("X-Api-Key", key)
-                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToMono(RequestResponse.class);
         return mono.block();

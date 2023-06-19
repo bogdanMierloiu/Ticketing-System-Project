@@ -11,7 +11,7 @@
 
 <nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/request/index}">
+        <a class="navbar-brand" th:href="@{/request}">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="45" height="40" viewBox="0 0 256 256"
                  xml:space="preserve">
     <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;"
@@ -27,8 +27,11 @@
               transform=" matrix(1 0 0 1 0 0)" stroke-linecap="round"/>
     </g>
 </svg>
-            D.G.P.M.B. - SCI
+            D.G.P.M.B. - S.C.I.
         </a>
+        <div>
+            <span class="sessionUser" th:text="${sessionUser.getDisplayName}"></span>
+        </div>
         <div class="row">
             <div class="col">
                 <form class="d-inline-block mr-3" th:action="@{/request/admin}">

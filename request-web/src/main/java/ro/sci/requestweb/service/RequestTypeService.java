@@ -20,6 +20,7 @@ public class RequestTypeService {
     public List<RequestTypeResponse> getAllRequestTypes() {
         Flux<RequestTypeResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request-type/all-request-types")
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(RequestTypeResponse.class);
         return responseFlux.collectList().block();
@@ -31,6 +32,7 @@ public class RequestTypeService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/request-type")
                     .bodyValue(request)
+                    .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)
                     .block();
