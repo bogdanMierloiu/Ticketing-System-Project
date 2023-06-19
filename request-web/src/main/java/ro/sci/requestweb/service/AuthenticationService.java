@@ -54,11 +54,19 @@ public class AuthenticationService {
 
                 //Dislay name
                 String displayName = attributes.get("displayName").toString();
-                int indexOfPoints = displayName.indexOf(":");
-                String userName = displayName.substring(indexOfPoints + 1);
+                int indexOfColon = displayName.indexOf(":");
+                String userNameBeforeFormat = displayName.substring(indexOfColon + 1).trim();
+                StringBuilder formattedUserName = new StringBuilder();
+                String[] nameParts = userNameBeforeFormat.split(" ");
+                for (String namePart : nameParts) {
+                    String firstLetter = namePart.substring(0, 1).toUpperCase();
+                    String restOfName = namePart.substring(1).toLowerCase();
+                    formattedUserName.append(firstLetter).append(restOfName).append(" ");
+                }
+                String formattedDisplayName = formattedUserName.toString().trim();
 
                 userDetails = UserInSession.builder()
-                        .displayName(userName)
+                        .displayName(formattedDisplayName)
                         .memberOf(extractedValue)
                         .build();
             }
@@ -67,10 +75,9 @@ public class AuthenticationService {
 
         } catch (AuthenticationException e) {
             throw new AuthenticationException("LDAP authentication failed");
-        } catch (PartialResultException e){
+        } catch (PartialResultException e) {
             e.printStackTrace();
-        }
-        catch (NamingException e) {
+        } catch (NamingException e) {
             e.printStackTrace();
             throw e;
         }

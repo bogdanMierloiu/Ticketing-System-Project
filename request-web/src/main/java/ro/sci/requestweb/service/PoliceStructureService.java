@@ -34,6 +34,7 @@ public class PoliceStructureService {
     public PoliceStructureResponse getById(Long structureId) {
         Mono<PoliceStructureResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/police-structure/find/{structureId}", structureId)
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToMono(PoliceStructureResponse.class);
         return mono.block();
@@ -45,6 +46,7 @@ public class PoliceStructureService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/police-structure")
                     .bodyValue(policeStructureRequest)
+                    .header("X-Api-Key", key)
                     .retrieve()
                     .toBodilessEntity()
                     .block();
