@@ -30,5 +30,6 @@ public class AccountRequest {
 
     private String observation;
 
+    private Commitment commitment;
 
 }

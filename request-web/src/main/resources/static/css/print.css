@@ -109,6 +109,9 @@ p {
         .print-button {
             display: none;
         }
+         .home-button {
+                    display: none;
+                }
         .finalize-button{
             display:none;
         }

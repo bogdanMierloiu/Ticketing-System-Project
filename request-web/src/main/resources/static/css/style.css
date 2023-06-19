@@ -1,10 +1,9 @@
 html, body {
     height: 100%;
-
 }
 
 .navbar {
-    background-color: #000000 !important;
+    background-color: #0A6EBD !important;
 }
 .navbar-nav {
     display: flex;
@@ -90,6 +89,12 @@ p {
 .error-message {
     color: red;
     font-weight: bold;
+}
+
+.file-name {
+  color: green;
+  font-style: italic;
+  /* Alte stiluri dorite */
 }
 
 

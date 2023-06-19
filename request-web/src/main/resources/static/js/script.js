@@ -411,6 +411,8 @@ function submitRejectFormIT() {
 }
 
 
+// Hide password
+
 function togglePasswordVisibility() {
     var passwordInput = document.getElementById("password");
     var showPasswordButton = document.getElementById("showPasswordButton");
@@ -423,5 +425,28 @@ function togglePasswordVisibility() {
         showPasswordButton.textContent = "Arata";
     }
 }
+
+// Upload document
+if (window.location.pathname.includes("add-request-form")) {
+    const fileInput = document.getElementById('fileInput');
+    const fileNameElement = document.getElementById('fileName');
+    $('#files').change(function() {
+         const filename = this.files[0].name;
+         fileNameElement.textContent = filename;
+         console.log(filename);
+     });
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 

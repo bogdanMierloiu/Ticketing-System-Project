@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ro">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -233,7 +233,20 @@
                         <label class="form-label" style="font-weight: bold;">Observatii:</label>
                         <textarea class="form-control" th:field="*{accountRequest.observation}"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <span style="font-style:italic; color:red; padding-top:5px; padding-bottom:15px;">
+                         Incarcati angajamentul privind utilizarea contului,
+                         semnat de catre lucratorul de politie pentru care se efectueaza solicitarea !
+                        </span>
+                    </div>
 
+                    <div class="mb-3">
+                        <div>
+                            <label class="btn btn-primary btn-sm" for="files">Alege fișier</label>
+                            <input type="file" id="files" name="commitment" style="visibility:hidden" accept=".pdf, .doc, .docx" required>
+                        </div>
+                        <span class="file-name" id="fileName"></span>
+                    </div>
                     <button type="submit" class="btn btn-success">Adauga</button>
                 </form>
             </div>
