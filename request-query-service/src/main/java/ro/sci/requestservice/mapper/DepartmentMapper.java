@@ -8,10 +8,8 @@ import ro.sci.requestservice.model.Department;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DepartmentMapper {
 
 

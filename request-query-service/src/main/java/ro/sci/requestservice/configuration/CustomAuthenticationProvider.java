@@ -7,11 +7,12 @@ import org.springframework.security.core.AuthenticationException;
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
+    private final String apiKey = System.getenv("api_key");
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String apiKey = (String) authentication.getPrincipal();
-        if (apiKey.equals("123abc")) {
-            return new CustomAuthenticationToken(apiKey);
+        String key = (String) authentication.getPrincipal();
+        if (key.equals(apiKey)) {
+            return new CustomAuthenticationToken(key);
         } else {
             throw new BadCredentialsException("Invalid API key");
         }

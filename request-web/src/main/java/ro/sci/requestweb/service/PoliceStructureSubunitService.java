@@ -20,10 +20,12 @@ import java.util.concurrent.CompletableFuture;
 public class PoliceStructureSubunitService {
 
     private final WebClient.Builder webClientBuilder;
+    private final String key = System.getenv("api_key");
 
     public List<PoliceStructureSubunitResponse> getStructuresByPoliceStation(Long policeStructureId) {
         Flux<PoliceStructureSubunitResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/police-structure-subunit/find/{policeStructureId}", policeStructureId)
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(PoliceStructureSubunitResponse.class);
         return responseFlux.collectList().block();
@@ -32,6 +34,7 @@ public class PoliceStructureSubunitService {
     public PoliceStructureSubunitResponse findById(Long subunitId) {
         Mono<PoliceStructureSubunitResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/police-structure-subunit/{subunitId}", subunitId)
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToMono(PoliceStructureSubunitResponse.class);
         return mono.block();
@@ -43,6 +46,7 @@ public class PoliceStructureSubunitService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/police-structure-subunit")
                     .bodyValue(structureRequest)
+                    .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)
                     .block();

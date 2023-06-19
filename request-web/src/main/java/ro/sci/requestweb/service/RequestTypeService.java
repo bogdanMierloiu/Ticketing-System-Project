@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class RequestTypeService {
 
     private final WebClient.Builder webClientBuilder;
+    private final String key = System.getenv("api_key");
 
     public List<RequestTypeResponse> getAllRequestTypes() {
         Flux<RequestTypeResponse> responseFlux = webClientBuilder.build().get()

@@ -13,10 +13,12 @@ import java.util.List;
 public class PolicemanService {
 
     private final WebClient.Builder webClientBuilder;
+    private final String key = System.getenv("api_key");
 
     public List<PolicemanResponse> getAllPolicemen() {
         Flux<PolicemanResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/policeman/all-policemen")
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(PolicemanResponse.class);
         return responseFlux.collectList().block();

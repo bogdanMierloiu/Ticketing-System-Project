@@ -3,13 +3,8 @@ package ro.sci.requestweb.service;
 import org.springframework.stereotype.Service;
 import ro.sci.requestweb.dto.UserInSession;
 
-import javax.naming.AuthenticationException;
-import javax.naming.Context;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
+import javax.naming.*;
 import javax.naming.directory.*;
-import java.io.IOException;
-import java.net.ConnectException;
 import java.util.Hashtable;
 
 @Service
@@ -28,6 +23,7 @@ public class AuthenticationService {
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, name.trim() + "@dgpmbpublic.local");
         env.put(Context.SECURITY_CREDENTIALS, pass);
+        env.put("java.naming.ldap.referral", "follow");
 
 
         UserInSession userDetails = new UserInSession();
@@ -39,6 +35,7 @@ public class AuthenticationService {
             // Configurează setările de căutare
             SearchControls searchControls = new SearchControls();
             searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+
 
             // Realizează căutarea și obține rezultatele
             NamingEnumeration<SearchResult> results = context.search(searchBase, searchFilter, searchControls);
@@ -70,7 +67,10 @@ public class AuthenticationService {
 
         } catch (AuthenticationException e) {
             throw new AuthenticationException("LDAP authentication failed");
-        } catch (NamingException e) {
+        } catch (PartialResultException e){
+            e.printStackTrace();
+        }
+        catch (NamingException e) {
             e.printStackTrace();
             throw e;
         }

@@ -19,9 +19,12 @@ public class ItSpecialistService {
 
     private final WebClient.Builder webClientBuilder;
 
+    private final String key = System.getenv("api_key");
+
     public List<ItSpecialistResponse> getAllSpecialists() {
         Flux<ItSpecialistResponse> responseFLux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/it-specialist/all-specialists")
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(ItSpecialistResponse.class);
         return responseFLux.collectList().block();
@@ -33,6 +36,7 @@ public class ItSpecialistService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/it-specialist")
                     .body(BodyInserters.fromValue(request))
+                    .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)
                     .block();

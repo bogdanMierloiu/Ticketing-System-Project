@@ -20,10 +20,12 @@ import java.util.concurrent.CompletableFuture;
 public class PoliceStructureService {
 
     private final WebClient.Builder webClientBuilder;
+    private final String key = System.getenv("api_key");
 
     public List<PoliceStructureResponse> getAllStructures() {
         Flux<PoliceStructureResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/police-structure/all-structures")
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(PoliceStructureResponse.class);
         return responseFlux.collectList().block();

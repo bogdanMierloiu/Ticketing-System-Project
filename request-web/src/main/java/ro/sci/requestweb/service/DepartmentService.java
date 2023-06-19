@@ -19,9 +19,11 @@ public class DepartmentService {
 
     private final WebClient.Builder webClientBuilder;
 
+    private final String key = System.getenv("api_key");
     public List<DepartmentResponse> getBySubunit(Long subunitId) {
         Flux<DepartmentResponse> departmentResponseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/department/{subunitId}", subunitId)
+                .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToFlux(DepartmentResponse.class);
         return departmentResponseFlux.collectList().block();
@@ -33,6 +35,7 @@ public class DepartmentService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/department")
                     .body(BodyInserters.fromValue(departmentRequest))
+                    .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)
                     .block();
