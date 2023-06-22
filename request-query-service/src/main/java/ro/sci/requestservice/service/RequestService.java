@@ -3,6 +3,7 @@ package ro.sci.requestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.RequestResponse;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.RequestMapper;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RequestService {
 
     private final RequestRepo requestRepo;
@@ -24,6 +26,7 @@ public class RequestService {
     private final RequestMapper requestMapper;
 
     @Async
+    @Transactional
     public CompletableFuture<List<RequestResponse>> getAllRequests() {
         List<Request> requests = requestRepo.findAllOrderByCreatedAtDesc();
         List<RequestResponse> requestResponses = new ArrayList<>();

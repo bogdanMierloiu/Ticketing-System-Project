@@ -12,10 +12,18 @@
 
 <!-- BUTTONS & ERROR -->
 <div style="display:block; padding-bottom:20px">
-    <div style="padding-bottom: 3px">
-        <button class="home-button btn btn-info my-2 my-sm-0" th:action="@{/request}">Pagina principala</button>
-    </div>
     <div>
+        <a th:href="@{/request}">
+            <button class="home-button btn btn-info my-2 my-sm-0">Pagina principala</button>
+        </a>
+    </div>
+    <div style="padding-top:3px;">
+        <form th:action="@{/commitment/request/{requestId}(requestId=${request.id})}">
+            <input type="hidden" th:value="${request.id}" name="requestId">
+            <button class="finalize-button btn btn-success my-2 my-sm-0">Vezi angajamentul</button>
+        </form>
+    </div>
+    <div style="padding-top:3px;">
         <button class="print-button btn btn-info my-2 my-sm-0" onclick="window.print()">Printează</button>
     </div>
     <div th:if="${isApproved == true}">

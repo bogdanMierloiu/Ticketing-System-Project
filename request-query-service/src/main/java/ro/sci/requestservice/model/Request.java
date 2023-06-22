@@ -1,19 +1,19 @@
 package ro.sci.requestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 public class Request {
 
     @Id
@@ -21,9 +21,11 @@ public class Request {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
     private Policeman policeman;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @ToString.Exclude
     private RequestType requestType;
 
     @Column(columnDefinition = "VARCHAR(16)")
@@ -67,6 +69,13 @@ public class Request {
     private LocalDateTime securityStructAppAt;
     private LocalDateTime itChiefAppAt;
     private LocalDateTime solvedAt;
+
+
+    @OneToOne(mappedBy = "request", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Commitment commitment;
+
+
 
 
 }

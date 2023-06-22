@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {PolicemanMapper.class, RequestTypeMapper.class}
+        uses = {PolicemanMapper.class, RequestTypeMapper.class, CommitmentMapper.class}
 )
 public interface RequestMapper {
 
@@ -24,5 +24,7 @@ public interface RequestMapper {
     @Mapping(source = "requestType", target = "requestTypeResponse")
     @Named("mapAccountResponseWithRequestType")
     RequestResponse mapWithRequestType(Request request);
+
+
 }
 

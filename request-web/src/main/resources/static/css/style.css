@@ -22,6 +22,11 @@ html, body {
     z-index: 100;
 }
 
+.logo-image {
+    margin-right:10px;
+    float : left;
+}
+
 .sessionUser{
     color: white;
 }

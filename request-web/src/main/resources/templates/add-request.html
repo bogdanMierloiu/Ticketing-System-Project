@@ -65,7 +65,7 @@
                 <span class="error-message" th:if="${errorMessage}">
                         [[${errorMessage}]]
                     </span>
-                <form class="needs-validation" th:action="@{/request/add-request}" method="post">
+                <form class="needs-validation" th:action="@{/request/add-request}" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <!-- Request Type -->
                         <label for="requestType" class="form-label font-bold" style="font-weight: bold;">Tipul
@@ -237,13 +237,14 @@
                         <span style="font-style:italic; color:red; padding-top:5px; padding-bottom:15px;">
                          Incarcati angajamentul privind utilizarea contului,
                          semnat de catre lucratorul de politie pentru care se efectueaza solicitarea !
+                         FORMAT .PDF !
                         </span>
                     </div>
 
                     <div class="mb-3">
                         <div>
                             <label class="btn btn-primary btn-sm" for="files">Alege fișier</label>
-                            <input type="file" id="files" name="commitment" style="visibility:hidden" accept=".pdf, .doc, .docx" required>
+                            <input type="file" id="files" th:field="*{accountRequest.documentData}" style="visibility:hidden" accept=".pdf" required>
                         </div>
                         <span class="file-name" id="fileName"></span>
                     </div>

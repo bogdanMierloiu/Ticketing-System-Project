@@ -43,4 +43,5 @@ public class RequestResponse {
     private LocalDate regDateFromITStruct;
 
     private Boolean isApprovedByITChief;
+
 }

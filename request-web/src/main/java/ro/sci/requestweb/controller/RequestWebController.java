@@ -7,7 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
-import ro.sci.requestweb.service.*;
+import ro.sci.requestweb.service.ItSpecialistService;
+import ro.sci.requestweb.service.RankService;
+import ro.sci.requestweb.service.RequestService;
+import ro.sci.requestweb.service.RequestTypeService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,6 +25,7 @@ public class RequestWebController {
     private final RankService rankService;
     private final RequestTypeService requestTypeService;
     private final ItSpecialistService itSpecialistService;
+    private final AccountRequestMapper accountRequestMapper;
 
 
     @GetMapping
@@ -84,7 +88,9 @@ public class RequestWebController {
     public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
 
-        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequest);
+        AccountRequestToSend accountRequestToSend = accountRequestMapper.mapToAccountRequestToSend(accountRequest);
+
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequestToSend);
         AsyncResponse<Void> response;
         try {
             response = asyncResponse.get();

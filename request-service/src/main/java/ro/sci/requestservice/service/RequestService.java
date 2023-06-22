@@ -31,10 +31,11 @@ public class RequestService {
 
     private final RequestRepo requestRepo;
     private final RequestTypeRepo requestTypeRepo;
-    private final PolicemanService policemanService;
     private final RequestMapper requestMapper;
     private final PolicemanMapper policemanMapper;
     private final ItSpecialistRepo itSpecialistRepo;
+    private final PolicemanService policemanService;
+    private final CommitmentService commitmentService;
 
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
@@ -57,6 +58,10 @@ public class RequestService {
             request.setIsApprovedByStructureChief(false);
             request.setIsApprovedBySecurityStructure(false);
             request.setIsApprovedByITChief(false);
+            // Commitment
+            Commitment commitment = commitmentService.add(accountRequest.getCommitmentRequest());
+            request.setCommitment(commitment);
+
 
             request.setCreatedAt(LocalDateTime.now());
             String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
@@ -64,9 +69,13 @@ public class RequestService {
                     obvToAdd);
 
             Request savedRequest = requestRepo.save(request);
+
             policeman.getRequests().add(savedRequest);
+            commitment.setRequest(savedRequest);
+
             RequestResponse requestResponse = requestMapper.mapWithRequestType(savedRequest);
             requestResponse.setPolicemanResponse(policemanMapper.mapPolicemanToResponse(policeman));
+
 
             future.complete(new AddRequestResult(true, null));
         } catch (Exception e) {

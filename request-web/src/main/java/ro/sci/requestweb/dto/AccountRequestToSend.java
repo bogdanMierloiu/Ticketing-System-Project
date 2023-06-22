@@ -1,14 +1,18 @@
-package ro.sci.requestservice.dto;
+package ro.sci.requestweb.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
-public class AccountRequest {
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class AccountRequestToSend {
 
     private Long id;
 
@@ -27,6 +31,7 @@ public class AccountRequest {
     private String observation;
 
     private CommitmentRequest commitmentRequest;
+
 
 
 }

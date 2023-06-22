@@ -13,14 +13,14 @@ import java.util.List;
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {PolicemanMapper.class, RequestTypeMapper.class}
+        uses = {PolicemanMapper.class, RequestTypeMapper.class, CommitmentMapper.class}
 )
 public interface RequestMapper {
-
     @Named("mapPolicemanToResponse")
     @Mapping(source = "policeman", target = "policemanResponse")
     @Mapping(source = "requestType", target = "requestTypeResponse")
     RequestResponse map(Request request);
+
 
     @Named("mapRequestTypeToResponse")
     @Mapping(source = "requestType", target = "requestTypeResponse")

@@ -3,6 +3,7 @@ package ro.sci.requestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.PolicemanResponse;
 import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.repository.PolicemanRepo;
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PolicemanService {
 
     private final PolicemanRepo policemanRepo;

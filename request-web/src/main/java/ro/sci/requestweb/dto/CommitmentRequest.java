@@ -9,9 +9,10 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Commitment {
+public class CommitmentRequest {
 
     private Long id;
 
-    private byte[] data;
+
+    private byte[] documentData;
 }

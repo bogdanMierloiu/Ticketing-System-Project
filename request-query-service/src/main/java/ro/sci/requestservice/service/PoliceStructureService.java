@@ -3,6 +3,7 @@ package ro.sci.requestservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.PoliceStructureResponse;
 import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.PoliceStructureMapper;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PoliceStructureService {
 
     private final PoliceStructureRepo policeStructureRepo;

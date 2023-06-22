@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ro.sci.requestweb.dto.AccountRequest;
+import ro.sci.requestweb.dto.AccountRequestToSend;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
@@ -95,7 +95,7 @@ public class RequestService {
     }
 
     @Async
-    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequest request) throws AlreadyHaveThisRequestException {
+    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequestToSend request) throws AlreadyHaveThisRequestException {
         try {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/request")
