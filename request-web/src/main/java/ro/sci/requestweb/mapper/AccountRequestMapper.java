@@ -1,7 +1,10 @@
-package ro.sci.requestweb.dto;
+package ro.sci.requestweb.mapper;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import ro.sci.requestweb.dto.AccountRequest;
+import ro.sci.requestweb.dto.AccountRequestToSend;
+import ro.sci.requestweb.dto.CommitmentRequestToSend;
 
 import java.io.IOException;
 @Component
@@ -13,7 +16,7 @@ public class AccountRequestMapper {
             documentBytes = multiPartToByte(documentData);
         }
 
-        CommitmentRequest commitmentRequest = CommitmentRequest.builder()
+        CommitmentRequestToSend commitmentRequest = CommitmentRequestToSend.builder()
                 .documentData(documentBytes)
                 .build();
 

@@ -9,13 +9,11 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class CommitmentResponse {
+public class CommitmentRequestToSend {
 
     private Long id;
 
     private String documentName;
-
-    private Boolean isFromAdmin;
 
     private byte[] documentData;
 }

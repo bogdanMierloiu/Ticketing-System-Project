@@ -58,10 +58,13 @@ public class RequestService {
             request.setIsApprovedByStructureChief(false);
             request.setIsApprovedBySecurityStructure(false);
             request.setIsApprovedByITChief(false);
+
             // Commitment
             Commitment commitment = commitmentService.add(accountRequest.getCommitmentRequest());
-            request.setCommitment(commitment);
+            commitment.setDocumentName("Angajament " + policemanNameCompose(policeman) + " pt. " + request.getRequestType().getRequestName());
+            commitment.setIsFromAdmin(false);
 
+            request.setCommitment(commitment);
 
             request.setCreatedAt(LocalDateTime.now());
             String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
@@ -243,6 +246,11 @@ public class RequestService {
             errorMessage.append("!");
             throw new UnsupportedOperationException(errorMessage.toString());
         }
+    }
+
+    private String policemanNameCompose(Policeman policeman) {
+        String firstNameSecondary = policeman.getFirstNameSecondary() != null ? policeman.getFirstNameSecondary() : "";
+        return (policeman.getLastName() + " " + policeman.getFirstName() + " " + firstNameSecondary).trim();
 
     }
 

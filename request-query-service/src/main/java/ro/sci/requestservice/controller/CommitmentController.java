@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ro.sci.requestservice.dto.CommitmentResponse;
 import ro.sci.requestservice.service.CommitmentService;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -24,4 +25,18 @@ public class CommitmentController {
         CompletableFuture<CommitmentResponse> future = commitmentService.findByRequest(requestId);
         return future.thenApply(ResponseEntity::ok);
     }
+
+    @GetMapping("/all-commitments")
+    public CompletableFuture<ResponseEntity<List<CommitmentResponse>>> getCommitmentsFromAdmin() {
+        CompletableFuture<List<CommitmentResponse>> future = commitmentService.getCommitmentsFromAdmin();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/{commitmentId}")
+    public CompletableFuture<ResponseEntity<CommitmentResponse>> getById(@PathVariable("commitmentId") Long commitmentId) {
+        CompletableFuture<CommitmentResponse> future = commitmentService.findById(commitmentId);
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+
 }

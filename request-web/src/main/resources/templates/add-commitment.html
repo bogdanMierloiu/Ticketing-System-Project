@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Structuri de politie</title>
+    <title>Adaugare subunitate de politie</title>
     <link th:href="@{/css/bootstrap.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
@@ -58,47 +58,30 @@
 </nav>
 
 <div class="content-wrap">
-    <!-- Button -->
-    <div>
-        <form class="add-button" th:action="@{/request/admin/add-structure-form}">
-            <button class="btn btn-success" type="submit">Adaugă structura de poliție</button>
-        </form>
-    </div>
-
-    <!-- Tabel -->
-    <div th:if="${#lists.isEmpty(structures)}">
-        <h5>Nu exista inregistrari</h5>
-    </div>
-    <table th:if="${not #lists.isEmpty(structures)}" class="table table-hover text-center">
-        <thead>
-        <tr>
-            <th colspan="3" style="text-align: center;" class="text-center">
-                <h4> Structuri de politie din cadrul D.G.P.M.B</h4>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="structure: ${structures}">
-            <td>
-                <span th:text="${structure.structureName}"></span>
-            </td>
-            <td>
-                <form th:action="@{/request/admin/show-subunits/{policeStructureId}(policeStructureId=${structure.id})}">
-                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                    <button class="btn btn-success" type="submit">Afișează subunitățile de poliție</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <span class="error-message" th:if="${errorMessage}">
+                        [[${errorMessage}]]
+                    </span>
+                <form class="needs-validation" th:action="@{/commitment/add-commitment}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Denumire angajament:</label>
+                        <input type="text" class="form-control" th:field="*{commitmentRequest.documentName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <div>
+                            <label class="btn btn-primary btn-sm" for="files">Alege fișier</label>
+                            <input type="file" id="files" th:field="*{commitmentRequest.documentData}" style="visibility:hidden" accept=".pdf" required>
+                        </div>
+                        <span class="file-name" id="fileName"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success">Adauga</button>
                 </form>
-            </td>
-            <td>
-                <form th:action="@{/request/show-requests-for-police-structure/{policeStructureId}(policeStructureId=${structure.id})}">
-                    <input type="hidden" name="policeStructureId" th:value="${structure.id}">
-                    <button class="btn btn-success" type="submit">Afișează solicitările</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>

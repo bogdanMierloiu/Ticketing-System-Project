@@ -9,6 +9,10 @@ public class CommitmentResponse {
 
     private Long id;
 
+    private String documentName;
+
+    private Boolean isFromAdmin;
+
     private byte[] documentData;
 
 }

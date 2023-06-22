@@ -117,7 +117,7 @@ public class RequestController {
     //UTILS
 
     private String composeResponseForAddingRequest(AccountRequest accountRequest) {
-        return accountRequest.getPolicemanRequest().getLastName() + " " + accountRequest.getPolicemanRequest().getLastName() +
+        return accountRequest.getPolicemanRequest().getLastName() + " " + accountRequest.getPolicemanRequest().getFirstName() +
                 " added successfully";
     }
 }

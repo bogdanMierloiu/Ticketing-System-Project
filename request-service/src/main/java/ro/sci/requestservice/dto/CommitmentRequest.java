@@ -9,6 +9,7 @@ public class CommitmentRequest {
 
     private Long id;
 
+    private String documentName;
 
     private byte[] documentData;
 }

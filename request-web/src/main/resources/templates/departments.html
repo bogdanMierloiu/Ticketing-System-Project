@@ -60,13 +60,11 @@
 <div class="content-wrap">
     <!-- Button -->
     <div>
-        <form th:action="@{/request/admin/add-department-form/{subunitId}(subunitId=${subunit.id})}">
+        <form class="add-button" th:action="@{/request/admin/add-department-form/{subunitId}(subunitId=${subunit.id})}">
             <input type="hidden" name="policeStructureId" th:value="${subunit.id}">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga linie de munca</button>
+            <button class="btn btn-success" type="submit">Adauga linie de munca</button>
         </form>
     </div>
-    <!-- Titlu -->
-    <h3 th:text="${subunit.subunitName}"></h3>
     <!-- Tabel -->
     <div th:if="${#lists.isEmpty(departments)}">
         <h5>Nu exista inregistrari</h5>
@@ -74,8 +72,11 @@
     <table th:if="${not #lists.isEmpty(departments)}" class="table table-hover text-center">
         <thead>
         <tr>
-            <th>Denumirea departament</th>
-            <th></th>
+            <th colspan="3" style="text-align: center;" class="text-center">
+                <div>
+                    <h4 th:text="${subunit.subunitName}"></h4>
+                </div>
+            </th>
         </tr>
         </thead>
         <tbody>

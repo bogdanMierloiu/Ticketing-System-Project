@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
+import ro.sci.requestweb.mapper.AccountRequestMapper;
 import ro.sci.requestweb.service.ItSpecialistService;
 import ro.sci.requestweb.service.RankService;
 import ro.sci.requestweb.service.RequestService;
@@ -107,7 +108,6 @@ public class RequestWebController {
             model.addAttribute("errorMessage", response.getError().getMessage());
             return "add-request";
         }
-
         return "redirect:/request";
     }
 

@@ -24,7 +24,6 @@ public class Policeman {
     @Column(nullable = false)
     private String firstName;
 
-
     private String firstNameSecondary;
 
     @Column(nullable = false)

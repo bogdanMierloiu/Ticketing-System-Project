@@ -60,12 +60,11 @@
 <div class="content-wrap">
     <!--  Button -->
     <div>
-        <form th:action="@{/request/admin/add-request-type-form}">
-            <button class="btn btn-primary my-2 my-sm-0" type="submit">Adauga tip de solicitare</button>
+        <form class="add-button" th:action="@{/request/admin/add-request-type-form}">
+            <button class="btn btn-success" type="submit">Adauga tip de solicitare</button>
         </form>
     </div>
-    <!--  Titlu -->
-    <h1 class="text-center">Tipuri de solicitari</h1>
+
     <!--  Tabel -->
     <div th:if="${#lists.isEmpty(requestTypes)}">
         <h5>Nu exista inregistrari</h5>
@@ -73,7 +72,11 @@
     <table th:if="${not #lists.isEmpty(requestTypes)}" class="table table-hover text-center">
         <thead>
         <tr>
-            <th>Tip solicitare</th>
+            <th colspan="3" style="text-align: center;" class="text-center">
+                <div>
+                    <h4>Tipuri de solicitari</h4>
+                </div>
+            </th>
         </tr>
         </thead>
         <tbody>

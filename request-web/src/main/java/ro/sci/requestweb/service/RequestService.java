@@ -109,7 +109,11 @@ public class RequestService {
                     .block();
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, null));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+            if (e instanceof AlreadyHaveThisRequestException) {
+                throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
+            } else {
+                throw new RuntimeException("A apărut o eroare la procesarea cererii!");
+            }
         }
     }
 

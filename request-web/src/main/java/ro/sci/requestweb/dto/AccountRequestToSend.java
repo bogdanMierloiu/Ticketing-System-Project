@@ -30,7 +30,7 @@ public class AccountRequestToSend {
 
     private String observation;
 
-    private CommitmentRequest commitmentRequest;
+    private CommitmentRequestToSend commitmentRequest;
 
 
 

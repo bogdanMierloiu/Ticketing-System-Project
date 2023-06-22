@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -13,6 +14,7 @@ public class CommitmentRequest {
 
     private Long id;
 
+    private String documentName;
 
-    private byte[] documentData;
+    private MultipartFile documentData;
 }

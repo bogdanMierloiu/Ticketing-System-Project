@@ -435,8 +435,20 @@ if (window.location.pathname.includes("add-request-form")) {
          fileNameElement.textContent = filename;
          console.log(filename);
      });
-
 }
+
+if (window.location.pathname.includes("add-request-form") ||
+  window.location.pathname.includes("add-commitment-form") ||
+  window.location.pathname.includes("update-commitment")) {
+    const fileInput = document.getElementById('fileInput');
+    const fileNameElement = document.getElementById('fileName');
+    $('#files').change(function() {
+        const filename = this.files[0].name;
+        fileNameElement.textContent = filename;
+        console.log(filename);
+    });
+}
+
 
 
 

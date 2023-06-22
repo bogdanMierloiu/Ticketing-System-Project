@@ -12,7 +12,7 @@
 <nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/request}">
-            <img class="logo-image" style="width:80px; height:45px; padding-right: 15px" th:src="@{/css/sigla.png}"
+            <img class="logo-image" style="width:70px; height:45px; padding-right: 15px" th:src="@{/css/sigla.png}"
                  alt="logo">
             <span style="align-items:center"> D.G.P.M.B. - S.C.I.</span>
         </a>
@@ -21,11 +21,14 @@
         </div>
         <div class="row">
             <div class="col">
+                <form class="d-inline-block mr-3" th:action="@{/commitment/admin}">
+                    <button class="btn btn-info" type="submit">Angajamente</button>
+                </form>
                 <form class="d-inline-block mr-3" th:action="@{/request/admin}">
-                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Pagina admin</button>
+                    <button class="btn btn-danger" type="submit">Pagina admin</button>
                 </form>
                 <form class="d-inline-block" th:action="@{/request/add-request-form}">
-                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Adauga solicitare</button>
+                    <button class="btn btn-success" type="submit">Adauga solicitare</button>
                 </form>
             </div>
             <div class="col-auto">

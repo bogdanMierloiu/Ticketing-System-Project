@@ -19,6 +19,10 @@ public class Commitment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String documentName;
+
+    private Boolean isFromAdmin;
+
     @Lob
     private byte[] documentData;
 
