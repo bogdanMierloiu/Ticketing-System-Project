@@ -5,7 +5,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import ro.sci.requestweb.dto.*;
+import reactor.core.publisher.Mono;
+import ro.sci.requestweb.dto.AsyncResponse;
+import ro.sci.requestweb.dto.RequestTypeReq;
+import ro.sci.requestweb.dto.RequestTypeResponse;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +27,15 @@ public class RequestTypeService {
                 .retrieve()
                 .bodyToFlux(RequestTypeResponse.class);
         return responseFlux.collectList().block();
+    }
+
+    public RequestTypeResponse getById(Long requestTypeId) {
+        Mono<RequestTypeResponse> responseMono = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request-type/{requestTypeId}", requestTypeId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(RequestTypeResponse.class);
+        return responseMono.block();
     }
 
     @Async

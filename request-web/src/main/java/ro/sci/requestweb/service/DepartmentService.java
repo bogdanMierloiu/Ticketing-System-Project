@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.DepartmentRequest;
 import ro.sci.requestweb.dto.DepartmentResponse;
@@ -27,6 +28,15 @@ public class DepartmentService {
                 .retrieve()
                 .bodyToFlux(DepartmentResponse.class);
         return departmentResponseFlux.collectList().block();
+    }
+
+    public DepartmentResponse getById(Long departmentId) {
+        Mono<DepartmentResponse> departmentResponseMono = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/department/find/{departmentId}", departmentId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(DepartmentResponse.class);
+        return departmentResponseMono.block();
     }
 
     @Async

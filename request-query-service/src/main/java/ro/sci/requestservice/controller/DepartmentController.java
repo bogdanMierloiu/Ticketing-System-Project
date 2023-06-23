@@ -26,4 +26,10 @@ public class DepartmentController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/find/{departmentId}")
+    public CompletableFuture<ResponseEntity<DepartmentResponse>> findById(@PathVariable("departmentId") Long departmentId) {
+        CompletableFuture<DepartmentResponse> future = departmentService.getById(departmentId);
+        return future.thenApply(ResponseEntity::ok);
+    }
+
 }

@@ -3,6 +3,7 @@ package ro.sci.requestservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.sci.requestservice.dto.RequestTypeResponse;
@@ -22,6 +23,12 @@ public class RequestTypeController {
     @GetMapping("/all-request-types")
     public CompletableFuture<ResponseEntity<List<RequestTypeResponse>>> getAll() {
         CompletableFuture<List<RequestTypeResponse>> future = requestTypeService.findAll();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/{requestTypeId}")
+    public CompletableFuture<ResponseEntity<RequestTypeResponse>> findById(@PathVariable("requestTypeId") Long requestTypeId) {
+        CompletableFuture<RequestTypeResponse> future = requestTypeService.findById(requestTypeId);
         return future.thenApply(ResponseEntity::ok);
     }
 }

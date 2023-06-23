@@ -18,7 +18,7 @@ function setInitialDate() {
     document.getElementById("currentDate").value = formattedDate;
 }
 
-if (window.location.pathname.includes("add-request")) {
+if (window.location.pathname === "/request/add-request-form") {
     // Apelăm funcția populatePoliceStructures() doar pe pagina de add-request
     populateStructures();
     setInitialDate();
@@ -438,8 +438,9 @@ if (window.location.pathname.includes("add-request-form")) {
 }
 
 if (window.location.pathname.includes("add-request-form") ||
-  window.location.pathname.includes("add-commitment-form") ||
-  window.location.pathname.includes("update-commitment")) {
+    window.location.pathname.includes("add-request-form-second") ||
+    window.location.pathname.includes("add-commitment-form") ||
+    window.location.pathname.includes("update-commitment")) {
     const fileInput = document.getElementById('fileInput');
     const fileNameElement = document.getElementById('fileName');
     $('#files').change(function() {

@@ -8,10 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.mapper.AccountRequestMapper;
-import ro.sci.requestweb.service.ItSpecialistService;
-import ro.sci.requestweb.service.RankService;
-import ro.sci.requestweb.service.RequestService;
-import ro.sci.requestweb.service.RequestTypeService;
+import ro.sci.requestweb.service.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +23,9 @@ public class RequestWebController {
     private final RankService rankService;
     private final RequestTypeService requestTypeService;
     private final ItSpecialistService itSpecialistService;
+    private final PoliceStructureService policeStructureService;
+    private final PoliceStructureSubunitService subunitService;
+    private final DepartmentService departmentService;
     private final AccountRequestMapper accountRequestMapper;
 
 
@@ -76,17 +76,34 @@ public class RequestWebController {
     public String addRequestForm(Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
+        AccountRequest accountRequest = new AccountRequest();
 
+        session.setAttribute("accountRequest", accountRequest);
+        model.addAttribute("accountRequest", accountRequest);
         model.addAttribute("userSession", userSession);
-        model.addAttribute("accountRequest", new AccountRequest());
         model.addAttribute("policemanRequest", new PolicemanRequest());
         model.addAttribute("ranks", rankService.getAllRanks());
         model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
         return "add-request";
     }
 
+    @GetMapping("/add-request-form-second")
+    public String addRequestFormSecond(@ModelAttribute("accountRequest") AccountRequest accountRequest,
+                                       HttpSession session,
+                                       Model model) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        session.setAttribute("accountRequest", accountRequest);
+        model.addAttribute("structure", policeStructureService.getById(accountRequest.getPolicemanRequest().getPoliceStructureId()));
+        model.addAttribute("subunit", subunitService.findById(accountRequest.getPolicemanRequest().getPoliceStructureSubunitId()));
+        model.addAttribute("department", departmentService.getById(accountRequest.getPolicemanRequest().getDepartmentId()));
+        model.addAttribute("requestTypeName", requestNameForAntet(accountRequest.getRequestTypeId()));
+        model.addAttribute("userSession", userSession);
+        model.addAttribute("accountRequest", accountRequest);
+        return "add-request-second";
+    }
+
     @PostMapping("/add-request")
-    public String addRequest(@ModelAttribute AccountRequest accountRequest, Model model, HttpSession session) {
+    public String addRequest(@ModelAttribute("accountRequest") AccountRequest accountRequest, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
 
         AccountRequestToSend accountRequestToSend = accountRequestMapper.mapToAccountRequestToSend(accountRequest);
@@ -110,7 +127,6 @@ public class RequestWebController {
         }
         return "redirect:/request";
     }
-
 
     @GetMapping("/search-by-name")
     public String searchByName(@RequestParam String name, Model model, HttpSession session) {
@@ -211,6 +227,14 @@ public class RequestWebController {
     private String getReferer(HttpServletRequest request) {
         String referer = request.getHeader("referer");
         return (referer != null) ? referer : "/";
+    }
+
+
+    private String requestNameForAntet(Long requestTypeId) {
+        RequestTypeResponse requestType = requestTypeService.getById(requestTypeId);
+        String requestName = requestType.getRequestName();
+        int indexOfAccess = requestName.indexOf("acces");
+        return requestName.substring(indexOfAccess + 5).trim();
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.RequestTypeResponse;
+import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.RequestTypeMapper;
 import ro.sci.requestservice.model.RequestType;
 import ro.sci.requestservice.repository.RequestTypeRepo;
@@ -25,6 +26,14 @@ public class RequestTypeService {
     public CompletableFuture<List<RequestTypeResponse>> findAll() {
         List<RequestType> requestTypes = requestTypeRepo.findAll();
         return CompletableFuture.completedFuture(requestTypeMapper.map(requestTypes));
+    }
+
+    @Async
+    public CompletableFuture<RequestTypeResponse> findById(Long requestTypeId) {
+        RequestType requestType = requestTypeRepo.findById(requestTypeId).orElseThrow(
+                () -> new NotFoundException("The request type with id " + requestTypeId + " not found!")
+        );
+        return CompletableFuture.completedFuture(requestTypeMapper.map(requestType));
     }
 
 }

@@ -126,4 +126,7 @@ p {
         .bottom-center {
         display:none
         }
+        .navbar {
+         display:none;
+        }
  }
