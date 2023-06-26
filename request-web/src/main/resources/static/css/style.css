@@ -1,9 +1,11 @@
+
+
 html, body {
     height: 100%;
 }
 
 .navbar {
-    background-color: #0A6EBD !important;
+    background-color: #0c2635 !important;
 }
 .navbar-nav {
     display: flex;

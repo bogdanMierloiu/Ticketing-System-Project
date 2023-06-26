@@ -12,30 +12,31 @@
 <nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/request}">
-            <img class="logo-image" style="width:70px; height:45px; padding-right: 15px" th:src="@{/css/sigla.png}"
+            <img class="logo-image" style="width:70px; height:45px; padding-right: 15px" th:src="@{/css/stema3d.gif}"
                  alt="logo">
-            <span style="align-items:center"> D.G.P.M.B. - S.C.I.</span>
+            <p style="align-items:center"> D.G.P.M.B. - S.C.I.</p>
         </a>
         <div>
             <span class="sessionUser" th:text="${sessionUser.getDisplayName}"></span>
         </div>
         <div class="row">
             <div class="col">
-                <form class="d-inline-block mr-3" th:action="@{/request/admin}">
-                    <button class="btn btn-danger" type="submit">Pagina admin</button>
+                <form th:if="${sessionUser.memberOf.equals('admin')}" class="d-inline-block mr-3"
+                      th:action="@{/request/admin}">
+                    <button class="btn btn-danger btn-sm" type="submit">Pagina admin</button>
                 </form>
                 <form class="d-inline-block" th:action="@{/request/add-request-form}">
-                    <button class="btn btn-success" type="submit">Adauga solicitare</button>
+                    <button class="btn btn-success btn-sm" type="submit">Adauga solicitare</button>
                 </form>
             </div>
             <div class="col-auto">
                 <div class="nav-item active">
                     <form th:action="@{/request/search-by-name}" method="get">
-                        <div class="input-group">
-                            <input class="form-control mr-sm-2" type="search" aria-label="Search" name="name"
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="search" aria-label="Search" name="name"
                                    required placeholder="Nume solicitant" style="margin-right: 4px;">
                             <div class="input-group-append">
-                                <button type="submit" class="btn btn-success" style="margin-left: 5px;">
+                                <button type="submit" class="btn btn-success btn-sm" style="margin-left: 5px;">
                                     <span class="glyphicon glyphicon-search"></span> Cauta solicitare
                                 </button>
                             </div>
@@ -211,12 +212,15 @@
                 <div class="text-center">
                     <i class="bi bi-telephone"></i>
                     <p class="text-muted mb-0 d-inline-block">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-telephone" viewBox="0 0 16 16">
                             <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
                         </svg>
-                        32105</p>
+                        32105
+                    </p>
                     <p class="text-muted mb-0 d-inline-block">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-geo-alt" viewBox="0 0 16 16">
                             <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
                             <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                         </svg>

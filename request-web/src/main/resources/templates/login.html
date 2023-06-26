@@ -7,35 +7,48 @@
     <link th:href="@{/css/bootstrap.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
     <link th:href="@{/css/login.css}" th:rel="stylesheet">
+    <style>
+         body {
+<!--            background-image: url(/images/foto_ai_2.jpg);-->
+<!--            background-color: #285b96;-->
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+    </style>
 </head>
 <body>
 
 
-<div class="content-wrap">
+<div class="content-wrap" style="background-color: #285b96;">
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="login-form">
-                    <h2 class="text-center mb-4">Bine ati venit</h2>
+                    <h2 class="text-center mb-4" style="padding-bottom:20px;">Bine ati venit</h2>
                     <form class="needs-validation" th:action="@{/login-page}" method="post">
                         <div class="form-group">
-                            <label for="username" class="form-label">Username:</label>
-                            <input type="text" class="form-control" id="username" name="username" required placeholder="nume_prenume_b">
+                            <label for="username" class="form-label">Nume de utilizator:</label>
+                            <input type="text" class="form-control" id="username" name="username" required
+                                   placeholder="nume_prenume_b">
                         </div>
                         <div class="form-group">
-                            <label for="password" class="form-label">Password:</label>
+                            <label for="password" class="form-label">Parola:</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password" required placeholder="***">
+                                <input type="password" class="form-control" id="password" name="password" required
+                                       placeholder="*****">
                                 <button type="button" class="btn btn-secondary" id="showPasswordButton"
                                         onclick="togglePasswordVisibility()">
-                                    Show
+                                    Arata
                                 </button>
                             </div>
                         </div>
                         <div class="form-group">
                             <span class="error-message" th:if="${errorMessage}">[[${errorMessage}]]</span>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Autentificare</button>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-block mx-auto">Autentificare</button>
+                        </div>
                     </form>
                 </div>
             </div>

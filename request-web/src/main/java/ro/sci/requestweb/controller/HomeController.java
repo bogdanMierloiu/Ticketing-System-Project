@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import ro.sci.requestweb.dto.LoginRequest;
 import ro.sci.requestweb.dto.UserInSession;
+import ro.sci.requestweb.exception.NotHaveAccessException;
 import ro.sci.requestweb.exception.UserNotInSessionException;
 import ro.sci.requestweb.service.*;
 
@@ -21,8 +22,9 @@ import javax.naming.NamingException;
 public class HomeController {
 
     private final AuthenticationService authService;
+
     @GetMapping("/")
-    public String home(){
+    public String home() {
         return "login";
     }
 
@@ -31,6 +33,7 @@ public class HomeController {
         try {
             UserInSession user = authService.authentication(userAd.getUsername(), userAd.getPassword());
             session.setAttribute("sessionUser", user);
+            model.addAttribute("sessionUser", user);
             return "redirect:/request";
         } catch (javax.naming.AuthenticationException e) {
             model.addAttribute("errorMessage", "Username sau parola nu sunt valide!");
@@ -45,6 +48,9 @@ public class HomeController {
         UserInSession user = (UserInSession) session.getAttribute("sessionUser");
         if (user == null) {
             throw new UserNotInSessionException("Utilizatorul nu este autentificat");
+        }
+        if(!user.getHaveAccess()){
+            throw new NotHaveAccessException("Utilizatorul nu are dreptul de accesare a aplicatiei");
         }
         return user;
     }

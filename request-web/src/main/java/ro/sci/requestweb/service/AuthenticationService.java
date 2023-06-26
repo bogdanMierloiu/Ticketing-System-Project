@@ -47,12 +47,19 @@ public class AuthenticationService {
                 Attributes attributes = result.getAttributes();
                 // Member of
                 Attribute memberOf = result.getAttributes().get("memberOf");
-                String memberOfValue = memberOf.toString();
-                int indexOfFirstComma = memberOfValue.indexOf(",");
-                int indexOfFistEqual = memberOfValue.indexOf("=");
-                String extractedValue = memberOfValue.substring(indexOfFistEqual + 1, indexOfFirstComma).toUpperCase();
-
-                //Dislay name
+                String memberOfValue = memberOf.toString().toLowerCase();
+                Attribute distinguishedname = result.getAttributes().get("distinguishedname");
+                String distinguishedNameValue = distinguishedname.toString().toLowerCase();
+                String extractedValue = null;
+                if (distinguishedNameValue.contains("sci")) {
+                    extractedValue = "admin";
+                }
+                if (distinguishedNameValue.contains("cstic")) {
+                    extractedValue = "security";
+                }
+                if (distinguishedNameValue.contains("conducere")) {
+                    extractedValue = "structureChief";
+                }
                 String displayName = attributes.get("displayName").toString();
                 int indexOfColon = displayName.indexOf(":");
                 String userNameBeforeFormat = displayName.substring(indexOfColon + 1).trim();
@@ -68,6 +75,7 @@ public class AuthenticationService {
                 userDetails = UserInSession.builder()
                         .displayName(formattedDisplayName)
                         .memberOf(extractedValue)
+                        .haveAccess(haveAccess(memberOfValue))
                         .build();
             }
 
@@ -82,5 +90,9 @@ public class AuthenticationService {
             throw e;
         }
         return userDetails;
+    }
+
+    private Boolean haveAccess(String memberOf) {
+        return memberOf.contains("solicitare_cont");
     }
 }
