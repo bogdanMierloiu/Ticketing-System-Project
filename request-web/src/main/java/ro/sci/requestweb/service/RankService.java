@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.RankRequest;
 import ro.sci.requestweb.dto.RankResponse;
@@ -41,6 +42,15 @@ public class RankService {
         } catch (Exception e) {
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
         }
+    }
+
+    public RankResponse findById(Long rankId) {
+        Mono<RankResponse> mono = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/rank/find/{rankId}", rankId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(RankResponse.class);
+        return mono.block();
     }
 
 }

@@ -97,6 +97,7 @@ public class RequestWebController {
         model.addAttribute("subunit", subunitService.findById(accountRequest.getPolicemanRequest().getPoliceStructureSubunitId()));
         model.addAttribute("department", departmentService.getById(accountRequest.getPolicemanRequest().getDepartmentId()));
         model.addAttribute("requestTypeName", requestNameForAntet(accountRequest.getRequestTypeId()));
+        model.addAttribute("rank", rankService.findById(accountRequest.getPolicemanRequest().getRankId()));
         model.addAttribute("userSession", userSession);
         model.addAttribute("accountRequest", accountRequest);
         return "add-request-second";

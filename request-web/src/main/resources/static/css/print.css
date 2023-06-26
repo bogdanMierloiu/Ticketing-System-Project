@@ -99,11 +99,19 @@ p {
     font-weight: bold;
 }
 
+.signature-section {
+            padding-top:30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
 .line-style {
   border: none;
   border-top: 1px solid #000;
   margin: 5px 0;
 }
+
 
  @media print {
         .print-button {
@@ -129,4 +137,12 @@ p {
         .navbar {
          display:none;
         }
+        .no-print {
+         display:none;
+        }
+        .empty-page {
+         display:none;
+        }
+
+
  }
