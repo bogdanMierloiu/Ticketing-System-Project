@@ -51,6 +51,7 @@ public class RequestWebController {
         model.addAttribute("sessionUser", userSession);
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
+        model.addAttribute("requestName", requestNameForHeader(requestResponse.getRequestTypeResponse().getId()));
         return "request-print";
     }
 
@@ -58,16 +59,19 @@ public class RequestWebController {
     public String finalizeRequest(@PathVariable("requestId") Long requestId, Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
+        RequestResponse request = requestService.findById(requestId);
 
         try {
             requestService.finalize(requestId);
             model.addAttribute("sessionUser", userSession);
-            model.addAttribute("request", requestService.findById(requestId));
+            model.addAttribute("request", request);
+            model.addAttribute("requestName", requestNameForHeader(request.getRequestTypeResponse().getId()));
             return "request-print";
         } catch (Exception exception) {
             model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", requestService.findById(requestId));
             model.addAttribute("errorMessage", exception.getMessage());
+            model.addAttribute("requestName", requestNameForHeader(request.getRequestTypeResponse().getId()));
             return "request-print";
         }
     }

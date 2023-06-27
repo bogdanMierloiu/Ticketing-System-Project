@@ -5,181 +5,224 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document solicitare cont</title>
     <link th:href="@{/css/bootstrap.css}" th:rel="stylesheet">
-    <link th:href="@{/css/style.css}" th:rel="stylesheet">
     <link th:href="@{/css/print.css}" th:rel="stylesheet">
 </head>
 <body>
 
-<!-- BUTTONS & ERROR -->
-<div style="display:block; padding-bottom:20px">
-    <div>
-        <a th:href="@{/request}">
-            <button class="home-button btn btn-info my-2 my-sm-0">Pagina principala</button>
-        </a>
-    </div>
-    <div style="padding-top:3px;">
-        <form th:action="@{/commitment/request/{requestId}(requestId=${request.id})}">
-            <input type="hidden" th:value="${request.id}" name="requestId">
-            <button class="finalize-button btn btn-success my-2 my-sm-0">Vezi angajamentul</button>
-        </form>
-    </div>
-    <div style="padding-top:3px;">
-        <button class="print-button btn btn-info my-2 my-sm-0" onclick="window.print()">Printează</button>
-    </div>
-    <div th:if="${isApproved == true}">
-        <div th:if="${request.status.name() != 'Finalizata'}" style="padding-top:3px;">
-            <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}" method="post">
-                <input type="hidden" th:value="${request.id}" name="requestId">
-                <button class="finalize-button btn btn-success my-2 my-sm-0">Finalizează</button>
-            </form>
+<div style="display:flex;">
+    <!-- SIDEBAR -->
+    <div style="width: 150px; background-color: #285b96; padding-top:10px; padding-right: 10px;">
+        <!-- BUTTONS & ERROR -->
+        <div style="display:block;">
+            <div style="padding-left:10px;">
+                <a th:href="@{/request}">
+                    <button class="home-button btn btn-success my-2">Pagina principală</button>
+                </a>
+            </div>
+            <div style="padding-left:10px;">
+                <button class="print-button btn btn-success my-2" onclick="window.print()">Printează raportul</button>
+            </div>
+            <div style="padding-left:10px;">
+                <form th:action="@{/commitment/request/{requestId}(requestId=${request.id})}">
+                    <input type="hidden" th:value="${request.id}" name="requestId">
+                    <button class="finalize-button btn btn-success my-2">Vezi angajamentul</button>
+                </form>
+            </div>
+            <div style="padding-left:10px;">
+                <button class="no-print btn btn-success my-2" onclick="showDetails()">Detalii solicitare</button>
+            </div>
+            <div th:if="${isApproved == true}">
+                <div th:if="${request.status.name() != 'Finalizata'}" style="padding-left:10px;">
+                    <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}" method="post">
+                        <input type="hidden" th:value="${request.id}" name="requestId">
+                        <button class="finalize-button btn btn-danger my-2">Finalizează</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <div>
+
+    <!-- Fereastra modală detalii solicitare -->
+    <div id="myModal" class="modal no-print" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalii solicitare</h5>
+                </div>
+                <div class="modal-body">
+                    <pre th:text="${request.observation}"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModalButton" type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()">Închide</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DOCUMENT FOR PRINT -->
+    <div style="flex-grow: 1; padding-top:50px; padding-left:50px; padding-right: 50px;">
+        <!-- ERROR -->
+        <div>
         <span class="error-message-in-print-page" style="color: red; font-weight: bold" th:if="${errorMessage}"
               th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- ANTET TABLE-->
+        <table>
+            <tbody>
+            <tr>
+                <td><p>ROMANIA</p></td>
+                <td style="text-align: right; padding-right:15px;"><p>NESECRET</p></td>
+            </tr>
+            <tr>
+                <td><p>MINISTERUL AFACERILOR INTERNE</p></td>
+                <td style="text-align: right;">
+                    <div>
+                        <span th:text="${request.requestStructRegNo}"></span>
+                        <label> / </label>
+                        <span th:text="${#temporals.format(request.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
+                    <div>
+                        <img style="width:115px; height:80px; padding-left: 30px" th:src="@{/css/sigla.png}" alt="logo">
+                    </div>
+                    <p style="text-transform: uppercase;"><span
+                            th:text="${request.policemanResponse.policeStructure.structureName}"></span></p>
+                    <p style="text-transform: uppercase;"><span
+                            th:text="${request.policemanResponse.policeStructureSubunit.subunitName}"></span></p>
+                    <p style="text-transform: uppercase;"><span
+                            th:text="${request.policemanResponse.department.departmentName}"></span></p>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align: right; padding-right: 30px">
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces S.I.C. W.A.N. POLITIA ROMANA'}"
+                         class="aprobari">
+                        <h4 style="font-weight:bold; padding-right: 70px; text-decoration: underline;">APROB</h4>
+                        <p>STRUCTURA DE SECURITATE</p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces S.I.C. W.A.N. POLITIA ROMANA'}"
+                         class="aprobari">
+                        <h5 style="font-weight:bold; text-decoration: underline; padding-left:10px">ROG APROBATI</h5>
+                        <p style="padding-left:30px;">SEFUL C.S.T.I.C.</p>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- TITLE-->
+        <div class="header">
+            <h5 style="font-weight:bold;">RAPORT</h5>
+            <h5 th:text="${request.requestTypeResponse.requestName}"></h5>
+        </div>
+
+        <!-- CONTENT TABLE-->
+        <table class="content-table">
+            <tr>
+                <td style="font-weight: bold; width: 30%"><span>Date despre solicitant:</span></td>
+                <td>
+                    <div>
+                        <label>Grad profesional:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.rank.rankName}"></span>
+                    </div>
+                    <div>
+                        <label>Nume:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.lastName}"></span>
+                    </div>
+                    <div>
+                        <label>Prenume:</label>
+                        <span class="field-value"
+                              th:text="${request.policemanResponse.firstName + ' ' + request.policemanResponse.firstNameSecondary}"></span>
+                    </div>
+                    <div>
+                        <label>CNP:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.personalNumber}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; width: 30%"><span>Date contact:</span></td>
+                <td>
+                    <div>
+                        <label>Nr. de telefon mobil:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.phoneNumber}"></span>
+                    </div>
+                    <div>
+                        <label>Nr. de telefon interior:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.phoneNumberPolice}"></span>
+                    </div>
+                    <hr class="line-style">
+                    <div>
+                        <label>Adresa de email:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.email}"></span>
+                    </div>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces S.I.C. W.A.N. POLITIA ROMANA'}">
+                        <label>Autorizatie/Certificat acces informatii clasificate:</label>
+                        <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
+                        <label>cu valabilitate de la:</label>
+                        <span class="field-value"
+                              th:text="${#temporals.format(request.policemanResponse.certificateValidFrom, 'dd-MM-yyyy')}"></span>
+                        <label>pana la:</label>
+                        <span class="field-value"
+                              th:text="${#temporals.format(request.policemanResponse.certificateValidUntil, 'dd-MM-yyyy')}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;"><span>Observatii:</span></td>
+                <td>
+                    <div style="text-transform: uppercase">
+                        <span th:text="${request.status.name()}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <div>
+                        <p th:text="'Declar că am luat la cunoștință despre prevederile Ghidului General de Securitate' + ' ' + ${requestName}"></p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+        <!-- SIGNATURE -->
+        <div style="text-align: center; padding-top: 35px">
+            <p style="font-weight:bold;">SOLICITANT</p>
+            <p style="font-style:italic;" th:text="${request.policemanResponse.rank.rankName}"></p>
+            <p style="text-transform: uppercase;" class="field-value" th:text="${request.policemanResponse.lastName + ' ' +
+    request.policemanResponse.firstNameSecondary + ' ' + request.policemanResponse.firstName}"></p>
+        </div>
     </div>
 </div>
 
-<!-- ANTET TABLE-->
-<table>
-    <tbody>
-    <tr>
-        <td><p>ROMANIA</p></td>
-        <td style="text-align: right; padding-right:15px;"><p>NESECRET</p></td>
-    </tr>
-    <tr>
-        <td><p>MINISTERUL AFACERILOR INTERNE</p></td>
-        <td style="text-align: right;">
-            <div>
-                <span th:text="${request.requestStructRegNo}"></span>
-                <label> / </label>
-                <span th:text="${#temporals.format(request.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
-            </div>
-        </td>
 
-    </tr>
-    <tr>
-        <td>
-            <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
-            <div>
-                <img style="width:115px; height:80px; padding-left: 30px" th:src="@{/css/sigla.png}" alt="logo">
-            </div>
-            <p style="text-transform: uppercase;"><span
-                    th:text="${request.policemanResponse.policeStructure.structureName}"></span></p>
-            <p style="text-transform: uppercase;"><span
-                    th:text="${request.policemanResponse.policeStructureSubunit.subunitName}"></span></p>
-            <p style="text-transform: uppercase;"><span
-                    th:text="${request.policemanResponse.department.departmentName}"></span></p>
-        </td>
-        <td></td>
-    </tr>
-    <tr>
-        <!-- coloana goala -->
-        <td></td>
-        <td style="text-align: right; padding-right: 30px">
-            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC_IGPR.RO'}"
-                 class="aprobari">
-                <h5 style="font-weight:bold; padding-right: 10px; text-decoration: underline;">APROBAT</h5>
-                <p style="padding-right:7px">SEF UNITATE</p>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC_IGPR.RO'}"
-                 class="aprobari">
-                <h5 style="font-weight:bold; text-decoration: underline; padding-left:10px">ROG APROBATI</h5>
-                <p style="padding-left:30px;">Seful nemijlocit</p>
-            </div>
-        </td>
-        <!-- coloana goala -->
-        <td></td>
-    </tr>
-    </tbody>
-</table>
-
-<!-- TITLE-->
-<div class="header">
-    <h5 style="font-weight:bold;">RAPORT</h5>
-    <h5 th:text="${request.requestTypeResponse.requestName}"></h5>
-</div>
-
-<!-- CONTENT TABLE-->
-<table class="content-table">
-    <tr>
-        <td style="font-weight: bold;"><span>Date despre solicitant:</span></td>
-        <td>
-            <div>
-                <label>Grad profesional:</label>
-                <span class="field-value" th:text="${request.policemanResponse.rank.rankName}"></span>
-            </div>
-            <div>
-                <label>Nume:</label>
-                <span class="field-value" th:text="${request.policemanResponse.lastName}"></span>
-            </div>
-            <div>
-                <label>Prenume:</label>
-                <span class="field-value"
-                      th:text="${request.policemanResponse.firstName + ' ' + request.policemanResponse.firstNameSecondary}"></span>
-            </div>
-            <div>
-                <label>CNP:</label>
-                <span class="field-value" th:text="${request.policemanResponse.personalNumber}"></span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="font-weight: bold;"><span>Date contact:</span></td>
-        <td>
-            <div>
-                <label>Nr. de telefon mobil:</label>
-                <span class="field-value" th:text="${request.policemanResponse.phoneNumber}"></span>
-            </div>
-            <div>
-                <label>Nr. de telefon interior:</label>
-                <span class="field-value" th:text="${request.policemanResponse.phoneNumberPolice}"></span>
-            </div>
-            <hr class="line-style">
-            <div>
-                <label>Adresa de email:</label>
-                <span class="field-value" th:text="${request.policemanResponse.email}"></span>
-            </div>
-            <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces Intrapol-b'}">
-                <label>Autorizatie secret:</label>
-                <span class="field-value" th:text="${request.policemanResponse.certificate}"></span>
-                <label>valabila de la:</label>
-                <span class="field-value"
-                      th:text="${#temporals.format(request.policemanResponse.certificateValidFrom, 'dd-MM-yyyy')}"></span>
-                <label>pana la:</label>
-                <span class="field-value"
-                      th:text="${#temporals.format(request.policemanResponse.certificateValidUntil, 'dd-MM-yyyy')}"></span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="font-weight: bold;"><span>Observatii:</span></td>
-        <td>
-            <span class="field-value"><pre class="pre-styled" th:text="${request.observation}"></pre></span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2" style="text-align: center;">
-            <div style="padding: 10px;">
-                <p>Declar că am luat la cunoștință despre prevederile Ghidului General de Securitate SIC_IGPR.RO</p>
-            </div>
-        </td>
-    </tr>
-</table>
-
-<div style="text-align: center; padding-top: 50px">
-    <p style="font-weight:bold;">SOLICITANT</p>
-    <p style="font-style:italic;" th:text="${request.policemanResponse.rank.rankName}"></p>
-    <p style="text-transform: uppercase;" class="field-value" th:text="${request.policemanResponse.lastName + ' ' +
-    request.policemanResponse.firstNameSecondary + ' ' + request.policemanResponse.firstName}"></p>
-</div>
-
+<script>
+    function showDetails() {
+        document.getElementById("myModal").style.display= "block";
+    }
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
 
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript"></script>
+<script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 </body>
 </html>
