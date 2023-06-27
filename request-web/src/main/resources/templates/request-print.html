@@ -108,6 +108,16 @@
                         <h4 style="font-weight:bold; padding-right: 70px; text-decoration: underline;">APROB</h4>
                         <p>STRUCTURA DE SECURITATE</p>
                     </div>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC-INTERNET-IGPR'}"
+                         class="aprobari">
+                        <h4 style="font-weight:bold; padding-right: 10px; text-decoration: underline;">APROB</h4>
+                        <p>SEF UNITATE</p>
+                    </div>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC-IGPR.RO'}"
+                         class="aprobari">
+                        <h4 style="font-weight:bold; padding-right: 10px; text-decoration: underline;">APROB</h4>
+                        <p>SEF UNITATE</p>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -116,6 +126,17 @@
                          class="aprobari">
                         <h5 style="font-weight:bold; text-decoration: underline; padding-left:10px">ROG APROBATI</h5>
                         <p style="padding-left:30px;">SEFUL C.S.T.I.C.</p>
+                    </div>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC-INTERNET-IGPR'}"
+                         class="aprobari">
+                        <h5 style="font-weight:bold; text-decoration: underline; padding-left:70px">ROG APROBATI</h5>
+                        <p style="padding-left:30px;">Responsabil cu atributii in domeniul</p>
+                        <p style="padding-left:30px;">protectiei informatiilor clasificate</p>
+                    </div>
+                    <div th:if="${request.requestTypeResponse.requestName == 'Solicitare cont de acces SIC-IGPR.RO'}"
+                         class="aprobari">
+                        <h5 style="font-weight:bold; text-decoration: underline; padding-left:30px">ROG APROBATI</h5>
+                        <p style="padding-left:30px;">SEFUL NEMIJLOCIT</p>
                     </div>
                 </td>
                 <td></td>
