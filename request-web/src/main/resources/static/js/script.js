@@ -29,7 +29,7 @@ function togglePolicemanAuthorization() {
     var selectedOption = requestTypeSelect.options[requestTypeSelect.selectedIndex].text;
     var policemanAuthorizationDiv = document.getElementById("policemanAuthorization");
 
-    if (selectedOption === "Solicitare cont de acces intrapol-b") {
+    if (selectedOption === "Solicitare cont de acces S.I.C. W.A.N. POLITIA ROMANA") {
         policemanAuthorizationDiv.style.display = "block";
         document.getElementById('certificate').required = true;
         document.getElementById('certificateValidFrom').required = true;

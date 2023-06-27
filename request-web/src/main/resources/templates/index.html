@@ -109,19 +109,21 @@
         </svg> <!-- Red cross icon -->
     </span>
                 </div>
-                <div th:if="${!request.isApprovedByStructureChief && request.status.name() != 'Respinsa'}"
-                     class="text-center">
-                    <form id="'decisionPoliceStructureForm-'+ ${request.id}" method="post">
-                        <select class="form-select narrow-select" id="'policeStructureDecision-' + ${request.id}"
-                                name="decision"
-                                onchange="onPoliceStructureDecisionChange(this)">
-                            <option>Autorizează</option>
-                            <option value="approve">APROBA</option>
-                            <option value="reject">RESPINGE</option>
-                        </select>
-                        <input type="hidden" id="'requestPoliceStructureId-'+${request.id}" name="requestId"
-                               th:value="${request.id}">
-                    </form>
+                <div th:if="${sessionUser.memberOf.equals('sef_structura')}">
+                    <div th:if="${!request.isApprovedByStructureChief && request.status.name() != 'Respinsa'}"
+                         class="text-center">
+                        <form id="'decisionPoliceStructureForm-'+ ${request.id}" method="post">
+                            <select class="form-select narrow-select" id="'policeStructureDecision-' + ${request.id}"
+                                    name="decision"
+                                    onchange="onPoliceStructureDecisionChange(this)">
+                                <option>Autorizează</option>
+                                <option value="approve">APROBA</option>
+                                <option value="reject">RESPINGE</option>
+                            </select>
+                            <input type="hidden" id="'requestPoliceStructureId-'+${request.id}" name="requestId"
+                                   th:value="${request.id}">
+                        </form>
+                    </div>
                 </div>
             </td>
             <!-- SECURITY STRUCTURE DECISION-->
@@ -140,18 +142,20 @@
 </svg> <!-- Red cross icon -->
         </span>
                 </div>
-                <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
-                     class="text-center">
-                    <form id="'decisionSecurityForm-' + ${request.id}" method="post">
-                        <select class="form-select narrow-select" id="'securityDecision-' + ${request.id}"
-                                name="decision" onchange="onDecisionChangeSecurity(this)">
-                            <option>Autorizează</option>
-                            <option value="approve">APROBA</option>
-                            <option value="reject">RESPINGE</option>
-                        </select>
-                        <input type="hidden" id="'requestSecurityId-' + ${request.id}" name="requestId"
-                               th:value="${request.id}">
-                    </form>
+                <div th:if="${sessionUser.memberOf.equals('structura_securitate')}">
+                    <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
+                         class="text-center">
+                        <form id="'decisionSecurityForm-' + ${request.id}" method="post">
+                            <select class="form-select narrow-select" id="'securityDecision-' + ${request.id}"
+                                    name="decision" onchange="onDecisionChangeSecurity(this)">
+                                <option>Autorizează</option>
+                                <option value="approve">APROBA</option>
+                                <option value="reject">RESPINGE</option>
+                            </select>
+                            <input type="hidden" id="'requestSecurityId-' + ${request.id}" name="requestId"
+                                   th:value="${request.id}">
+                        </form>
+                    </div>
                 </div>
             </td>
             <!-- IT STRUCTURE DECISION-->
@@ -168,17 +172,20 @@
     <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.354 14.354a.5.5 0 0 1-.708.708L12 12.707l-3.646 3.647a.5.5 0 0 1-.708-.708L11.293 12 7.646 8.354a.5.5 0 0 1 .708-.708L12 11.293l3.646-3.647a.5.5 0 0 1 .708.708L12.707 12l3.647 3.646z"/>
                      </svg> <!-- Red cross icon --> </span>
                 </div>
-                <div th:if="${!request.isApprovedByITChief && request.status.name() != 'Respinsa'}" class="text-center">
-                    <form th:id="'decisionITForm-' + ${request.id}" method="post">
-                        <select class="form-select narrow-select" id="itDecision-${request.id}" name="decision"
-                                onchange="onDecisionChangeIT(this)">
-                            <option>Autorizează</option>
-                            <option value="approve">REPARTIZEAZA</option>
-                            <option value="reject">RESPINGE</option>
-                        </select>
-                        <input type="hidden" th:id="'requestITId-' + ${request.id}" name="requestId"
-                               th:value="${request.id}">
-                    </form>
+                <div th:if="${sessionUser.memberOf.equals('admin')}">
+                    <div th:if="${!request.isApprovedByITChief && request.status.name() != 'Respinsa'}"
+                         class="text-center">
+                        <form th:id="'decisionITForm-' + ${request.id}" method="post">
+                            <select class="form-select narrow-select" id="itDecision-${request.id}" name="decision"
+                                    onchange="onDecisionChangeIT(this)">
+                                <option>Autorizează</option>
+                                <option value="approve">REPARTIZEAZA</option>
+                                <option value="reject">RESPINGE</option>
+                            </select>
+                            <input type="hidden" th:id="'requestITId-' + ${request.id}" name="requestId"
+                                   th:value="${request.id}">
+                        </form>
+                    </div>
                 </div>
             </td>
             <!-- STATUS -->

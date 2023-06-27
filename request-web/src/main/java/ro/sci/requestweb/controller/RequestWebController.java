@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
+import ro.sci.requestweb.exception.NotAuthorizedForThisActionException;
 import ro.sci.requestweb.mapper.AccountRequestMapper;
 import ro.sci.requestweb.service.*;
 
@@ -95,7 +96,7 @@ public class RequestWebController {
         model.addAttribute("structure", policeStructureService.getById(accountRequest.getPolicemanRequest().getPoliceStructureId()));
         model.addAttribute("subunit", subunitService.findById(accountRequest.getPolicemanRequest().getPoliceStructureSubunitId()));
         model.addAttribute("department", departmentService.getById(accountRequest.getPolicemanRequest().getDepartmentId()));
-        model.addAttribute("requestTypeName", requestNameForAntet(accountRequest.getRequestTypeId()));
+        model.addAttribute("requestTypeName", requestNameForHeader(accountRequest.getRequestTypeId()));
         model.addAttribute("rank", rankService.findById(accountRequest.getPolicemanRequest().getRankId()));
         model.addAttribute("userSession", userSession);
         model.addAttribute("accountRequest", accountRequest);
@@ -175,7 +176,10 @@ public class RequestWebController {
     public String structureChiefDecision(@PathVariable("requestId") Long requestId,
                                          @RequestParam("decision") String decision,
                                          @RequestParam(value = "observation", required = false) String observation,
-                                         HttpServletRequest request) {
+                                         HttpServletRequest request,
+                                         HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsPoliceStructureChief(userSession.getMemberOf());
         if ("approve".equals(decision)) {
             requestService.structureChiefApprove(requestId);
         } else if ("reject".equals(decision)) {
@@ -190,7 +194,9 @@ public class RequestWebController {
     public String securityDecision(@PathVariable("requestId") Long requestId,
                                    @RequestParam("decision") String decision,
                                    @RequestParam(value = "observation", required = false) String observation,
-                                   HttpServletRequest request) {
+                                   HttpServletRequest request, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsFromSecurityStructure(userSession.getMemberOf());
         if ("approve".equals(decision)) {
             requestService.securityApprove(requestId);
         } else if ("reject".equals(decision)) {
@@ -207,7 +213,9 @@ public class RequestWebController {
                              @RequestParam("decision") String decision,
                              @RequestParam("itSpecialistId") Long itSpecialistId,
                              @RequestParam(value = "observation", required = false) String observation,
-                             HttpServletRequest request) {
+                             HttpServletRequest request, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsFromSCI(userSession.getMemberOf());
         if ("approve".equals(decision)) {
             requestService.itApprove(requestId, itSpecialistId);
         } else if ("reject".equals(decision)) {
@@ -230,11 +238,29 @@ public class RequestWebController {
     }
 
 
-    private String requestNameForAntet(Long requestTypeId) {
+    private String requestNameForHeader(Long requestTypeId) {
         RequestTypeResponse requestType = requestTypeService.getById(requestTypeId);
         String requestName = requestType.getRequestName();
         int indexOfAccess = requestName.indexOf("acces");
         return requestName.substring(indexOfAccess + 5).trim();
+    }
+
+    private void checkIsPoliceStructureChief(String memberOf) {
+        if (!(memberOf.equals("sef_structura"))) {
+            throw new NotAuthorizedForThisActionException("User not authorized for this action");
+        }
+    }
+
+    private void checkIsFromSecurityStructure(String memberOf) {
+        if (!(memberOf.equals("structura_securitate"))) {
+            throw new NotAuthorizedForThisActionException("User not authorized for this action");
+        }
+    }
+
+    private void checkIsFromSCI(String memberOf) {
+        if (!(memberOf.equals("admin"))) {
+            throw new NotAuthorizedForThisActionException("User not authorized for this action");
+        }
     }
 
 }
