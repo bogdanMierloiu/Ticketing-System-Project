@@ -43,17 +43,17 @@
     </div>
 
     <!-- Fereastra modală detalii solicitare -->
-    <div id="myModal" class="modal no-print" tabindex="-1">
-        <div class="modal-dialog">
+    <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detalii solicitare</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Detalii solicitare</h5>
                 </div>
                 <div class="modal-body">
                     <pre th:text="${request.observation}"></pre>
                 </div>
                 <div class="modal-footer">
-                    <button id="closeModalButton" type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="closeModal()">Închide</button>
+                    <button id="closeModalButton" type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close" onclick="closeModal()">Închide</button>
                 </div>
             </div>
         </div>

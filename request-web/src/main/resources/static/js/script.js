@@ -220,6 +220,11 @@ function submitRejectForm() {
     });
 }
 
+function closePoliceStructureModal(){
+        var modal = document.getElementById("rejectPoliceStructureModal");
+        modal.style.display = "none";
+        window.location.reload();
+    }
 
 // AUTORIZATION SECURITY STRUCTURE
 
@@ -312,7 +317,11 @@ function submitRejectFormSecurity() {
         }
     });
 }
-
+function closeSecurityModal(){
+        var modal = document.getElementById("rejectModalForSecurity");
+        modal.style.display = "none";
+        window.location.reload();
+    }
 
 // IT STRUCTURE
 
@@ -410,6 +419,17 @@ function submitRejectFormIT() {
     });
 }
 
+function closeITRejectModal(){
+        var modal = document.getElementById("rejectModalForIT");
+        modal.style.display = "none";
+        window.location.reload();
+    }
+
+function closeSpecialistAssignModal(){
+        var modal = document.getElementById("specialistAssign");
+        modal.style.display = "none";
+        window.location.reload();
+    }
 
 // Hide password
 
