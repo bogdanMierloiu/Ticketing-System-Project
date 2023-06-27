@@ -2,15 +2,18 @@ package ro.sci.requestweb.service;
 
 import org.springframework.stereotype.Service;
 import ro.sci.requestweb.dto.UserInSession;
+import ro.sci.requestweb.exception.NotHaveAccessException;
 
 import javax.naming.*;
 import javax.naming.directory.*;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 @Service
 public class AuthenticationService {
 
-    public UserInSession authentication(String name, String pass) throws NamingException {
+    public UserInSession authentication(String name, String pass) throws NamingException, NotHaveAccessException {
         String ldapUrl = "ldap://192.168.168.25:389"; // Adresa IP sau numele de gazdă al serverului LDAP
         String searchBase = "DC=dgpmbpublic,DC=local"; // Baza de căutare în directorul LDAP
         String searchFilter = "(sAMAccountName=" + name.trim() + ")";
@@ -45,21 +48,13 @@ public class AuthenticationService {
             while (results.hasMore()) {
                 SearchResult result = results.next();
                 Attributes attributes = result.getAttributes();
+
                 // Member of
                 Attribute memberOf = result.getAttributes().get("memberOf");
                 String memberOfValue = memberOf.toString().toLowerCase();
-                Attribute distinguishedname = result.getAttributes().get("distinguishedname");
-                String distinguishedNameValue = distinguishedname.toString().toLowerCase();
-                String extractedValue = null;
-                if (distinguishedNameValue.contains("sci")) {
-                    extractedValue = "admin";
-                }
-                if (distinguishedNameValue.contains("cstic")) {
-                    extractedValue = "security";
-                }
-                if (distinguishedNameValue.contains("conducere")) {
-                    extractedValue = "structureChief";
-                }
+                String accessLevel = checkAccess(memberOfValue);
+
+                // Display name
                 String displayName = attributes.get("displayName").toString();
                 int indexOfColon = displayName.indexOf(":");
                 String userNameBeforeFormat = displayName.substring(indexOfColon + 1).trim();
@@ -74,8 +69,7 @@ public class AuthenticationService {
 
                 userDetails = UserInSession.builder()
                         .displayName(formattedDisplayName)
-                        .memberOf(extractedValue)
-                        .haveAccess(haveAccess(memberOfValue))
+                        .memberOf(accessLevel)
                         .build();
             }
 
@@ -92,7 +86,23 @@ public class AuthenticationService {
         return userDetails;
     }
 
-    private Boolean haveAccess(String memberOf) {
-        return memberOf.contains("solicitare_cont");
+
+    private String checkAccess(String memberOfValue) throws NotHaveAccessException {
+        Map<String, String> roleMappings = new HashMap<>();
+        roleMappings.put("solicitari_cont_b", "sef_birou");
+        roleMappings.put("aprobare_solicitare_b", "sef_structura");
+        roleMappings.put("autorizare_cont_b", "structura_securitate");
+        roleMappings.put("admin_solicitari_b", "admin");
+
+        for (Map.Entry<String, String> entry : roleMappings.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (memberOfValue.contains(key)) {
+                return value;
+            }
+        }
+        throw new NotHaveAccessException("User does not have access");
     }
+
+
 }

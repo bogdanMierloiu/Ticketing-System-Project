@@ -15,7 +15,6 @@ public class UserInSession implements Serializable {
 
     private String displayName;
     private String memberOf;
-    private Boolean haveAccess;
 
 
 }

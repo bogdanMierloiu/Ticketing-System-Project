@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import ro.sci.requestweb.dto.LoginRequest;
 import ro.sci.requestweb.dto.UserInSession;
-import ro.sci.requestweb.exception.NotHaveAccessException;
 import ro.sci.requestweb.exception.UserNotInSessionException;
-import ro.sci.requestweb.service.*;
+import ro.sci.requestweb.service.AuthenticationService;
 
 import javax.naming.NamingException;
 
@@ -48,9 +47,6 @@ public class HomeController {
         UserInSession user = (UserInSession) session.getAttribute("sessionUser");
         if (user == null) {
             throw new UserNotInSessionException("Utilizatorul nu este autentificat");
-        }
-        if(!user.getHaveAccess()){
-            throw new NotHaveAccessException("Utilizatorul nu are dreptul de accesare a aplicatiei");
         }
         return user;
     }

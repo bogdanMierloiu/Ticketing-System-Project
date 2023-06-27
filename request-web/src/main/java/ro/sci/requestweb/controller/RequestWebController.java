@@ -33,7 +33,6 @@ public class RequestWebController {
     public String indexPage(Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
-
         model.addAttribute("sessionUser", userSession);
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
