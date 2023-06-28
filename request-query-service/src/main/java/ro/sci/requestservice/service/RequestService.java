@@ -113,6 +113,19 @@ public class RequestService {
         return CompletableFuture.completedFuture(requestResponses);
     }
 
+    @Async
+    public CompletableFuture<Long> countAllRequests() {
+        return CompletableFuture.completedFuture(requestRepo.countAllRequests());
+    }
+    @Async
+    public CompletableFuture<Long> countRequestsInProgress() {
+        return CompletableFuture.completedFuture(requestRepo.countRequestsInProgress());
+    }
+    @Async
+    public CompletableFuture<Long> countRequestsSuccessFinalized() {
+        return CompletableFuture.completedFuture(requestRepo.countRequestsSuccessFinalized());
+    }
+
     // UTILS
 
     private RequestType getRequestTypeById(Long requestTypeId) {

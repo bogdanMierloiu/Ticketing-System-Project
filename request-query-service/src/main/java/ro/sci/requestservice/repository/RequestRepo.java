@@ -33,8 +33,14 @@ public interface RequestRepo extends JpaRepository<Request, Long> {
     @Query("Select r from Request r where r.policeman.policeStructureSubunit.id = :id")
     public List<Request> findAllByPoliceSubunit(@Param("id") Long id);
 
+    @Query("SELECT COUNT(r) FROM Request r")
+    public Long countAllRequests();
 
+    @Query("SELECT COUNT(r) FROM Request r WHERE r.status = 'In_lucru'")
+    public Long countRequestsInProgress();
 
+    @Query("SELECT COUNT(r) FROM Request r WHERE r.status = 'Finalizata'")
+    public Long countRequestsSuccessFinalized();
 
 
 }

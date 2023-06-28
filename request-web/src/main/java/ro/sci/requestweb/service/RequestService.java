@@ -245,6 +245,36 @@ public class RequestService {
         }
     }
 
+
+    // COUNTERS
+
+    public Long countAllRequests() {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/count/all-requests")
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
+    public Long countRequestsInProgress() {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/count/all-requests-in-progress")
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
+    public Long countRequestsSuccessFinalized() {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/count/all-requests-finalized")
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
     // UTILS
     private <T> List<T> collectToList(Flux<T> flux) {
         return flux.collectList().block();

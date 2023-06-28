@@ -14,11 +14,8 @@
         <a class="navbar-brand" th:href="@{/request}">
             <img class="logo-image" style="width:70px; height:45px; padding-right: 15px" th:src="@{/css/stema3d.gif}"
                  alt="logo">
-            <p style="align-items:center"> D.G.P.M.B. - S.C.I.</p>
+            <p style="align-items:center"> D.G.P.M.B. - SERVICIUL COMUNICATII SI INFORMATICA </p>
         </a>
-        <div>
-            <span class="sessionUser" th:text="${sessionUser.getDisplayName}"></span>
-        </div>
         <div class="row">
             <div class="col">
                 <form th:if="${sessionUser.memberOf.equals('admin')}" class="d-inline-block mr-3"
@@ -82,7 +79,7 @@
             <!-- POLICEMAN DATA -->
             <td>
                  <span>
-                     <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>
+<!--                     <em th:text="${request.getPolicemanResponse.rank.rankName}" style="font-style: italic;"></em>-->
                      <span th:text="${' ' + request.getPolicemanResponse.lastName + ' '
                                           + request.getPolicemanResponse.firstName
                      + (request.getPolicemanResponse.firstNameSecondary != null ? ' ' + request.getPolicemanResponse.firstNameSecondary : '')}"></span>

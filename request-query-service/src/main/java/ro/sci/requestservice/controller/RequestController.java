@@ -59,4 +59,22 @@ public class RequestController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/count/all-requests")
+    public CompletableFuture<ResponseEntity<Long>> countAllRequests() {
+        CompletableFuture<Long> future = requestService.countAllRequests();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/count/all-requests-in-progress")
+    public CompletableFuture<ResponseEntity<Long>> countRequestsInProgress() {
+        CompletableFuture<Long> future = requestService.countRequestsInProgress();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+    @GetMapping("/count/all-requests-finalized")
+    public CompletableFuture<ResponseEntity<Long>> countRequestsSuccessFinalized() {
+        CompletableFuture<Long> future = requestService.countRequestsSuccessFinalized();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
 }

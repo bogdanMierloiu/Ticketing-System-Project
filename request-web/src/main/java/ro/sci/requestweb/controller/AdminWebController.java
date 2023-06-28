@@ -34,6 +34,9 @@ public class AdminWebController {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsAdmin(userSession.getMemberOf());
         model.addAttribute("sessionUser", userSession);
+        model.addAttribute("totalRequests", requestService.countAllRequests());
+        model.addAttribute("inProgressRequests", requestService.countRequestsInProgress());
+        model.addAttribute("finalizedRequests", requestService.countRequestsSuccessFinalized());
         return "admin";
     }
 
