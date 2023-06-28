@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucratori SCI</title>
+    <title>Pagina admin</title>
     <link th:href="@{/css/bootstrap.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
@@ -46,59 +46,60 @@
 </nav>
 
 <div class="content-wrap">
-    <div style="display:flex; width:100%;">
+    <div style="display:flex">
         <!-- Sidebar  -->
-        <div style="width: 250px; height: 110vh; background-color: #285b96; padding-top:10px; padding-right: 10px;">
+        <div style="width: 250px; height: 100vh; background-color: #285b96; padding-top:10px; padding-right: 10px;">
             <div style="display:block; padding-bottom:20px">
-                <div style="padding-left:20px">
+                <div style="padding-left:20px; padding-top:15px;">
                     <h4 style="color:white" th:text="${sessionUser.displayName}"></h4>
                 </div>
                 <div style="padding-left:10px">
                     <ul style="color:white; padding:20px" class="my-ul">
                         <li>
-                            <a th:href="@{/request/admin/add-specialist-form}">
-                                Adauga lucrator S.C.I.</a>
+                            <a th:href="@{/specialist/show-all-requests/{specialistId}(specialistId=${specialist.id})}">Solicitarile
+                                tale</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!--  Tabel -->
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: flex-start; margin-left: auto; width:100%;">
-            <div th:if="${#lists.isEmpty(specialists)}">
-                <h5>Nu exista inregistrari</h5>
+        <!-- CONTENT -->
+        <div style="flex-grow: 1; display: flex; height: 100vh; justify-content: flex-start;">
+            <div style="padding-left:40px;" class="statistic-structure">
+                <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
+                             class="bi bi-bar-chart" viewBox="0 0 16 16">
+  <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+</svg>
+                     </span>
+                <span class="count">Total solicitari:</span>
+                <span class="count" th:text="${totalRequests}"></span>
             </div>
-            <table th:if="${not #lists.isEmpty(specialists)}" class="table table-hover text-center">
-                <thead>
-                <tr>
-                    <th colspan="2" style="text-align: center;" class="text-center">
-                        <div>
-                            <span>Lucratori din cadrul S.C.I. - Biroul Informatica</span>
-                        </div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="specialist: ${specialists}">
-                    <td>
-                        <span th:text="${specialist.rank.rankName}"></span>
-                    </td>
-                    <td>
-                        <span th:text="${specialist.lastName + ' ' + specialist.firstName}"></span>
-                    </td>
-                    <!--                <td>-->
-                    <!--                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
-                    <!--                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
-                    <!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza solicitari in lucru (DE IMPLEMENTAT)</button>-->
-                    <!--                    </form>-->
-                    <!--                </td>-->
-                </tr>
-                </tbody>
-            </table>
+            <div style="color:red" class="statistic-structure">
+                <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
+                             class="bi bi-bar-chart" viewBox="0 0 16 16">
+  <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+</svg>
+                     </span>
+                <span class="count">In lucru:</span>
+                <span class="count" th:text="${totalRequestsInProgress}"></span>
+            </div>
+            <div style="color:green" class="statistic-structure">
+                <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
+                             class="bi bi-bar-chart" viewBox="0 0 16 16">
+  <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
+</svg>
+                     </span>
+                <span class="count">Finalizate:</span>
+                <span class="count" th:text="${totalRequestsFinalized}"></span>
+            </div>
         </div>
     </div>
 </div>
+
 
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>

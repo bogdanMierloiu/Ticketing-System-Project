@@ -54,10 +54,12 @@
                 </span>
                 <form class="needs-validation" th:action="@{/request/admin/add-structure}" method="post">
                     <div class="mb-3">
-                        <label class="form-label">Denumire structura:</label>
-                        <input type="text" class="form-control" name="structureName" required>
+                        <label for="structureName" class="form-label">Denumire structura:</label>
+                        <input type="text" id="structureName" class="form-control" name="structureName" required>
                     </div>
-                    <button type="submit" class="btn btn-success">Adauga</button>
+                    <div>
+                        <button type="submit" class="btn btn-success">Adauga</button>
+                    </div>
                 </form>
             </div>
         </div>

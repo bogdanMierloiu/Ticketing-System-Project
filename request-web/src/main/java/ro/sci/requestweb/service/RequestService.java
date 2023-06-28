@@ -85,6 +85,15 @@ public class RequestService {
         return collectToList(responseFlux);
     }
 
+    public List<RequestResponse> getAllRequestsByItSpecialist(Long specialistId) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/specialist/{specialistId}", specialistId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
+    }
+
     public RequestResponse findById(Long requestId) {
         Mono<RequestResponse> mono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/find/{requestId}", requestId)
@@ -274,6 +283,17 @@ public class RequestService {
                 .bodyToMono(Long.class);
         return responseFlux.block();
     }
+
+    public Long countRequestsRejected() {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/count/all-requests-rejected")
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
+
 
     // UTILS
     private <T> List<T> collectToList(Flux<T> flux) {

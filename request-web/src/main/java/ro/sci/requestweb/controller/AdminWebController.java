@@ -37,6 +37,7 @@ public class AdminWebController {
         model.addAttribute("totalRequests", requestService.countAllRequests());
         model.addAttribute("inProgressRequests", requestService.countRequestsInProgress());
         model.addAttribute("finalizedRequests", requestService.countRequestsSuccessFinalized());
+        model.addAttribute("rejectedRequests", requestService.countRequestsRejected());
         return "admin";
     }
 

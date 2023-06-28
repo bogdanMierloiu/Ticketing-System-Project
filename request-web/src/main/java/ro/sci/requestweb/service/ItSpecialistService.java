@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ro.sci.requestweb.dto.AsyncResponse;
 import ro.sci.requestweb.dto.ItSpecialistRequest;
 import ro.sci.requestweb.dto.ItSpecialistResponse;
@@ -30,6 +31,15 @@ public class ItSpecialistService {
         return responseFLux.collectList().block();
     }
 
+    public ItSpecialistResponse findByName(String lastName) {
+        Mono<ItSpecialistResponse> responseMono = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/it-specialist/find/{lastName}", lastName)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(ItSpecialistResponse.class);
+        return responseMono.block();
+    }
+
     @Async
     public CompletableFuture<AsyncResponse<Void>> addSpecialist(ItSpecialistRequest request) {
         try {
@@ -44,6 +54,34 @@ public class ItSpecialistService {
         } catch (Exception e) {
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
         }
+    }
+
+
+    public Long countAllRequests(Long specialistId) {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/it-specialist/count/all-requests/{specialistId}", specialistId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
+    public Long countAllRequestsInProgress(Long specialistId) {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/it-specialist/count/all-requests-in-progress/{specialistId}", specialistId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
+    public Long countAllRequestsFinalized(Long specialistId) {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/it-specialist/count/all-requests-finalized/{specialistId}", specialistId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
     }
 
 

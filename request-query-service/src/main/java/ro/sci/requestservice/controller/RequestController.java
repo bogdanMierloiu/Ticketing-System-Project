@@ -47,6 +47,12 @@ public class RequestController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/specialist/{id}")
+    public CompletableFuture<ResponseEntity<List<RequestResponse>>> getAllByItSpecialistId(@PathVariable("id") Long specialistId) {
+        CompletableFuture<List<RequestResponse>> future = requestService.findAllByItSpecialistId(specialistId);
+        return future.thenApply(ResponseEntity::ok);
+    }
+
     @GetMapping("/search-by-name")
     public CompletableFuture<ResponseEntity<List<RequestResponse>>> getAllByPolicemanName(@RequestParam String name) {
         CompletableFuture<List<RequestResponse>> future = requestService.getAllByPolicemanName(name);
@@ -76,5 +82,13 @@ public class RequestController {
         CompletableFuture<Long> future = requestService.countRequestsSuccessFinalized();
         return future.thenApply(ResponseEntity::ok);
     }
+
+    @GetMapping("/count/all-requests-rejected")
+    public CompletableFuture<ResponseEntity<Long>> countRequestsRejected() {
+        CompletableFuture<Long> future = requestService.countRequestsRejected();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+
 
 }

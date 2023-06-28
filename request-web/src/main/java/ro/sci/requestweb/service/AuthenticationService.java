@@ -93,6 +93,7 @@ public class AuthenticationService {
         roleMappings.put("aprobare_solicitare_b", "sef_structura");
         roleMappings.put("autorizare_cont_b", "structura_securitate");
         roleMappings.put("admin_solicitari_b", "admin");
+        roleMappings.put("lucratori_solicitari_b", "lucrator");
 
         for (Map.Entry<String, String> entry : roleMappings.entrySet()) {
             String key = entry.getKey();

@@ -67,6 +67,7 @@ public class RequestService {
         return CompletableFuture.completedFuture(requestResponses);
     }
 
+
     @Async
     public CompletableFuture<List<RequestResponse>> getAllByPoliceStructure(Long id) {
         List<Request> requests = requestRepo.findAllByPoliceStructure(id);
@@ -88,6 +89,20 @@ public class RequestService {
         }
         return CompletableFuture.completedFuture(requestResponses);
     }
+
+    @Async
+    public CompletableFuture<List<RequestResponse>> findAllByItSpecialistId(Long id) {
+        List<Request> requests = requestRepo.findAllByItSpecialistId(id);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return CompletableFuture.completedFuture(requestResponses);
+    }
+
+
+
 
     @Async
     public CompletableFuture<List<RequestResponse>> getAllByPolicemanName(String name) {
@@ -124,6 +139,10 @@ public class RequestService {
     @Async
     public CompletableFuture<Long> countRequestsSuccessFinalized() {
         return CompletableFuture.completedFuture(requestRepo.countRequestsSuccessFinalized());
+    }
+    @Async
+    public CompletableFuture<Long> countRequestsRejected() {
+        return CompletableFuture.completedFuture(requestRepo.countRequestsRejected());
     }
 
     // UTILS
