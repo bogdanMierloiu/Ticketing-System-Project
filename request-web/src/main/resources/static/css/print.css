@@ -114,6 +114,15 @@ p {
   margin: 5px 0;
 }
 
+.my-ul li{
+    padding:10px;
+    color:white;
+}
+
+.my-ul li a{
+    color:white;
+}
+
 
  @media print {
         .pre-styled {
@@ -144,7 +153,7 @@ p {
          display:none;
         }
         .no-print {
-         display:none;
+         display:none !important;
         }
         .empty-page {
          display:none;

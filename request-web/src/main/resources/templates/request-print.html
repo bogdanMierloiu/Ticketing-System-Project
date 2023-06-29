@@ -11,39 +11,44 @@
 
 <div style="display:flex;">
     <!-- SIDEBAR -->
-    <div style="width: 150px; background-color: #285b96; padding-top:10px; padding-right: 10px;">
+    <div style="width: 250px; height: 100vh; background-color: #285b96; padding-top:10px; padding-right: 10px;">
         <!-- BUTTONS & ERROR -->
-        <div style="display:block;">
+        <div class="no-print" style="display:block; padding-bottom:20px">
             <div style="padding-left:10px;">
-                <a th:href="@{/request}">
-                    <button class="home-button btn btn-success my-2">Pagina principală</button>
-                </a>
-            </div>
-            <div style="padding-left:10px;">
-                <button class="print-button btn btn-success my-2" onclick="window.print()">Printează raportul</button>
-            </div>
-            <div style="padding-left:10px;">
-                <form th:action="@{/commitment/request/{requestId}(requestId=${request.id})}">
-                    <input type="hidden" th:value="${request.id}" name="requestId">
-                    <button class="finalize-button btn btn-success my-2">Vezi angajamentul</button>
-                </form>
-            </div>
-            <div style="padding-left:10px;">
-                <button class="no-print btn btn-success my-2" onclick="showDetails()">Detalii solicitare</button>
-            </div>
-            <div th:if="${isApproved == true}">
-                <div th:if="${request.status.name() != 'Finalizata'}" style="padding-left:10px;">
-                    <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}" method="post">
-                        <input type="hidden" th:value="${request.id}" name="requestId">
-                        <button class="finalize-button btn btn-danger my-2">Finalizează</button>
-                    </form>
-                </div>
+                <ul style="color:white; padding:20px" class="my-ul">
+                    <li>
+                        <a th:href="@{/request}">Pagina principala</a>
+                    </li>
+                    <li>
+                        <a onclick="window.print()" style="text-decoration: underline; cursor: pointer;">Printează
+                            raportul</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/commitment/request/{requestId}(requestId=${request.id})}">Vezi angajamentul</a>
+                    </li>
+                    <li>
+                        <a onclick="showDetails()" style="text-decoration: underline; cursor: pointer;">Detalii
+                            solicitare</a>
+                    </li>
+                    <div th:if="${isSpecialistAssigned == true}" style="margin-left: -20px;">
+                        <div th:if="${isApproved == true}">
+                            <div th:if="${request.status.name() != 'Finalizata'}" style="padding-left:10px;">
+                                <form th:action="@{/request/finalize/{requestId}(requestId=${request.id})}"
+                                      method="post">
+                                    <input type="hidden" th:value="${request.id}" name="requestId">
+                                    <button class="finalize-button btn btn-danger my-2">Finalizează</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
             </div>
         </div>
     </div>
 
     <!-- Fereastra modală detalii solicitare -->
-    <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -53,7 +58,9 @@
                     <pre th:text="${request.observation}"></pre>
                 </div>
                 <div class="modal-footer">
-                    <button id="closeModalButton" type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close" onclick="closeModal()">Închide</button>
+                    <button id="closeModalButton" type="button" class="btn btn-secondary" data-dismiss="modal"
+                            aria-label="Close" onclick="closeModal()">Închide
+                    </button>
                 </div>
             </div>
         </div>
@@ -228,6 +235,8 @@
     request.policemanResponse.firstNameSecondary + ' ' + request.policemanResponse.firstName}"></p>
         </div>
     </div>
+
+
 </div>
 
 
@@ -239,6 +248,12 @@
         var modal = document.getElementById("myModal");
         modal.style.display = "none";
     }
+
+
+
+
+
+
 </script>
 
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>

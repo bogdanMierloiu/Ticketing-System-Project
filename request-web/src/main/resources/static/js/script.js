@@ -442,7 +442,7 @@ function togglePasswordVisibility() {
         showPasswordButton.textContent = "Ascunde";
     } else {
         passwordInput.type = "password";
-        showPasswordButton.textContent = "Arata";
+        showPasswordButton.textContent = "Arată";
     }
 }
 

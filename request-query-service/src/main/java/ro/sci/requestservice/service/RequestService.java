@@ -102,8 +102,6 @@ public class RequestService {
     }
 
 
-
-
     @Async
     public CompletableFuture<List<RequestResponse>> getAllByPolicemanName(String name) {
         String[] nameParts = name.split(" ");
@@ -132,18 +130,28 @@ public class RequestService {
     public CompletableFuture<Long> countAllRequests() {
         return CompletableFuture.completedFuture(requestRepo.countAllRequests());
     }
+
     @Async
     public CompletableFuture<Long> countRequestsInProgress() {
         return CompletableFuture.completedFuture(requestRepo.countRequestsInProgress());
     }
+
     @Async
     public CompletableFuture<Long> countRequestsSuccessFinalized() {
         return CompletableFuture.completedFuture(requestRepo.countRequestsSuccessFinalized());
     }
+
     @Async
     public CompletableFuture<Long> countRequestsRejected() {
         return CompletableFuture.completedFuture(requestRepo.countRequestsRejected());
     }
+
+
+    @Async
+    public CompletableFuture<Long> getSpecialistIdByRequest(Long requestId) {
+        return CompletableFuture.completedFuture(requestRepo.getSpecialistIdByRequest(requestId));
+    }
+
 
     // UTILS
 

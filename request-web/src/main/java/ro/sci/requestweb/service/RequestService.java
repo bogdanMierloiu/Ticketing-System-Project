@@ -293,6 +293,15 @@ public class RequestService {
         return responseFlux.block();
     }
 
+    public Long getSpecialistIdByRequest(Long requestId) {
+        Mono<Long> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/get-specialist-id/{requestId}", requestId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Long.class);
+        return responseFlux.block();
+    }
+
 
 
     // UTILS

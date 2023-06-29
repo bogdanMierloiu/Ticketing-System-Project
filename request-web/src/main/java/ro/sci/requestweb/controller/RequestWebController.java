@@ -12,6 +12,7 @@ import ro.sci.requestweb.mapper.AccountRequestMapper;
 import ro.sci.requestweb.service.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Controller
@@ -47,7 +48,9 @@ public class RequestWebController {
         RequestResponse requestResponse = requestService.findById(requestId);
         assert requestResponse != null;
         boolean isApproved = isFullyApproved(requestResponse);
+        boolean isSpecialistAssigned = verifyRequestIsAssignedForSpecialistFromSession(userSession.getDisplayName(), requestResponse);
 
+        model.addAttribute("isSpecialistAssigned", isSpecialistAssigned);
         model.addAttribute("sessionUser", userSession);
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
@@ -63,6 +66,9 @@ public class RequestWebController {
 
         try {
             requestService.finalize(requestId);
+            boolean isSpecialistAssigned = verifyRequestIsAssignedForSpecialistFromSession(userSession.getDisplayName(), request);
+
+
             model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", request);
             model.addAttribute("requestName", requestNameForHeader(request.getRequestTypeResponse().getId()));
@@ -265,6 +271,14 @@ public class RequestWebController {
         if (!(memberOf.equals("admin"))) {
             throw new NotAuthorizedForThisActionException("User not authorized for this action");
         }
+    }
+
+    private boolean verifyRequestIsAssignedForSpecialistFromSession(String displayName, RequestResponse request) {
+        int indexOf = displayName.indexOf(" ");
+        String lastName = displayName.substring(0, indexOf);
+        ItSpecialistResponse specialistFromSession = itSpecialistService.findByName(lastName);
+        Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
+        return Objects.equals(specialistFromSession.getId(), specialistId);
     }
 
 }

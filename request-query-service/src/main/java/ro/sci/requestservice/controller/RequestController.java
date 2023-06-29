@@ -89,6 +89,11 @@ public class RequestController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/get-specialist-id/{requestId}")
+    public CompletableFuture<ResponseEntity<Long>> getSpecialistIdByRequest(@PathVariable("requestId") Long requestId) {
+        CompletableFuture<Long> future = requestService.getSpecialistIdByRequest(requestId);
+        return future.thenApply(ResponseEntity::ok);
+    }
 
 
 }

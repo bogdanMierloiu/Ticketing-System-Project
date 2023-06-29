@@ -317,7 +317,6 @@ public class AdminWebController {
     @GetMapping("/show-structures-script")
     public ResponseEntity<List<PoliceStructureResponse>> viewPoliceStructuresScript(HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
-        checkIsAdmin(userSession.getMemberOf());
         List<PoliceStructureResponse> structures = policeStructureService.getAllStructures();
         assert structures != null;
         return ResponseEntity.ok(structures);
@@ -326,7 +325,6 @@ public class AdminWebController {
     @GetMapping("/show-subunits-script/{policeStructureId}")
     public ResponseEntity<List<PoliceStructureSubunitResponse>> viewSubunitsForStructure(@PathVariable("policeStructureId") Long policeStructureId, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
-        checkIsAdmin(userSession.getMemberOf());
         List<PoliceStructureSubunitResponse> subunits = policeStructureSubunitService.getStructuresByPoliceStation(policeStructureId);
         assert subunits != null;
         return ResponseEntity.ok(subunits);
@@ -335,7 +333,6 @@ public class AdminWebController {
     @GetMapping("/show-departments-script/{subunitId}")
     public ResponseEntity<List<DepartmentResponse>> viewDepartmentsForStructureScript(@PathVariable("subunitId") Long subunitId, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
-        checkIsAdmin(userSession.getMemberOf());
         List<DepartmentResponse> departments = departmentService.getBySubunit(subunitId);
         assert departments != null;
         return ResponseEntity.ok(departments);
