@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.exception.NotAuthorizedForThisActionException;
+import ro.sci.requestweb.exception.NotHaveAccessException;
 import ro.sci.requestweb.mapper.AccountRequestMapper;
 import ro.sci.requestweb.service.*;
 
@@ -66,8 +67,7 @@ public class RequestWebController {
 
         try {
             requestService.finalize(requestId);
-            boolean isSpecialistAssigned = verifyRequestIsAssignedForSpecialistFromSession(userSession.getDisplayName(), request);
-
+            throwErrorIsSpecialistIsNotAssigned(userSession.getDisplayName(), request);
 
             model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", request);
@@ -86,9 +86,12 @@ public class RequestWebController {
     public String addRequestForm(Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
+        boolean isBureauChief = isBureauChief(userSession);
         AccountRequest accountRequest = new AccountRequest();
 
+
         session.setAttribute("accountRequest", accountRequest);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("accountRequest", accountRequest);
         model.addAttribute("userSession", userSession);
         model.addAttribute("policemanRequest", new PolicemanRequest());
@@ -116,6 +119,7 @@ public class RequestWebController {
     @PostMapping("/add-request")
     public String addRequest(@ModelAttribute("accountRequest") AccountRequest accountRequest, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
+        checkIsBureauChief(userSession.getMemberOf());
 
         AccountRequestToSend accountRequestToSend = accountRequestMapper.mapToAccountRequestToSend(accountRequest);
 
@@ -273,12 +277,28 @@ public class RequestWebController {
         }
     }
 
+    private void checkIsBureauChief(String memberOf) {
+        if (!(memberOf.equals("sef_birou"))) {
+            throw new NotAuthorizedForThisActionException("User not authorized for this action");
+        }
+    }
+
+    private boolean isBureauChief(UserInSession user){
+        return user.getMemberOf().equals("sef_birou");
+    }
+
     private boolean verifyRequestIsAssignedForSpecialistFromSession(String displayName, RequestResponse request) {
         int indexOf = displayName.indexOf(" ");
         String lastName = displayName.substring(0, indexOf);
         ItSpecialistResponse specialistFromSession = itSpecialistService.findByName(lastName);
         Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
         return Objects.equals(specialistFromSession.getId(), specialistId);
+    }
+
+    private void throwErrorIsSpecialistIsNotAssigned(String displayName, RequestResponse request){
+        if (!verifyRequestIsAssignedForSpecialistFromSession(displayName, request)){
+            throw new NotHaveAccessException("The specialist is not assigned");
+        }
     }
 
 }
