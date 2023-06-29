@@ -10,6 +10,7 @@
 </head>
 <body>
 
+
 <nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/request}">
@@ -19,11 +20,15 @@
         </a>
         <div class="row">
             <div class="col">
+                <form th:if="${sessionUser.memberOf.equals('lucrator')}" class="d-inline-block mr-3"
+                      th:action="@{/specialist/account}">
+                    <button class="btn btn-danger btn-sm" type="submit">Contul tau</button>
+                </form>
                 <form th:if="${sessionUser.memberOf.equals('admin')}" class="d-inline-block mr-3"
                       th:action="@{/request/admin}">
                     <button class="btn btn-danger btn-sm" type="submit">Pagina admin</button>
                 </form>
-                <form class="d-inline-block" th:action="@{/request/add-request-form}">
+                <form th:if="${isBureauChief}" class="d-inline-block" th:action="@{/request/add-request-form}">
                     <button class="btn btn-success btn-sm" type="submit">Adauga solicitare</button>
                 </form>
             </div>
@@ -46,74 +51,97 @@
     </div>
 </nav>
 
-<div style="padding-top: 50px">
+
+<div style="display:flex; margin-top: 50px;">
+    <!-- SIDEBAR -->
+    <div style="width: 300px; background-color: #285b96; padding-top:10px; padding-right: 10px;">
+        <!-- BUTTONS & ERROR -->
+        <div class="no-print" style="display:block; padding-bottom:20px">
+            <div style="padding-left:10px;">
+                <ul style="color:white; padding:20px" class="my-ul">
+                    <li>
+                        <a th:href="@{/request}">Pagina principala</a>
+                    </li>
+                    <li>
+                        <a onclick="window.print()" style="text-decoration: underline; cursor: pointer;">Printează
+                            angajamentul</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <!-- ANTET TABLE -->
-    <table>
-        <tbody>
-        <tr>
-            <td><p>ROMANIA</p></td>
-            <td style="text-align: right; padding-right: 15px;"><p>NESECRET</p></td>
-        </tr>
-        <tr>
-            <td><p>MINISTERUL AFACERILOR INTERNE</p></td>
-            <td style="text-align: right;">
-                <div>
-                    <span th:text="${accountRequest.requestStructRegNo}"></span>
-                    <label> / </label>
-                    <span th:text="${#temporals.format(accountRequest.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
-                <div>
-                    <img style="width:115px; height:80px; padding-left: 30px" th:src="@{/css/sigla.png}" alt="logo">
-                </div>
-                <p style="text-transform: uppercase;"><span th:text="${structure.structureName}"></span></p>
-                <p style="text-transform: uppercase;"><span th:text="${subunit.subunitName}"></span></p>
-                <p style="text-transform: uppercase;"><span th:text="${department.departmentName}"></span></p>
-            </td>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <div class="header">
-        <h5 style="font-weight:bold;">ANGAJAMENT PENTRU UTILIZATORII</h5>
-        <h5 th:text="${requestTypeName}"></h5>
-    </div>
-
-    <div style="text-indent: 2em;">
-        <p th:text="'Subsemnatul ' + ${accountRequest.policemanRequest.lastName} + ' ' + ${accountRequest.policemanRequest.firstNameSecondary} + ' ' + ${accountRequest.policemanRequest.firstName}
-        + ', cu CNP ' + ${accountRequest.policemanRequest.personalNumber} + ', am citit și am înțeles prevederile Ghidului General de Securitate pentru Utilizatori'"></p>
-        <p> Sunt constient ca trebuie sa respect aceste proceduri pe timpul activitatilor desfasurate de mine pentru
-            indeplinirea sarcinilor de serviciu</p>
-        <p th:text="'Inteleg ca actiunile mele personale trebuie sa fie in concordanta cu toate cerintele privind securitatea ' +${requestTypeName} +
-        ' si ca trebuie sa particip activ la respectarea acestor cerinte de securitate in cadrul ' + ${requestTypeName}"></p>
-    </div>
-
-    <div style="padding-top:30px">
-        <p>Data luarii la cunostinta:____/____/________</p>
-        <div style="text-align :center; text-transform: uppercase; padding-top:30px;">
-            <p th:text="${rank.rankName}"></p>
-            <p th:text="${accountRequest.policemanRequest.lastName} + ' ' + ${accountRequest.policemanRequest.firstNameSecondary} + ' ' + ${accountRequest.policemanRequest.firstName} "></p>
-            <p>________________________</p>
-        </div>
-    </div>
-    <div class="empty-page">
-        <div class="no-print">
-            <div>
-          <span style="text-transform: uppercase; font-weight: bold; color:red; padding-top:20px; padding-bottom:20px;">
+    <div style="flex-grow: 1; padding-top:50px; padding-left:50px; padding-right: 50px;">
+        <div class="empty-page">
+            <div class="no-print text-center">
+                <span style="text-transform: uppercase; font-weight: bold; color:red; padding-top:20px; padding-bottom:20px;">
                 Printati si ulterior incarcati angajamentul privind utilizarea contului,
-                semnat de catre lucratorul de politie pentru care se efectueaza solicitarea!
-                FORMAT .PDF!
-            </span>
+                semnat de catre lucratorul
+                </span>
             </div>
-            <div style="padding-bottom:5px; padding-top:5px;">
-                <button class="print-button btn btn-primary" onclick="window.print()">Printează</button>
+            <div class="no-print text-center">
+                <span style="text-transform: uppercase; font-weight: bold; color:red; padding-top:20px; padding-bottom:20px;">
+                de politie pentru care se efectueaza solicitarea!
+                   IN FORMAT  ".PDF"!
+                </span>
             </div>
         </div>
+        <table>
+            <tbody>
+            <tr>
+                <td><p>ROMANIA</p></td>
+                <td style="text-align: right; padding-right: 15px;"><p>NESECRET</p></td>
+            </tr>
+            <tr>
+                <td><p>MINISTERUL AFACERILOR INTERNE</p></td>
+                <td style="text-align: right;">
+                    <div>
+                        <span th:text="${accountRequest.requestStructRegNo}"></span>
+                        <label> / </label>
+                        <span th:text="${#temporals.format(accountRequest.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>INSPECTORATUL GENERAL AL POLITIEI ROMANE</p>
+                    <div>
+                        <img style="width:115px; height:80px; padding-left: 30px" th:src="@{/css/sigla.png}"
+                             alt="logo">
+                    </div>
+                    <p style="text-transform: uppercase;"><span th:text="${structure.structureName}"></span></p>
+                    <p style="text-transform: uppercase;"><span th:text="${subunit.subunitName}"></span></p>
+                    <p style="text-transform: uppercase;"><span th:text="${department.departmentName}"></span></p>
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="header">
+            <h5 style="font-weight:bold;">ANGAJAMENT PENTRU UTILIZATORII</h5>
+            <h5 th:text="${requestTypeName}"></h5>
+        </div>
+
+        <div style="text-indent: 2em;">
+            <p th:text="'Subsemnatul ' + ${accountRequest.policemanRequest.lastName} + ' ' + ${accountRequest.policemanRequest.firstNameSecondary} + ' ' + ${accountRequest.policemanRequest.firstName}
+        + ', cu CNP ' + ${accountRequest.policemanRequest.personalNumber} + ', am citit și am înțeles prevederile Ghidului General de Securitate pentru Utilizatori'"></p>
+            <p> Sunt constient ca trebuie sa respect aceste proceduri pe timpul activitatilor desfasurate de mine
+                pentru
+                indeplinirea sarcinilor de serviciu</p>
+            <p th:text="'Inteleg ca actiunile mele personale trebuie sa fie in concordanta cu toate cerintele privind securitatea ' +${requestTypeName} +
+        ' si ca trebuie sa particip activ la respectarea acestor cerinte de securitate in cadrul ' + ${requestTypeName}"></p>
+        </div>
+
+        <div style="padding-top:30px">
+            <p>Data luarii la cunostinta:____/____/________</p>
+            <div style="text-align :center; text-transform: uppercase; padding-top:30px;">
+                <p th:text="${rank.rankName}"></p>
+                <p th:text="${accountRequest.policemanRequest.lastName} + ' ' + ${accountRequest.policemanRequest.firstNameSecondary} + ' ' + ${accountRequest.policemanRequest.firstName} "></p>
+                <p>________________________</p>
+            </div>
+        </div>
+
         <div class="no-print">
             <div class="no-print mb-3">
                 <div class="button-container">
@@ -123,7 +151,8 @@
                             <div style="display: flex; justify-content: space-between;">
                                 <div class="mb-3" style="text-align:left;">
                                     <div>
-                                        <label class="no-print btn btn-success" for="files">Incarca fisier</label>
+                                        <label class="no-print btn btn-danger" for="files">Incarca
+                                            fisier</label>
                                         <input type="file" id="files" th:field="*{documentData}"
                                                style="visibility:hidden"
                                                accept=".pdf"
@@ -145,7 +174,8 @@
                                                th:value="${accountRequest.policemanRequest.certificate}"/>
                                         <input type="hidden" th:field="*{policemanRequest.certificateValidFrom}"
                                                th:value="${accountRequest.policemanRequest.certificateValidFrom}"/>
-                                        <input type="hidden" th:field="*{policemanRequest.certificateValidUntil}"
+                                        <input type="hidden"
+                                               th:field="*{policemanRequest.certificateValidUntil}"
                                                th:value="${accountRequest.policemanRequest.certificateValidUntil}"/>
                                         <input type="hidden" th:field="*{policemanRequest.phoneNumber}"
                                                th:value="${accountRequest.policemanRequest.phoneNumber}"/>
@@ -157,7 +187,8 @@
                                                th:value="${accountRequest.policemanRequest.rankId}"/>
                                         <input type="hidden" th:field="*{policemanRequest.policeStructureId}"
                                                th:value="${accountRequest.policemanRequest.policeStructureId}"/>
-                                        <input type="hidden" th:field="*{policemanRequest.policeStructureSubunitId}"
+                                        <input type="hidden"
+                                               th:field="*{policemanRequest.policeStructureSubunitId}"
                                                th:value="${accountRequest.policemanRequest.policeStructureSubunitId}"/>
                                         <input type="hidden" th:field="*{policemanRequest.departmentId}"
                                                th:value="${accountRequest.policemanRequest.departmentId}"/>
@@ -184,9 +215,12 @@
         </div>
     </div>
 </div>
+</div>
+
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript"></script>
 </body>
 </html>

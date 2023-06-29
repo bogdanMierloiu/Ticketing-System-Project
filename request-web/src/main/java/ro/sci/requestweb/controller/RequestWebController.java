@@ -36,6 +36,8 @@ public class RequestWebController {
     public String indexPage(Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("sessionUser", userSession);
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -86,12 +88,10 @@ public class RequestWebController {
     public String addRequestForm(Model model, HttpSession session) {
 
         UserInSession userSession = HomeController.getUserSession(session);
-        boolean isBureauChief = isBureauChief(userSession);
         AccountRequest accountRequest = new AccountRequest();
 
 
         session.setAttribute("accountRequest", accountRequest);
-        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("accountRequest", accountRequest);
         model.addAttribute("userSession", userSession);
         model.addAttribute("policemanRequest", new PolicemanRequest());
@@ -147,6 +147,8 @@ public class RequestWebController {
     public String searchByName(@RequestParam String name, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPolicemanName);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -157,6 +159,8 @@ public class RequestWebController {
     public String searchByPolicemanId(@PathVariable("policemanId") Long policemanId, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPolicemanId = requestService.getAllRequestsByPolicemanId(policemanId);
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPolicemanId);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -168,6 +172,8 @@ public class RequestWebController {
     public String searchByPoliceStructure(@PathVariable("policeStructureId") Long policeStructureId, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPoliceStructure = requestService.getAllRequestsByPoliceStructure(policeStructureId);
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPoliceStructure);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -178,6 +184,8 @@ public class RequestWebController {
     public String searchByPoliceSubunit(@PathVariable("subunitId") Long subunitId, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPoliceSubunit = requestService.getAllRequestsByPoliceSubunit(subunitId);
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByPoliceSubunit);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -283,7 +291,7 @@ public class RequestWebController {
         }
     }
 
-    private boolean isBureauChief(UserInSession user){
+    private boolean isBureauChief(UserInSession user) {
         return user.getMemberOf().equals("sef_birou");
     }
 
@@ -295,8 +303,8 @@ public class RequestWebController {
         return Objects.equals(specialistFromSession.getId(), specialistId);
     }
 
-    private void throwErrorIsSpecialistIsNotAssigned(String displayName, RequestResponse request){
-        if (!verifyRequestIsAssignedForSpecialistFromSession(displayName, request)){
+    private void throwErrorIsSpecialistIsNotAssigned(String displayName, RequestResponse request) {
+        if (!verifyRequestIsAssignedForSpecialistFromSession(displayName, request)) {
             throw new NotHaveAccessException("The specialist is not assigned");
         }
     }

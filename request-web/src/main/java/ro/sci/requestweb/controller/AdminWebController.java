@@ -45,6 +45,8 @@ public class AdminWebController {
     public String getAllRequests(Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsAdmin(userSession.getMemberOf());
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", requestService.getAllRequests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -342,6 +344,10 @@ public class AdminWebController {
         if (!(memberOf.equals("admin"))) {
             throw new NotAuthorizedForThisActionException("User not authorized for this action");
         }
+    }
+
+    private boolean isBureauChief(UserInSession user) {
+        return user.getMemberOf().equals("sef_birou");
     }
 
 

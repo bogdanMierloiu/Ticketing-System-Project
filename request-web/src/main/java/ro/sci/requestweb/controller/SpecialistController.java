@@ -42,6 +42,8 @@ public class SpecialistController {
     public String searchBySpecialistId(@PathVariable("specialistId") Long specialistId, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByItSpecialist = requestService.getAllRequestsByItSpecialist(specialistId);
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);
         model.addAttribute("requests", allRequestsByItSpecialist);
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
@@ -62,6 +64,10 @@ public class SpecialistController {
         int indexOf = displayName.indexOf(" ");
         String lastName = displayName.substring(0, indexOf);
         return itSpecialistService.findByName(lastName);
+    }
+
+    private boolean isBureauChief(UserInSession user) {
+        return user.getMemberOf().equals("sef_birou");
     }
 
 

@@ -9,6 +9,7 @@
 </head>
 <body>
 
+
 <nav class="navbar navbar-dark bg-dark fixed-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/request}">
@@ -18,11 +19,15 @@
         </a>
         <div class="row">
             <div class="col">
+                <form th:if="${sessionUser.memberOf.equals('lucrator')}" class="d-inline-block mr-3"
+                      th:action="@{/specialist/account}">
+                    <button class="btn btn-danger btn-sm" type="submit">Contul tau</button>
+                </form>
                 <form th:if="${sessionUser.memberOf.equals('admin')}" class="d-inline-block mr-3"
                       th:action="@{/request/admin}">
                     <button class="btn btn-danger btn-sm" type="submit">Pagina admin</button>
                 </form>
-                <form class="d-inline-block" th:action="@{/request/add-request-form}">
+                <form th:if="${isBureauChief}" class="d-inline-block" th:action="@{/request/add-request-form}">
                     <button class="btn btn-success btn-sm" type="submit">Adauga solicitare</button>
                 </form>
             </div>
@@ -44,6 +49,7 @@
         </div>
     </div>
 </nav>
+
 
 <div class="content-wrap">
     <div style="display:flex; width:100%;">
@@ -104,5 +110,6 @@
 <script th:src="@{/js/script.js}" type="text/javascript"></script>
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>
 <script th:src="@{/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/bootstrap.bundle.js}" type="text/javascript"></script>
 </body>
 </html>

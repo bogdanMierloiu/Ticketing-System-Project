@@ -101,6 +101,7 @@ p {
 .file-name {
   color: green;
   font-style: italic;
+  font-size: 20px;
   /* Alte stiluri dorite */
 }
 
