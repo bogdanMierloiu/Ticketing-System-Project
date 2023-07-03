@@ -13,6 +13,7 @@ import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestweb.exception.UnsupportedOperationException;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -103,6 +104,18 @@ public class RequestService {
         return mono.block();
     }
 
+
+    public Boolean checkExistingRequest(Long requestTypeId, String policemanCNP) {
+        Mono<Boolean> mono = webClientBuilder.build()
+                .post()
+                .uri("lb://request-service/api/v1/request/check-existing-request?requestTypeId={requestTypeId}&policemanCNP={policemanCNP}", requestTypeId, policemanCNP)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(Boolean.class);
+        return mono.block();
+    }
+
+
     @Async
     public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequestToSend request) throws AlreadyHaveThisRequestException {
         try {
@@ -111,18 +124,11 @@ public class RequestService {
                     .bodyValue(request)
                     .header("X-Api-Key", key)
                     .retrieve()
-                    .onStatus(HttpStatus.CONFLICT::equals, clientResponse -> {
-                        throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
-                    })
                     .toBodilessEntity()
                     .block();
             return CompletableFuture.completedFuture(new AsyncResponse<>(null, null));
         } catch (Exception e) {
-            if (e instanceof AlreadyHaveThisRequestException) {
-                throw new AlreadyHaveThisRequestException("Pentru acest politist, exista deja o solicitare de acest tip in lucru!");
-            } else {
-                throw new RuntimeException("A apărut o eroare la procesarea cererii!");
-            }
+            throw new RuntimeException("A apărut o eroare la procesarea cererii!");
         }
     }
 
@@ -303,10 +309,53 @@ public class RequestService {
     }
 
 
-
     // UTILS
     private <T> List<T> collectToList(Flux<T> flux) {
         return flux.collectList().block();
+    }
+
+    public boolean isValidCNP(String cnp) {
+        // Verificăm dimensiunea CNP-ului
+        if (cnp.length() != 13) {
+            return false;
+        }
+
+        // Verificăm prima cifră
+        char firstDigit = cnp.charAt(0);
+        boolean isMale = firstDigit == '1' || firstDigit == '5';
+        boolean isFemale = firstDigit == '2' || firstDigit == '6';
+        if (!isMale && !isFemale) {
+            return false;
+        }
+
+        // Verificăm celelalte cifre
+        try {
+            int year = Integer.parseInt(cnp.substring(1, 3));
+            year += firstDigit == '5' || firstDigit == '6' ? 2000 : 1900;
+            int month = Integer.parseInt(cnp.substring(3, 5));
+            int day = Integer.parseInt(cnp.substring(5, 7));
+            int countyCode = Integer.parseInt(cnp.substring(7, 9));
+            int orderNumber = Integer.parseInt(cnp.substring(9, 12));
+
+            if (year < 0 || year > 9999 || month < 1 || month > 12 ||
+                    day < 1 || day > 31 || countyCode < 1 || countyCode > 52 ||
+                    orderNumber < 1 || orderNumber > 999) {
+                return false;
+            }
+
+            // Verificăm anul de naștere în funcție de prima cifră
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            boolean isBornBefore2000 = firstDigit == '1' || firstDigit == '2';
+            boolean isBornAfter2000 = firstDigit == '5' || firstDigit == '6';
+            if ((isBornBefore2000 && (year < 1900 || year > currentYear - 18)) || (isBornAfter2000 && (year < 2000 || year > currentYear - 18))) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        // CNP-ul a trecut toate verificările
+        return true;
     }
 
 }

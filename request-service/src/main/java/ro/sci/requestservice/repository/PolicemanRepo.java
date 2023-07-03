@@ -6,4 +6,6 @@ import ro.sci.requestservice.model.Policeman;
 public interface PolicemanRepo extends JpaRepository<Policeman, Long> {
 
     Policeman findByPersonalNumber(String personalNumber);
+
+
 }

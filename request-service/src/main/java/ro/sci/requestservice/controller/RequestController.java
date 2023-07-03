@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sci.requestservice.dto.AccountRequest;
-import ro.sci.requestservice.exception.AlreadyHaveThisRequestException;
 import ro.sci.requestservice.exception.UnsupportedOperationException;
 import ro.sci.requestservice.service.RequestService;
 
@@ -19,21 +18,22 @@ public class RequestController {
 
     private final RequestService requestService;
 
+
+    @PostMapping("/check-existing-request")
+    public ResponseEntity<Boolean> checkExistingRequest(@RequestParam("requestTypeId") Long requestTypeId,
+                                                        @RequestParam("policemanCNP") String policemanCNP) {
+        boolean result;
+        result = requestService.hasAlreadyThisRequestType(requestTypeId, policemanCNP);
+        return ResponseEntity.ok(result);
+    }
+
+
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> add(@RequestBody AccountRequest accountRequest) {
         return requestService.add(accountRequest)
                 .thenApply(result -> {
                     if (result.getSuccess()) {
                         return ResponseEntity.ok("Request for " + composeResponseForAddingRequest(accountRequest));
-                    } else if (result.getErrorMessage().equals("Already have this request type in progress!")) {
-                        return ResponseEntity.status(HttpStatus.CONFLICT).body(result.getErrorMessage());
-                    } else {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A aparut o eroare la procesarea cererii!");
-                    }
-                })
-                .exceptionally(ex -> {
-                    if (ex.getCause() instanceof AlreadyHaveThisRequestException) {
-                        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getCause().getMessage());
                     } else {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A aparut o eroare la procesarea cererii!");
                     }

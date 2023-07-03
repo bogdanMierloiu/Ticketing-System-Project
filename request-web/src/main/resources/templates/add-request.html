@@ -55,9 +55,12 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <h2 class="text-center mb-4">Formular de solicitare cont</h2>
-                <span class="error-message" th:if="${errorMessage}">
+                <div style="padding-bottom:10px;">
+                    <span class="error-message" th:if="${errorMessage}">
                         [[${errorMessage}]]
                     </span>
+                </div>
+
                 <form class="needs-validation"
                       th:action="@{/request/add-request-form-second}"
                       th:object="${accountRequest}"
@@ -231,13 +234,13 @@
                     </div>
 
 
-<!--                    <div class="mb-3">-->
-<!--                        <div>-->
-<!--                            <label class="btn btn-primary btn-sm" for="files">Alege fișier</label>-->
-<!--                            <input type="file" id="files" th:field="*{accountRequest.documentData}" style="visibility:hidden" accept=".pdf" required>-->
-<!--                        </div>-->
-<!--                        <span class="file-name" id="fileName"></span>-->
-<!--                    </div>-->
+                    <!--                    <div class="mb-3">-->
+                    <!--                        <div>-->
+                    <!--                            <label class="btn btn-primary btn-sm" for="files">Alege fișier</label>-->
+                    <!--                            <input type="file" id="files" th:field="*{accountRequest.documentData}" style="visibility:hidden" accept=".pdf" required>-->
+                    <!--                        </div>-->
+                    <!--                        <span class="file-name" id="fileName"></span>-->
+                    <!--                    </div>-->
                     <button type="submit" class="btn btn-success">Pasul urmator</button>
                 </form>
             </div>
@@ -246,6 +249,11 @@
 
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        populateStructures();
+    });
+</script>
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>

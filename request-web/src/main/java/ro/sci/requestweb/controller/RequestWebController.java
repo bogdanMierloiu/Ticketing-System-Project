@@ -51,8 +51,11 @@ public class RequestWebController {
         RequestResponse requestResponse = requestService.findById(requestId);
         assert requestResponse != null;
         boolean isApproved = isFullyApproved(requestResponse);
-        boolean isSpecialistAssigned = verifyRequestIsAssignedForSpecialistFromSession(userSession.getDisplayName(), requestResponse);
 
+        boolean isSpecialistAssigned = false;
+        if (userSession.getMemberOf().equals("lucrator")) {
+            isSpecialistAssigned = verifyRequestIsAssignedForSpecialistFromSession(userSession.getDisplayName(), requestResponse);
+        }
         model.addAttribute("isSpecialistAssigned", isSpecialistAssigned);
         model.addAttribute("sessionUser", userSession);
         model.addAttribute("isApproved", isApproved);
@@ -89,8 +92,6 @@ public class RequestWebController {
 
         UserInSession userSession = HomeController.getUserSession(session);
         AccountRequest accountRequest = new AccountRequest();
-
-
         session.setAttribute("accountRequest", accountRequest);
         model.addAttribute("accountRequest", accountRequest);
         model.addAttribute("userSession", userSession);
@@ -106,6 +107,11 @@ public class RequestWebController {
                                        Model model) {
         UserInSession userSession = HomeController.getUserSession(session);
         session.setAttribute("accountRequest", accountRequest);
+
+        Boolean haveAnotherRequestSameType = requestService.checkExistingRequest(accountRequest.getRequestTypeId(), accountRequest.getPolicemanRequest().getPersonalNumber());
+        boolean isValidCNP = requestService.isValidCNP(accountRequest.getPolicemanRequest().getPersonalNumber());
+
+        // Copiază atribuțiile comune în model înainte de verificarea rezultatului
         model.addAttribute("structure", policeStructureService.getById(accountRequest.getPolicemanRequest().getPoliceStructureId()));
         model.addAttribute("subunit", subunitService.findById(accountRequest.getPolicemanRequest().getPoliceStructureSubunitId()));
         model.addAttribute("department", departmentService.getById(accountRequest.getPolicemanRequest().getDepartmentId()));
@@ -113,8 +119,21 @@ public class RequestWebController {
         model.addAttribute("rank", rankService.findById(accountRequest.getPolicemanRequest().getRankId()));
         model.addAttribute("userSession", userSession);
         model.addAttribute("accountRequest", accountRequest);
-        return "add-request-second";
+        model.addAttribute("ranks", rankService.getAllRanks());
+        model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+
+        if (!haveAnotherRequestSameType && isValidCNP) {
+            return "add-request-second";
+        } else {
+            if (haveAnotherRequestSameType) {
+                model.addAttribute("errorMessage", "Pentru acest politist exista deja o solicitare de acelasi tip, in curs de solutionare!");
+            } else {
+                model.addAttribute("errorMessage", "CNP-ul introdus nu este corect. Va rog verificati si reincercati!");
+            }
+            return "add-request";
+        }
     }
+
 
     @PostMapping("/add-request")
     public String addRequest(@ModelAttribute("accountRequest") AccountRequest accountRequest, Model model, HttpSession session) {
@@ -127,6 +146,7 @@ public class RequestWebController {
         AsyncResponse<Void> response;
         try {
             response = asyncResponse.get();
+
         } catch (Exception e) {
             response = new AsyncResponse<>(null, e);
         }
@@ -137,7 +157,9 @@ public class RequestWebController {
             model.addAttribute("policemanRequest", new PolicemanRequest());
             model.addAttribute("ranks", rankService.getAllRanks());
             model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
-            model.addAttribute("errorMessage", response.getError().getMessage());
+            int indexOfComa = ((response.getError().getMessage()).indexOf(":")) + 1;
+            String errorMessage = (response.getError().getMessage()).substring(indexOfComa);
+            model.addAttribute("errorMessage", errorMessage);
             return "add-request";
         }
         return "redirect:/request";
@@ -299,8 +321,11 @@ public class RequestWebController {
         int indexOf = displayName.indexOf(" ");
         String lastName = displayName.substring(0, indexOf);
         ItSpecialistResponse specialistFromSession = itSpecialistService.findByName(lastName);
-        Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
-        return Objects.equals(specialistFromSession.getId(), specialistId);
+        if (specialistFromSession != null) {
+            Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
+            return Objects.equals(specialistFromSession.getId(), specialistId);
+        }
+        return false;
     }
 
     private void throwErrorIsSpecialistIsNotAssigned(String displayName, RequestResponse request) {

@@ -15,6 +15,7 @@ import ro.sci.requestservice.mapper.PolicemanMapper;
 import ro.sci.requestservice.mapper.RequestMapper;
 import ro.sci.requestservice.model.*;
 import ro.sci.requestservice.repository.ItSpecialistRepo;
+import ro.sci.requestservice.repository.PolicemanRepo;
 import ro.sci.requestservice.repository.RequestRepo;
 import ro.sci.requestservice.repository.RequestTypeRepo;
 
@@ -36,6 +37,7 @@ public class RequestService {
     private final ItSpecialistRepo itSpecialistRepo;
     private final PolicemanService policemanService;
     private final CommitmentService commitmentService;
+    private final PolicemanRepo policemanRepo;
 
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
@@ -47,7 +49,6 @@ public class RequestService {
             Request request = requestMapper.map(accountRequest);
             CompletableFuture<Policeman> futurePoliceman = policemanService.add(accountRequest.getPolicemanRequest());
             Policeman policeman = futurePoliceman.join();
-            hasAlreadyThisRequestType(accountRequest.getRequestTypeId(), policeman);
 
             request.setPoliceman(policeman);
             request.setStatus(Status.Deschisa);
@@ -213,18 +214,22 @@ public class RequestService {
         );
     }
 
-    @Async
-    private void hasAlreadyThisRequestType(Long requestTypeId, Policeman policeman) throws
-            AlreadyHaveThisRequestException {
+    public Boolean hasAlreadyThisRequestType(Long requestTypeId, String policemanCNP) throws AlreadyHaveThisRequestException {
+        boolean result = false;
         RequestType requestTypeRequested = getRequestTypeById(requestTypeId);
-        for (Request request : policeman.getRequests()) {
-            if (request.getStatus() == Status.In_lucru || request.getStatus() == Status.Deschisa) {
-                if (requestTypeRequested.equals(request.getRequestType())) {
-                    throw new AlreadyHaveThisRequestException("Already have this request type in progress!");
+        Policeman policeman = policemanRepo.findByPersonalNumber(policemanCNP);
+        if (policeman != null) {
+            for (Request request : policeman.getRequests()) {
+                if (request.getStatus() == Status.In_lucru || request.getStatus() == Status.Deschisa) {
+                    if (requestTypeRequested.equals(request.getRequestType())) {
+                        result = true;
+                    }
                 }
             }
         }
+        return result;
     }
+
 
     @Async
     private void checkApprovalBeforeFinalize(Request requestToCheck) throws UnsupportedOperationException {
@@ -253,6 +258,9 @@ public class RequestService {
         return (policeman.getLastName() + " " + policeman.getFirstName() + " " + firstNameSecondary).trim();
 
     }
+
+
+
 
 
 }
