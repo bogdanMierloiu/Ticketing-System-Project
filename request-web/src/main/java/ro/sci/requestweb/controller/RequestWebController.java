@@ -50,6 +50,13 @@ public class RequestWebController {
 
         RequestResponse requestResponse = requestService.findById(requestId);
         assert requestResponse != null;
+
+        String specialistName = null;
+        if (requestResponse.getObservation().contains("repartizata catre")) {
+            int indexOfSpecialistName = requestResponse.getObservation().indexOf("repartizata catre");
+            specialistName = requestResponse.getObservation().substring(indexOfSpecialistName + 18);
+        }
+
         boolean isApproved = isFullyApproved(requestResponse);
 
         boolean isSpecialistAssigned = false;
@@ -61,6 +68,7 @@ public class RequestWebController {
         model.addAttribute("isApproved", isApproved);
         model.addAttribute("request", requestResponse);
         model.addAttribute("requestName", requestNameForHeader(requestResponse.getRequestTypeResponse().getId()));
+        model.addAttribute("specialistName", specialistName);
         return "request-print";
     }
 
@@ -70,19 +78,27 @@ public class RequestWebController {
         UserInSession userSession = HomeController.getUserSession(session);
         RequestResponse request = requestService.findById(requestId);
 
+        String specialistName = null;
+        if (request.getObservation().contains("repartizata catre")) {
+            int indexOfSpecialistName = request.getObservation().indexOf("repartizata catre");
+            specialistName = request.getObservation().substring(indexOfSpecialistName + 18);
+        }
+
+
         try {
             requestService.finalize(requestId);
             throwErrorIsSpecialistIsNotAssigned(userSession.getDisplayName(), request);
-
             model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", request);
             model.addAttribute("requestName", requestNameForHeader(request.getRequestTypeResponse().getId()));
+            model.addAttribute("specialistName", specialistName);
             return "request-print";
         } catch (Exception exception) {
             model.addAttribute("sessionUser", userSession);
             model.addAttribute("request", requestService.findById(requestId));
             model.addAttribute("errorMessage", exception.getMessage());
             model.addAttribute("requestName", requestNameForHeader(request.getRequestTypeResponse().getId()));
+            model.addAttribute("specialistName", specialistName);
             return "request-print";
         }
     }

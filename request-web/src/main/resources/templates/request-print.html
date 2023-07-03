@@ -227,6 +227,10 @@
                         <label>Nr.de inregistrare S.C.I. : </label>
                         <span th:text="${request.itStructRegNoResponse.number + ' / ' + #temporals.format(request.regDateFromITStruct, 'dd-MM-yyyy')}"></span>
                     </div>
+                    <div th:if="${specialistName !=null}">
+                        <label>Repartizata spre solutionare catre : </label>
+                        <span th:text="${specialistName}"></span>
+                    </div>
                 </td>
             </tr>
             <tr>
