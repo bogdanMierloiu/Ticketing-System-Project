@@ -39,7 +39,7 @@ public class RequestWebController {
         boolean isBureauChief = isBureauChief(userSession);
         model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("sessionUser", userSession);
-        model.addAttribute("requests", requestService.getAllRequests());
+        model.addAttribute("requests", requestService.getLast100Requests());
         model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
         return "index";
     }
@@ -169,6 +169,18 @@ public class RequestWebController {
     public String searchByName(@RequestParam String name, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         List<RequestResponse> allRequestsByPolicemanName = requestService.getAllRequestsByPolicemanName(name.strip());
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
+        model.addAttribute("userSession", userSession);
+        model.addAttribute("requests", allRequestsByPolicemanName);
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
+    }
+
+    @GetMapping("/search-by-number")
+    public String searchBySCINumber(@RequestParam Long numberFromSCI, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        List<RequestResponse> allRequestsByPolicemanName = requestService.getAllRequestsBySCINumber(numberFromSCI);
         boolean isBureauChief = isBureauChief(userSession);
         model.addAttribute("isBureauChief", isBureauChief);
         model.addAttribute("userSession", userSession);

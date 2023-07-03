@@ -213,7 +213,19 @@
                 <td style="font-weight: bold;"><span>Observatii:</span></td>
                 <td>
                     <div style="text-transform: uppercase">
-                        <span th:text="${request.status.name()}"></span>
+                        <span th:text="${'Status: ' + request.status.name()}"></span>
+                    </div>
+                    <div>
+                        <label th:text="${'Nr.de inregistrare ' + request.policemanResponse.policeStructureSubunit.subunitName} + ' : '"></label>
+                        <span th:text="${request.requestStructRegNo + ' / ' + #temporals.format(request.regDateFromRequestStruct, 'dd-MM-yyyy')}"></span>
+                    </div>
+                    <div th:if="${request.securityStructRegNo != null}">
+                        <label th:text="${'Nr.de inregistrare C.S.T.I.C. : '"></label>
+                        <span th:text="${request.securityStructRegNo + ' / ' + #temporals.format(request.regDateFromSecurityStruct, 'dd-MM-yyyy')}"></span>
+                    </div>
+                    <div th:if="${request.itStructRegNo != null}">
+                        <label>Nr.de inregistrare S.C.I. : </label>
+                        <span th:text="${request.itStructRegNo + ' / ' + #temporals.format(request.regDateFromITStruct, 'dd-MM-yyyy')}"></span>
                     </div>
                 </td>
             </tr>
@@ -250,12 +262,7 @@
     }
 
 
-
-
-
-
 </script>
-
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>
 <script th:src="@{/js/popper.min.js}" type="text/javascript"></script>

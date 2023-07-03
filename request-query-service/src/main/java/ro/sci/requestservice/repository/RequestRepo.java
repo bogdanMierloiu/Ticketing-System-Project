@@ -12,6 +12,9 @@ public interface RequestRepo extends JpaRepository<Request, Long> {
     @Query("Select r from Request r Order By r.createdAt DESC")
     public List<Request> findAllOrderByCreatedAtDesc();
 
+    @Query("Select r from Request r Order By r.createdAt DESC LIMIT 100")
+    public List<Request> findLast10OrderByCreatedAtDesc();
+
     @Query("SELECT r FROM Request r WHERE r.status != 'Finalizata' ORDER BY r.createdAt DESC")
     public List<Request> findNonFinalizedRequestsOrderByCreatedAtDesc();
 
@@ -38,6 +41,9 @@ public interface RequestRepo extends JpaRepository<Request, Long> {
 
     @Query("Select r from Request r where r.policeman.policeStructure.id = :id ORDER BY r.createdAt DESC")
     public List<Request> findAllByPoliceStructure(@Param("id") Long id);
+
+    @Query("Select r from Request r where r.itStructRegNo = :number ORDER BY r.createdAt DESC")
+    public List<Request> findBySCINumber(@Param("number") Long number);
 
     @Query("Select r from Request r where r.policeman.policeStructureSubunit.id = :id ORDER BY r.createdAt DESC")
     public List<Request> findAllByPoliceSubunit(@Param("id") Long id);

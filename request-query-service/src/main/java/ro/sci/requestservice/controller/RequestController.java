@@ -23,6 +23,14 @@ public class RequestController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/all-100-requests")
+    public CompletableFuture<ResponseEntity<List<RequestResponse>>> findLast100OrderByCreatedAtDesc() {
+        CompletableFuture<List<RequestResponse>> future = requestService.findLast100OrderByCreatedAtDesc();
+        return future.thenApply(ResponseEntity::ok);
+    }
+
+
+
     @GetMapping("/all-requests-in-progress")
     public CompletableFuture<ResponseEntity<List<RequestResponse>>> findNonFinalizedAndRecentRejectedRequests() {
         CompletableFuture<List<RequestResponse>> future = requestService.findNonFinalizedAndRecentRejectedRequests();
@@ -58,6 +66,13 @@ public class RequestController {
         CompletableFuture<List<RequestResponse>> future = requestService.getAllByPolicemanName(name);
         return future.thenApply(ResponseEntity::ok);
     }
+
+    @GetMapping("/search-by-number")
+    public CompletableFuture<ResponseEntity<List<RequestResponse>>> searchBySCINumber(@RequestParam Long numberFromSCI) {
+        CompletableFuture<List<RequestResponse>> future = requestService.searchBySCINumber(numberFromSCI);
+        return future.thenApply(ResponseEntity::ok);
+    }
+
 
     @GetMapping("/find/{requestId}")
     public CompletableFuture<ResponseEntity<RequestResponse>> findById(@PathVariable("requestId") Long requestId) {

@@ -38,6 +38,7 @@ public class RequestService {
     private final PolicemanService policemanService;
     private final CommitmentService commitmentService;
     private final PolicemanRepo policemanRepo;
+    private final NumberGeneratorSCI numberGeneratorSCI;
 
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
@@ -167,7 +168,7 @@ public class RequestService {
                     + " si repartizata catre " +
                     requestToAssign.getItSpecialist().getLastName() + " " +
                     requestToAssign.getItSpecialist().getFirstName());
-            requestToAssign.setItStructRegNo(NumberGeneratorSCI.getNextNumber());
+            requestToAssign.setItStructRegNo(numberGeneratorSCI.getNextNumber());
             requestToAssign.setRegDateFromITStruct(LocalDate.now());
             requestRepo.save(requestToAssign);
         } else {

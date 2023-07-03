@@ -35,6 +35,15 @@ public class RequestService {
         return collectToList(responseFlux);
     }
 
+    public List<RequestResponse> getLast100Requests() {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/request/all-100-requests")
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
+    }
+
     public List<RequestResponse> getAllRequestsInProgress() {
         Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/request/all-requests-in-progress")
@@ -52,6 +61,19 @@ public class RequestService {
                         .host("request-query-service")
                         .path("/api/v2/request/search-by-name")
                         .queryParam("name", name)
+                        .build())
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToFlux(RequestResponse.class);
+        return collectToList(responseFlux);
+    }
+    public List<RequestResponse> getAllRequestsBySCINumber(Long numberFromSCI) {
+        Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("lb")
+                        .host("request-query-service")
+                        .path("/api/v2/request/search-by-number")
+                        .queryParam("numberFromSCI", numberFromSCI)
                         .build())
                 .header("X-Api-Key", key)
                 .retrieve()

@@ -26,7 +26,6 @@ public class RequestService {
     private final RequestMapper requestMapper;
 
     @Async
-    @Transactional
     public CompletableFuture<List<RequestResponse>> getAllRequests() {
         List<Request> requests = requestRepo.findAllOrderByCreatedAtDesc();
         List<RequestResponse> requestResponses = new ArrayList<>();
@@ -36,6 +35,19 @@ public class RequestService {
         }
         return CompletableFuture.completedFuture(requestResponses);
     }
+
+    @Async
+    public CompletableFuture<List<RequestResponse>> findLast100OrderByCreatedAtDesc() {
+        List<Request> requests = requestRepo.findLast10OrderByCreatedAtDesc();
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return CompletableFuture.completedFuture(requestResponses);
+    }
+
+
 
     @Async
     public CompletableFuture<List<RequestResponse>> findNonFinalizedAndRecentRejectedRequests() {
@@ -125,6 +137,20 @@ public class RequestService {
         }
         return CompletableFuture.completedFuture(requestResponses);
     }
+
+    @Async
+    public CompletableFuture<List<RequestResponse>> searchBySCINumber(Long numberFromSCI) {
+
+        List<Request> requests = requestRepo.findBySCINumber(numberFromSCI);
+        List<RequestResponse> requestResponses = new ArrayList<>();
+        for (var request : requests) {
+            RequestResponse requestResponse = requestMapper.map(request);
+            requestResponses.add(requestResponse);
+        }
+        return CompletableFuture.completedFuture(requestResponses);
+    }
+
+
 
     @Async
     public CompletableFuture<Long> countAllRequests() {

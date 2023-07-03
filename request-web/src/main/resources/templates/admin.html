@@ -71,7 +71,7 @@
                             <a th:href="@{/request/admin/all-ranks}">Grade profesionale</a>
                         </li>
                         <li>
-                            <a th:href="@{/request/admin/all-specialists}">Lucratori SCI</a>
+                            <a th:href="@{/request/admin/all-specialists}">Lucratori S.C.I.</a>
                         </li>
                         <li>
                             <a th:href="@{/request/admin/all-request-type}">Tipuri de solicitari</a>
@@ -85,48 +85,66 @@
         </div>
 
         <!-- CONTENT -->
-        <div style="flex-grow: 1; display: flex; height: 100vh; justify-content: flex-start;">
-            <div style="padding-left:40px;" class="statistic-structure">
+        <div style="display: flex; flex-direction:column;">
+            <div style="display:flex; align-items:center;">
+                <div style="padding-left:40px;" class="statistic-structure">
                 <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
                              class="bi bi-bar-chart" viewBox="0 0 16 16">
   <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
 </svg>
                      </span>
-                <span class="count">Total solicitari:</span>
-                <span class="count" th:text="${totalRequests}"></span>
-            </div>
-            <div style="color:red" class="statistic-structure">
+                    <span class="count">Total solicitari:</span>
+                    <span class="count" th:text="${totalRequests}"></span>
+                </div>
+                <div style="color:red" class="statistic-structure">
                 <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
                              class="bi bi-bar-chart" viewBox="0 0 16 16">
   <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
 </svg>
                      </span>
-                <span class="count">Solicitari in lucru:</span>
-                <span class="count" th:text="${inProgressRequests}"></span>
-            </div>
-            <div style="color:green" class="statistic-structure">
+                    <span class="count">Solicitari in lucru:</span>
+                    <span class="count" th:text="${inProgressRequests}"></span>
+                </div>
+                <div style="color:green" class="statistic-structure">
                 <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
                              class="bi bi-bar-chart" viewBox="0 0 16 16">
   <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
 </svg>
                      </span>
-                <span class="count">Finalizate cu succes:</span>
-                <span class="count" th:text="${finalizedRequests}"></span>
-            </div>
-            <div style="color:orange" class="statistic-structure">
+                    <span class="count">Finalizate cu succes:</span>
+                    <span class="count" th:text="${finalizedRequests}"></span>
+                </div>
+                <div style="color:orange" class="statistic-structure">
             <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" fill="currentColor"
                              class="bi bi-bar-chart" viewBox="0 0 16 16">
   <path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5v12h-2V2h2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3z"/>
 </svg>
                      </span>
-                <span class="count">Respinse:</span>
-                <span class="count" th:text="${rejectedRequests}"></span>
+                    <span class="count">Respinse:</span>
+                    <span class="count" th:text="${rejectedRequests}"></span>
+                </div>
+            </div>
+            <div>
+                <div style="padding:40px; width:420px;" class="statistic-structure">
+                    <form th:action="@{/request/search-by-number}" method="get">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" type="search" aria-label="Search" name="numberFromSCI" pattern="^[0-9]+$"
+                                   required placeholder="Numar de inregistrare  S.C.I." style="margin-right: 4px;">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-success btn-sm" style="margin-left: 5px;">
+                                    <span class="glyphicon glyphicon-search"></span> Cauta solicitare
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
 
