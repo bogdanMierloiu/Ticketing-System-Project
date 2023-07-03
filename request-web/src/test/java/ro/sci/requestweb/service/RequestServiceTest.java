@@ -13,7 +13,7 @@ class RequestServiceTest {
     void isValidCNP() {
 
         // Test CNPs
-        String validCNP = "6031231521019";
+        String validCNP = "1921020152483";
         // Assert CNPs
         Assertions.assertTrue(isValidCNP(validCNP));
 
@@ -50,9 +50,25 @@ class RequestServiceTest {
 
             // Verificăm anul de naștere în funcție de prima cifră
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-            boolean isBornBefore2000 = firstDigit == '1' || firstDigit == '2' ;
+            boolean isBornBefore2000 = firstDigit == '1' || firstDigit == '2';
             boolean isBornAfter2000 = firstDigit == '5' || firstDigit == '6';
             if ((isBornBefore2000 && (year < 1900 || year > currentYear - 18)) || (isBornAfter2000 && (year < 2000 || year > currentYear - 18))) {
+                return false;
+            }
+
+            // Verificăm cifra de control
+            int[] coefficients = {2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9};
+            int sum = 0;
+            for (int i = 0; i < 12; i++) {
+                int digit = Integer.parseInt(String.valueOf(cnp.charAt(i)));
+                sum += digit * coefficients[i];
+            }
+            int controlDigit = sum % 11;
+            if (controlDigit == 10) {
+                controlDigit = 1;
+            }
+            int lastDigit = Integer.parseInt(String.valueOf(cnp.charAt(12)));
+            if (controlDigit != lastDigit) {
                 return false;
             }
         } catch (NumberFormatException e) {

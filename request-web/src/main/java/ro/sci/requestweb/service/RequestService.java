@@ -135,14 +135,15 @@ public class RequestService {
 
     // POLICE STRUCTURE
 
-    public synchronized void structureChiefApprove(Long requestId) {
+    public synchronized void structureChiefApprove(Long requestId, String structureChiefName) {
         synchronized (lock) {
             webClientBuilder.build().patch()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("lb")
                             .host("request-service")
                             .path("/api/v1/request/structure-chief-approve/{requestId}")
-                            .build(requestId))
+                            .queryParam("structureChiefName", structureChiefName)
+                            .build(requestId, structureChiefName))
                     .header("X-Api-Key", key)
                     .retrieve()
                     .toBodilessEntity()
@@ -150,7 +151,7 @@ public class RequestService {
         }
     }
 
-    public synchronized void structureChiefReject(Long requestId, String observation) {
+    public synchronized void structureChiefReject(Long requestId, String observation, String structureChiefName) {
         synchronized (lock) {
             webClientBuilder.build().put()
                     .uri(uriBuilder -> uriBuilder
@@ -158,6 +159,7 @@ public class RequestService {
                             .host("request-service")
                             .path("/api/v1/request/structure-chief-reject/{requestId}")
                             .queryParam("observation", observation)
+                            .queryParam("structureChiefName", structureChiefName)
                             .build(requestId))
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -169,13 +171,14 @@ public class RequestService {
     // SECURITY STRUCTURE
 
 
-    public synchronized void securityApprove(Long requestId) {
+    public synchronized void securityApprove(Long requestId, String securityPolicemanName) {
         synchronized (lock) {
             webClientBuilder.build().patch()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("lb")
                             .host("request-service")
                             .path("/api/v1/request/security-approve/{requestId}")
+                            .queryParam("securityPolicemanName", securityPolicemanName)
                             .build(requestId))
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -188,7 +191,7 @@ public class RequestService {
     }
 
 
-    public synchronized void securityReject(Long requestId, String observation) {
+    public synchronized void securityReject(Long requestId, String observation, String securityPolicemanName) {
         synchronized (lock) {
             webClientBuilder.build().put()
                     .uri(uriBuilder -> uriBuilder
@@ -196,6 +199,7 @@ public class RequestService {
                             .host("request-service")
                             .path("/api/v1/request/security-reject/{requestId}")
                             .queryParam("observation", observation)
+                            .queryParam("securityPolicemanName", securityPolicemanName)
                             .build(requestId))
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -209,13 +213,14 @@ public class RequestService {
 
     // IT STRUCTURE
 
-    public synchronized void itApprove(Long requestId, Long itSpecialistId) {
+    public synchronized void itApprove(Long requestId, Long itSpecialistId, String adminName) {
         synchronized (lock) {
             webClientBuilder.build().put()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("lb")
                             .host("request-service")
                             .path("/api/v1/request/it-approve/{requestId}/{itSpecialistId}")
+                            .queryParam("adminName", adminName)
                             .build(requestId, itSpecialistId))
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -227,7 +232,7 @@ public class RequestService {
         }
     }
 
-    public synchronized void itReject(Long requestId, String observation) {
+    public synchronized void itReject(Long requestId, String observation, String adminName) {
         synchronized (lock) {
             webClientBuilder.build().put()
                     .uri(uriBuilder -> uriBuilder
@@ -235,6 +240,7 @@ public class RequestService {
                             .host("request-service")
                             .path("/api/v1/request/it-reject/{requestId}")
                             .queryParam("observation", observation)
+                            .queryParam("adminName", adminName)
                             .build(requestId))
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -348,6 +354,22 @@ public class RequestService {
             boolean isBornBefore2000 = firstDigit == '1' || firstDigit == '2';
             boolean isBornAfter2000 = firstDigit == '5' || firstDigit == '6';
             if ((isBornBefore2000 && (year < 1900 || year > currentYear - 18)) || (isBornAfter2000 && (year < 2000 || year > currentYear - 18))) {
+                return false;
+            }
+
+            // Verificăm cifra de control
+            int[] coefficients = {2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9};
+            int sum = 0;
+            for (int i = 0; i < 12; i++) {
+                int digit = Integer.parseInt(String.valueOf(cnp.charAt(i)));
+                sum += digit * coefficients[i];
+            }
+            int controlDigit = sum % 11;
+            if (controlDigit == 10) {
+                controlDigit = 1;
+            }
+            int lastDigit = Integer.parseInt(String.valueOf(cnp.charAt(12)));
+            if (controlDigit != lastDigit) {
                 return false;
             }
         } catch (NumberFormatException e) {

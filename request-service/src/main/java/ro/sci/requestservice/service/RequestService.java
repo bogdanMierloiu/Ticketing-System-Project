@@ -97,37 +97,37 @@ public class RequestService {
 
     // Structure Chief Decisions
 
-    public synchronized void structureChiefApprove(Long requestId) {
+    public synchronized void structureChiefApprove(Long requestId, String structureChiefName) {
         Request requestToApprove = findById(requestId);
         requestToApprove.setIsApprovedByStructureChief(true);
         requestToApprove.setStatus(Status.In_lucru);
         requestToApprove.setStructureChiefAppAt(LocalDateTime.now());
         requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
-                "Aprobat de seful structurii de politie emitente la data de " +
+                "Aprobata de " + structureChiefName + " la data de " +
                 requestToApprove.getStructureChiefAppAt().format(dateTimeFormatter));
         requestRepo.save(requestToApprove);
     }
 
-    public synchronized void structureChiefReject(Long requestId, String observation) {
+    public synchronized void structureChiefReject(Long requestId, String observation, String structureChiefName) {
         Request requestToReject = findById(requestId);
         requestToReject.setIsApprovedByStructureChief(false);
         requestToReject.setStatus(Status.Respinsa);
         requestToReject.setObservation(requestToReject.getObservation() + "\n" +
-                "Respinsa de sefulul structurii de politie emitente la data de " +
+                "Respinsa de " + structureChiefName + " la data de " +
                 LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
         requestRepo.save(requestToReject);
     }
 
     // Security Structure Decisions
 
-    public synchronized void securityStructureApprove(Long requestId) throws UnsupportedOperationException {
+    public synchronized void securityStructureApprove(Long requestId, String securityPolicemanName) throws UnsupportedOperationException {
         Request requestToApprove = findById(requestId);
         if (requestToApprove.getIsApprovedByStructureChief()) {
             requestToApprove.setIsApprovedBySecurityStructure(true);
             requestToApprove.setStatus(Status.In_lucru);
             requestToApprove.setSecurityStructAppAt(LocalDateTime.now());
             requestToApprove.setObservation(requestToApprove.getObservation() + "\n" +
-                    "Aprobat de strucutra de securitate la data de " +
+                    "Autorizata de " + securityPolicemanName + " la data de " +
                     requestToApprove.getSecurityStructAppAt().format(dateTimeFormatter));
             requestRepo.save(requestToApprove);
         } else {
@@ -135,14 +135,14 @@ public class RequestService {
         }
     }
 
-    public synchronized void securityStructureReject(Long requestId, String observation) throws
+    public synchronized void securityStructureReject(Long requestId, String observation, String securityPolicemanName) throws
             UnsupportedOperationException {
         Request requestToReject = findById(requestId);
         if (requestToReject.getIsApprovedByStructureChief()) {
             requestToReject.setIsApprovedBySecurityStructure(false);
             requestToReject.setStatus(Status.Respinsa);
             requestToReject.setObservation(requestToReject.getObservation() + "\n" +
-                    "Respinsa de structura de securitate la data de " +
+                    "Respinsa de " + securityPolicemanName + " la data de " +
                     LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
             requestRepo.save(requestToReject);
         } else {
@@ -152,7 +152,7 @@ public class RequestService {
 
     // IT STRUCTURE
 
-    public synchronized void assignSpecialist(Long requestId, Long itSpecialistId) throws
+    public synchronized void assignSpecialist(Long requestId, Long itSpecialistId, String adminName) throws
             UnsupportedOperationException {
         Request requestToAssign = findById(requestId);
         ItSpecialist itSpecialistToAssign = getItSpecialistById(itSpecialistId);
@@ -162,7 +162,7 @@ public class RequestService {
             requestToAssign.setItChiefAppAt(LocalDateTime.now());
             requestToAssign.setStatus(Status.In_lucru);
             requestToAssign.setObservation(requestToAssign.getObservation() + "\n" +
-                    "Aprobat de Serviciul Comunicatii si Informatica la data de " +
+                    "Aprobata de " + adminName + " la data de " +
                     requestToAssign.getItChiefAppAt().format(dateTimeFormatter) + "\n"
                     + " si repartizata catre " +
                     requestToAssign.getItSpecialist().getLastName() + " " +
@@ -175,12 +175,12 @@ public class RequestService {
         }
     }
 
-    public synchronized void itReject(Long requestId, String observation) {
+    public synchronized void itReject(Long requestId, String observation, String adminName) {
         Request requestToReject = findById(requestId);
         requestToReject.setIsApprovedByITChief(false);
         requestToReject.setStatus(Status.Respinsa);
         requestToReject.setObservation(requestToReject.getObservation() + "\n" +
-                "Respinsa de Serviciul Comunicatii si Informatica la data de " +
+                "Respinsa de " + adminName + " la data de " +
                 LocalDateTime.now().format(dateTimeFormatter) + " din motivul: " + observation);
         requestRepo.save(requestToReject);
     }
@@ -258,9 +258,6 @@ public class RequestService {
         return (policeman.getLastName() + " " + policeman.getFirstName() + " " + firstNameSecondary).trim();
 
     }
-
-
-
 
 
 }

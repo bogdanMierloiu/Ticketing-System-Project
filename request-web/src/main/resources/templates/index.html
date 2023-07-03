@@ -147,7 +147,7 @@
 </svg> <!-- Red cross icon -->
         </span>
                 </div>
-                <div th:if="${sessionUser.memberOf.equals('structura_securitate')}">
+                <div th:if="${sessionUser.memberOf.equals('structura_securitate') && request.isApprovedByStructureChief}">
                     <div th:if="${!request.isApprovedBySecurityStructure && request.status.name() != 'Respinsa'}"
                          class="text-center">
                         <form id="'decisionSecurityForm-' + ${request.id}" method="post">
@@ -177,7 +177,7 @@
     <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.354 14.354a.5.5 0 0 1-.708.708L12 12.707l-3.646 3.647a.5.5 0 0 1-.708-.708L11.293 12 7.646 8.354a.5.5 0 0 1 .708-.708L12 11.293l3.646-3.647a.5.5 0 0 1 .708.708L12.707 12l3.647 3.646z"/>
                      </svg> <!-- Red cross icon --> </span>
                 </div>
-                <div th:if="${sessionUser.memberOf.equals('admin')}">
+                <div th:if="${sessionUser.memberOf.equals('admin') && request.isApprovedBySecurityStructure}">
                     <div th:if="${!request.isApprovedByITChief && request.status.name() != 'Respinsa'}"
                          class="text-center">
                         <form th:id="'decisionITForm-' + ${request.id}" method="post">

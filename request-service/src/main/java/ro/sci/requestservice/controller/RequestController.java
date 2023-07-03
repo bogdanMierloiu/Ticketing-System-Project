@@ -44,22 +44,26 @@ public class RequestController {
     // POLICE STRUCTURE
 
     @PatchMapping("/structure-chief-approve/{requestId}")
-    public ResponseEntity<String> structureChiefApprove(@PathVariable("requestId") Long requestId) {
-        requestService.structureChiefApprove(requestId);
+    public ResponseEntity<String> structureChiefApprove(@PathVariable("requestId") Long requestId,
+                                                        @RequestParam("structureChiefName") String structureChiefName) {
+        requestService.structureChiefApprove(requestId, structureChiefName);
         return ResponseEntity.ok("Approved successfully by structure chief!");
     }
 
     @PutMapping("/structure-chief-reject/{requestId}")
-    public ResponseEntity<String> structureChiefReject(@PathVariable("requestId") Long requestId, @RequestParam("observation") String observation) {
-        requestService.structureChiefReject(requestId, observation);
+    public ResponseEntity<String> structureChiefReject(@PathVariable("requestId") Long requestId,
+                                                       @RequestParam("observation") String observation,
+                                                       @RequestParam("structureChiefName") String structureChiefName) {
+        requestService.structureChiefReject(requestId, observation, structureChiefName);
         return ResponseEntity.ok("Rejected successfully by structure chief because: " + observation);
     }
 
     // SECURITY STRUCTURE
     @PatchMapping("/security-approve/{requestId}")
-    public ResponseEntity<?> securityApprove(@PathVariable("requestId") Long requestId) {
+    public ResponseEntity<?> securityApprove(@PathVariable("requestId") Long requestId,
+                                             @RequestParam("securityPolicemanName") String securityPolicemanName) {
         try {
-            requestService.securityStructureApprove(requestId);
+            requestService.securityStructureApprove(requestId, securityPolicemanName);
             return ResponseEntity.ok("Approved successfully by security structure!");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
@@ -68,9 +72,11 @@ public class RequestController {
     }
 
     @PutMapping("/security-reject/{requestId}")
-    public ResponseEntity<?> securityReject(@PathVariable("requestId") Long requestId, @RequestParam String observation) {
+    public ResponseEntity<?> securityReject(@PathVariable("requestId") Long requestId,
+                                            @RequestParam("observation") String observation,
+                                            @RequestParam("securityPolicemanName") String securityPolicemanName) {
         try {
-            requestService.securityStructureReject(requestId, observation);
+            requestService.securityStructureReject(requestId, observation, securityPolicemanName);
             return ResponseEntity.ok("Rejected successfully by security structure!");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("The request is not " +
@@ -83,9 +89,10 @@ public class RequestController {
 
     @PutMapping("/it-approve/{requestId}/{itSpecialistId}")
     public ResponseEntity<String> itApproveAssign(@PathVariable("requestId") Long requestId,
-                                                  @PathVariable("itSpecialistId") Long itSpecialistId) {
+                                                  @PathVariable("itSpecialistId") Long itSpecialistId,
+                                                  @RequestParam("adminName") String adminName) {
         try {
-            requestService.assignSpecialist(requestId, itSpecialistId);
+            requestService.assignSpecialist(requestId, itSpecialistId, adminName);
             return ResponseEntity.ok("Request approved and assigned successfully in SCI");
         } catch (UnsupportedOperationException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Solicitarea nu este aprobata de structura de securitate");
@@ -95,8 +102,9 @@ public class RequestController {
 
     @PutMapping("/it-reject/{requestId}")
     public ResponseEntity<String> itReject(@PathVariable("requestId") Long requestId,
-                                           @RequestParam String observation) {
-        requestService.itReject(requestId, observation);
+                                           @RequestParam("adminName") String observation,
+                                           @RequestParam("adminName") String adminName) {
+        requestService.itReject(requestId, observation, adminName);
         return ResponseEntity.ok("Request rejected successfully by SCI");
     }
 

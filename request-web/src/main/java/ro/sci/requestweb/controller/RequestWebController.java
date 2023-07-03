@@ -225,9 +225,9 @@ public class RequestWebController {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsPoliceStructureChief(userSession.getMemberOf());
         if ("approve".equals(decision)) {
-            requestService.structureChiefApprove(requestId);
+            requestService.structureChiefApprove(requestId, userSession.getDisplayName());
         } else if ("reject".equals(decision)) {
-            requestService.structureChiefReject(requestId, observation);
+            requestService.structureChiefReject(requestId, observation, userSession.getDisplayName());
         }
         return "redirect:" + getReferer(request);
     }
@@ -242,9 +242,9 @@ public class RequestWebController {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsFromSecurityStructure(userSession.getMemberOf());
         if ("approve".equals(decision)) {
-            requestService.securityApprove(requestId);
+            requestService.securityApprove(requestId, userSession.getDisplayName());
         } else if ("reject".equals(decision)) {
-            requestService.securityReject(requestId, observation);
+            requestService.securityReject(requestId, observation, userSession.getDisplayName());
         }
         return "redirect:" + getReferer(request);
     }
@@ -259,11 +259,11 @@ public class RequestWebController {
                              @RequestParam(value = "observation", required = false) String observation,
                              HttpServletRequest request, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
-        checkIsFromSCI(userSession.getMemberOf());
+        checkIsAdmin(userSession.getMemberOf());
         if ("approve".equals(decision)) {
-            requestService.itApprove(requestId, itSpecialistId);
+            requestService.itApprove(requestId, itSpecialistId, userSession.getDisplayName());
         } else if ("reject".equals(decision)) {
-            requestService.itReject(requestId, observation);
+            requestService.itReject(requestId, observation, userSession.getDisplayName());
         }
         return "redirect:" + getReferer(request);
     }
@@ -301,7 +301,7 @@ public class RequestWebController {
         }
     }
 
-    private void checkIsFromSCI(String memberOf) {
+    private void checkIsAdmin(String memberOf) {
         if (!(memberOf.equals("admin"))) {
             throw new NotAuthorizedForThisActionException("User not authorized for this action");
         }
