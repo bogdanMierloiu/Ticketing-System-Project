@@ -67,6 +67,7 @@ public class RequestService {
                 .bodyToFlux(RequestResponse.class);
         return collectToList(responseFlux);
     }
+
     public List<RequestResponse> getAllRequestsBySCINumber(Long numberFromSCI) {
         Flux<RequestResponse> responseFlux = webClientBuilder.build().get()
                 .uri(uriBuilder -> uriBuilder
@@ -139,10 +140,15 @@ public class RequestService {
 
 
     @Async
-    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequestToSend request) throws AlreadyHaveThisRequestException {
+    public CompletableFuture<AsyncResponse<Void>> addRequest(AccountRequestToSend request, String requestingPoliceman) throws AlreadyHaveThisRequestException {
         try {
             webClientBuilder.build().post()
-                    .uri("lb://request-service/api/v1/request")
+                    .uri(uriBuilder -> uriBuilder
+                            .scheme("lb")
+                            .host("request-service")
+                            .path("/api/v1/request")
+                            .queryParam("requestingPoliceman", requestingPoliceman)
+                            .build())
                     .bodyValue(request)
                     .header("X-Api-Key", key)
                     .retrieve()
@@ -153,6 +159,7 @@ public class RequestService {
             throw new RuntimeException("A apărut o eroare la procesarea cererii!");
         }
     }
+
 
 
     // POLICE STRUCTURE

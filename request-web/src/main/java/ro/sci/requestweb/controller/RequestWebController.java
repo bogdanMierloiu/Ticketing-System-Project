@@ -142,7 +142,7 @@ public class RequestWebController {
 
         AccountRequestToSend accountRequestToSend = accountRequestMapper.mapToAccountRequestToSend(accountRequest);
 
-        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequestToSend);
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestService.addRequest(accountRequestToSend, userSession.getDisplayName());
         AsyncResponse<Void> response;
         try {
             response = asyncResponse.get();

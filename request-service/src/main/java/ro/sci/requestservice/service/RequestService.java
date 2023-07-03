@@ -44,7 +44,7 @@ public class RequestService {
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy / HH:mm");
 
     @Async
-    public CompletableFuture<AddRequestResult> add(AccountRequest accountRequest) throws AlreadyHaveThisRequestException {
+    public CompletableFuture<AddRequestResult> add(AccountRequest accountRequest, String requestingPoliceman) throws AlreadyHaveThisRequestException {
         CompletableFuture<AddRequestResult> future = new CompletableFuture<>();
         try {
             Request request = requestMapper.map(accountRequest);
@@ -69,7 +69,7 @@ public class RequestService {
             request.setCommitment(commitment);
 
             request.setCreatedAt(LocalDateTime.now());
-            String obvToAdd = "Solicitare creata la data de: " + request.getCreatedAt().format(dateTimeFormatter);
+            String obvToAdd = "Solicitare creata de catre " + requestingPoliceman + " la data de: " + request.getCreatedAt().format(dateTimeFormatter);
             request.setObservation(!StringUtils.isEmpty(accountRequest.getObservation()) ? request.getObservation() + "\n" + obvToAdd :
                     obvToAdd);
 

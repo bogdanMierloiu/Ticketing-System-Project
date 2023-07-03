@@ -29,8 +29,9 @@ public class RequestController {
 
 
     @PostMapping
-    public CompletableFuture<ResponseEntity<String>> add(@RequestBody AccountRequest accountRequest) {
-        return requestService.add(accountRequest)
+    public CompletableFuture<ResponseEntity<String>> add(@RequestBody AccountRequest accountRequest,
+                                                         @RequestParam("requestingPoliceman") String requestingPoliceman) {
+        return requestService.add(accountRequest, requestingPoliceman)
                 .thenApply(result -> {
                     if (result.getSuccess()) {
                         return ResponseEntity.ok("Request for " + composeResponseForAddingRequest(accountRequest));

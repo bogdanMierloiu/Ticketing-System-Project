@@ -223,7 +223,7 @@
                         <label th:text="${'Nr.de inregistrare C.S.T.I.C. : '"></label>
                         <span th:text="${request.securityStructRegNo + ' / ' + #temporals.format(request.regDateFromSecurityStruct, 'dd-MM-yyyy')}"></span>
                     </div>
-                    <div th:if="${request.itStructRegNoResponse.number != null}">
+                    <div th:if="${request.itStructRegNoResponse != null}">
                         <label>Nr.de inregistrare S.C.I. : </label>
                         <span th:text="${request.itStructRegNoResponse.number + ' / ' + #temporals.format(request.regDateFromITStruct, 'dd-MM-yyyy')}"></span>
                     </div>
