@@ -55,7 +55,9 @@ public class Request {
 
     // IT Structure
 
-    private Long itStructRegNo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "it_registration_number_id")
+    private ItStructureRegistrationNumber itStructRegNo;
 
     private LocalDate regDateFromITStruct;
 

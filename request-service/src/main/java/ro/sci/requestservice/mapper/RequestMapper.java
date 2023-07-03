@@ -10,7 +10,10 @@ import java.util.List;
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {PolicemanMapper.class, RequestTypeMapper.class, CommitmentMapper.class}
+        uses = {PolicemanMapper.class,
+                RequestTypeMapper.class,
+                CommitmentMapper.class,
+                ItStructureRegistrationNumberMapper.class}
 )
 public interface RequestMapper {
 

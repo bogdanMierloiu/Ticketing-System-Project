@@ -41,7 +41,7 @@ public class RequestResponse {
 
     // IT Structure
 
-    private Long itStructRegNo;
+    private ItStructureRegistrationNumberResponse itStructRegNoResponse;
 
     private LocalDate regDateFromITStruct;
 

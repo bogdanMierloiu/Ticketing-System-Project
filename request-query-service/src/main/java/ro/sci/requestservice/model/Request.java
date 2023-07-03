@@ -55,7 +55,11 @@ public class Request {
 
     // IT Structure
 
-    private Long itStructRegNo;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "it_registration_number_id")
+    @ToString.Exclude
+    @JsonIgnore
+    private ItStructureRegistrationNumber itStructRegNo;
 
     private LocalDate regDateFromITStruct;
 
@@ -74,8 +78,6 @@ public class Request {
     @OneToOne(mappedBy = "request", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Commitment commitment;
-
-
 
 
 }

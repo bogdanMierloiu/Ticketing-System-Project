@@ -13,12 +13,16 @@ import java.util.List;
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = {PolicemanMapper.class, RequestTypeMapper.class, CommitmentMapper.class}
+        uses = {PolicemanMapper.class,
+                RequestTypeMapper.class,
+                CommitmentMapper.class,
+                ItStructureRegistrationNumberMapper.class}
 )
 public interface RequestMapper {
     @Named("mapPolicemanToResponse")
     @Mapping(source = "policeman", target = "policemanResponse")
     @Mapping(source = "requestType", target = "requestTypeResponse")
+    @Mapping(source = "itStructRegNo", target = "itStructRegNoResponse")
     RequestResponse map(Request request);
 
 
@@ -29,5 +33,8 @@ public interface RequestMapper {
     @Named("mapAccountResponses")
     @Mapping(source = "policeman", target = "policemanResponse")
     @Mapping(source = "requestType", target = "requestTypeResponse")
+    @Mapping(source = "itStructRegNo", target = "itStructRegNoResponse")
     List<RequestResponse> map(List<Request> requests);
+
+
 }
