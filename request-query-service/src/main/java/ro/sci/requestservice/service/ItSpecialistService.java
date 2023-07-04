@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sci.requestservice.dto.ItSpecialistResponse;
+import ro.sci.requestservice.exception.NotFoundException;
 import ro.sci.requestservice.mapper.ItSpecialistMapper;
 import ro.sci.requestservice.model.Request;
 import ro.sci.requestservice.repository.ItSpecialistRepo;
@@ -34,6 +35,13 @@ public class ItSpecialistService {
     }
 
     @Async
+    public CompletableFuture<ItSpecialistResponse> findById(Long specialistId) throws NotFoundException {
+        return CompletableFuture.completedFuture(itSpecialistMapper.map(itSpecialistRepo.findById(specialistId).orElseThrow(
+                () -> new NotFoundException(String.format("The specialist with id %d not found", specialistId))
+        )));
+    }
+
+    @Async
     public CompletableFuture<Long> countAllRequests(Long specialistId) {
         List<Request> requests = requestRepo.findAllByItSpecialistId(specialistId);
         return CompletableFuture.completedFuture((long) requests.size());
@@ -50,9 +58,6 @@ public class ItSpecialistService {
         List<Request> requests = requestRepo.findAllFinalizedByItSpecialistId(specialistId);
         return CompletableFuture.completedFuture((long) requests.size());
     }
-
-
-
 
 
 }

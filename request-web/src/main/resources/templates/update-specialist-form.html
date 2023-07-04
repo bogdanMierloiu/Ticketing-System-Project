@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade profesionale</title>
+    <title>Modificare lucrator SCI</title>
     <link th:href="@{/css/bootstrap.css}" th:rel="stylesheet">
     <link th:href="@{/css/style.css}" th:rel="stylesheet">
 </head>
@@ -52,50 +52,47 @@
 
 
 <div class="content-wrap">
-    <div style="display:flex; width:100%;">
-        <!-- Sidebar  -->
-        <div style="width: 250px; height: 110vh; background-color: #285b96; padding-top:10px; padding-right: 10px;">
-            <div style="display:block; padding-bottom:20px">
-                <div style="padding-left:20px">
-                    <h4 style="color:white" th:text="${sessionUser.displayName}"></h4>
-                </div>
-                <div style="padding-left:10px">
-                    <ul style="color:white; padding:20px" class="my-ul">
-                        <li>
-                            <a th:href="@{/request/admin/add-rank-form}">
-                                Adauga grad profesional</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="text-center mb-4">Actualizeaza date lucrator SCI</h2>
+                <span class="error-message" th:if="${errorMessage}">
+                        [[${errorMessage}]]
+                    </span>
+                <form class="add-form" th:action="@{/request/admin/update-specialist}" method="post">
 
-        <!--  Tabel -->
-        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: flex-start; margin-left: auto; width:100%;">
-            <div class="nothing-found" th:if="${#lists.isEmpty(ranks)}">
-                <h5>Nu exista inregistrari !</h5>
-            </div>
-            <table th:if="${not #lists.isEmpty(ranks)}" class="table table-hover text-center">
-                <thead>
-                <tr>
-                    <th colspan="3" style="text-align: center;" class="text-center">
+                    <!-- Rank -->
+
+                    <div class="mb-3">
+                        <label for="rankId" class="form-label">Grad profesional:</label>
+                        <select id="rankId" class="form-select" name="rankId">
+                            <option value="">Selectati gradul profesional</option>
+                            <option th:each="rank : ${ranks}" th:value="${rank.id}" th:text="${rank.rankName}"></option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight: bold;">Informatii lucrator:</label>
                         <div>
-                            <span>Grade profesionale</span>
+                            <label for="lastName" class="form-label">Nume:</label>
+                            <input id="lastName" type="text" class="form-control"
+                                   name="lastName" th:value="${itSpecialistToUpdate.lastName}" pattern="^[A-Za-z ]+$">
                         </div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="rank: ${ranks}">
-                    <td>
-                        <span th:text="${rank.rankName}"></span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Prenume:</label>
+                        <input id="firstName" type="text" class="form-control"
+                               name="firstName" th:value="${itSpecialistToUpdate.firstName}" pattern="^[A-Za-z ]+$">
+                    </div>
+                    <input type="hidden" th:value="${itSpecialistToUpdate.id}" name="id">
+                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Modifica</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 
 <script th:src="@{/js/jquery-3.7.0.js}" type="text/javascript"></script>
 <script th:src="@{/js/script.js}" type="text/javascript"></script>

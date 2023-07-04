@@ -20,13 +20,33 @@ public class ItSpecialistService {
     private final RankRepo rankRepo;
 
 
-    public void add(ItSpecialistRequest specialistRequest) {
+    public void add(ItSpecialistRequest specialistRequest) throws NotFoundException {
         ItSpecialist itSpecialist = new ItSpecialist();
         itSpecialist.setFirstName(specialistRequest.getFirstName());
         itSpecialist.setLastName(specialistRequest.getLastName());
         itSpecialist.setRank(getRankById(specialistRequest.getRankId()));
         itSpecialistRepo.save(itSpecialist);
+    }
 
+    public void update(ItSpecialistRequest specialistRequest) throws NotFoundException {
+        ItSpecialist itSpecialistToUpdate = itSpecialistRepo.findById(specialistRequest.getId()).orElseThrow(
+                () -> new NotFoundException(String.format("The specialist with  id %d not found", specialistRequest.getId())));
+        if (specialistRequest.getRankId() != null) {
+            Rank rank = getRankById(specialistRequest.getRankId());
+            itSpecialistToUpdate.setRank(rank);
+        }
+        itSpecialistToUpdate.setFirstName(specialistRequest.getFirstName() != null ? specialistRequest.getFirstName() : itSpecialistToUpdate.getFirstName());
+        itSpecialistToUpdate.setLastName(specialistRequest.getLastName() != null ? specialistRequest.getLastName() : itSpecialistToUpdate.getLastName());
+
+        itSpecialistRepo.save(itSpecialistToUpdate);
+    }
+
+    public void delete(Long specialistId) throws NotFoundException {
+        ItSpecialist itSpecialist = itSpecialistRepo.findById(specialistId).orElseThrow(
+                () -> new NotFoundException(String.format("The specialist with  id %d not found", specialistId)));
+        if (itSpecialist != null) {
+            itSpecialistRepo.delete(itSpecialist);
+        }
     }
 
 

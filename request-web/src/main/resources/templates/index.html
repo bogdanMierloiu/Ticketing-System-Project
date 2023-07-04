@@ -53,8 +53,8 @@
 <div class="content-wrap">
 
     <!--   Table start -->
-    <div th:if="${#lists.isEmpty(requests)}">
-        <h5>Nu exista inregistrari</h5>
+    <div class="nothing-found"  th:if="${#lists.isEmpty(requests)}">
+        <h5>Nu exista inregistrari !</h5>
     </div>
 
     <table th:if="${not #lists.isEmpty(requests)}" class="table table-hover text-center">

@@ -264,6 +264,36 @@ public class AdminWebController {
         return "redirect:/request/admin/all-specialists";
     }
 
+    @GetMapping("/update-specialist-form/{specialistId}")
+    public String updateSpecialistForm(@PathVariable Long specialistId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        ItSpecialistResponse itSpecialistToUpdate = itSpecialistService.findById(specialistId);
+        model.addAttribute("itSpecialistToUpdate", itSpecialistToUpdate);
+        model.addAttribute("userSession", userSession);
+        model.addAttribute("ranks", rankService.getAllRanks());
+        return "update-specialist-form";
+    }
+
+    @PostMapping("update-specialist")
+    public String update(@ModelAttribute ItSpecialistRequest request, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = itSpecialistService.update(request);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("userSession", userSession);
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            return "add-specialist-form";
+        }
+        return "redirect:/request/admin/all-specialists";
+    }
+
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
 
     @GetMapping("/all-request-type")

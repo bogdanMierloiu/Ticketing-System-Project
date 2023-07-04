@@ -71,8 +71,8 @@
 
         <!-- Tabel -->
         <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: flex-start; margin-left: auto; width:100%;">
-            <div th:if="${#lists.isEmpty(structures)}">
-                <h5>Nu exista inregistrari</h5>
+            <div class="nothing-found" th:if="${#lists.isEmpty(structures)}">
+                <h5>Nu exista inregistrari !</h5>
             </div>
             <table th:if="${not #lists.isEmpty(structures)}" class="table table-hover text-center">
                 <thead>

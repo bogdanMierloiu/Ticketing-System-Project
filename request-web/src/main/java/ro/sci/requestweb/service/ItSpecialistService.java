@@ -39,6 +39,14 @@ public class ItSpecialistService {
                 .bodyToMono(ItSpecialistResponse.class);
         return responseMono.block();
     }
+    public ItSpecialistResponse findById(Long specialistId) {
+        Mono<ItSpecialistResponse> responseMono = webClientBuilder.build().get()
+                .uri("lb://request-query-service/api/v2/it-specialist/find-id/{specialistId}", specialistId)
+                .header("X-Api-Key", key)
+                .retrieve()
+                .bodyToMono(ItSpecialistResponse.class);
+        return responseMono.block();
+    }
 
     @Async
     public CompletableFuture<AsyncResponse<Void>> addSpecialist(ItSpecialistRequest request) {
@@ -46,6 +54,37 @@ public class ItSpecialistService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/it-specialist")
                     .body(BodyInserters.fromValue(request))
+                    .header("X-Api-Key", key)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
+    }
+
+    @Async
+    public CompletableFuture<AsyncResponse<Void>> update(ItSpecialistRequest request) {
+        try {
+            webClientBuilder.build().put()
+                    .uri("lb://request-service/api/v1/it-specialist")
+                    .body(BodyInserters.fromValue(request))
+                    .header("X-Api-Key", key)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
+    }
+
+    @Async
+    public CompletableFuture<AsyncResponse<Void>> delete(Long specialistId) {
+        try {
+            webClientBuilder.build().delete()
+                    .uri("lb://request-service/api/v1/it-specialist/{id}", specialistId)
                     .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)

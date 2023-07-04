@@ -1,6 +1,7 @@
 package ro.sci.requestservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,16 @@ public class ItSpecialistController {
         return future.thenApply(ResponseEntity::ok);
     }
 
+    @GetMapping("/find-id/{specialistId}")
+    public CompletableFuture<ResponseEntity<ItSpecialistResponse>> findById(@PathVariable("specialistId") Long specialistId) {
+        try {
+            CompletableFuture<ItSpecialistResponse> future = itSpecialistService.findById(specialistId);
+            return future.thenApply(ResponseEntity::ok);
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        }
+    }
+
     @GetMapping("/count/all-requests/{specialistId}")
     public CompletableFuture<ResponseEntity<Long>> countAllRequests(@PathVariable("specialistId") Long specialistId) {
         CompletableFuture<Long> future = itSpecialistService.countAllRequests(specialistId);
@@ -49,11 +60,6 @@ public class ItSpecialistController {
         CompletableFuture<Long> future = itSpecialistService.findAllFinalizedByItSpecialistId(specialistId);
         return future.thenApply(ResponseEntity::ok);
     }
-
-
-
-
-
 
 
 }
