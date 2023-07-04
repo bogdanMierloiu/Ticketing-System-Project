@@ -83,7 +83,7 @@
             <table th:if="${not #lists.isEmpty(specialists)}" class="table table-hover text-center">
                 <thead>
                 <tr>
-                    <th colspan="4" style="text-align: center;" class="text-center">
+                    <th colspan="5" style="text-align: center;" class="text-center">
                         <div>
                             <span>Lucratori din cadrul S.C.I. - Biroul Informatica</span>
                         </div>
@@ -104,16 +104,16 @@
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/request/admin/delete-specialist/{specialistId}(specialistId=${specialist.id})}" method="post">
+                        <form th:action="@{/request/admin/show-requests-for-specialist/{specialistId}(specialistId=${specialist.id})}">
+                            <button class="btn btn-primary btn-sm" type="submit">Solicitari</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/request/admin/delete-specialist/{specialistId}(specialistId=${specialist.id})}"
+                              method="post">
                             <button class="btn btn-danger btn-sm" type="submit">Sterge</button>
                         </form>
                     </td>
-                    <!--                <td>-->
-                    <!--                    <form th:action="@{/request/admin/show-departments/{policeStructureId}(policeStructureId=${structure.id})}">-->
-                    <!--                        <input type="hidden" name="policeStructureId" th:value="${structure.id}">-->
-                    <!--                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Afiseaza solicitari in lucru (DE IMPLEMENTAT)</button>-->
-                    <!--                    </form>-->
-                    <!--                </td>-->
                 </tr>
                 </tbody>
             </table>

@@ -53,8 +53,9 @@ public class RequestWebController {
 
         String specialistName = null;
         if (requestResponse.getObservation().contains("repartizata catre")) {
-            int indexOfSpecialistName = requestResponse.getObservation().indexOf("repartizata catre");
-            specialistName = requestResponse.getObservation().substring(indexOfSpecialistName + 18);
+            int indexOfBeginSpecialistName = requestResponse.getObservation().indexOf("repartizata catre");
+            int indexOfEndSpecialistName = requestResponse.getObservation().indexOf("Finalizata la data de");
+            specialistName = requestResponse.getObservation().substring(indexOfBeginSpecialistName + 18, indexOfEndSpecialistName);
         }
 
         boolean isApproved = isFullyApproved(requestResponse);

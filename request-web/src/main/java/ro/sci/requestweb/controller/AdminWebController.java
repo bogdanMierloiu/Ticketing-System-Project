@@ -318,6 +318,19 @@ public class AdminWebController {
         return "redirect:/request/admin/all-specialists";
     }
 
+    @GetMapping("/show-requests-for-specialist/{specialistId}")
+    public String getRequestsForSpecialist(@PathVariable("specialistId") Long specialistId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        boolean isBureauChief = isBureauChief(userSession);
+        model.addAttribute("isBureauChief", isBureauChief);
+        model.addAttribute("userSession", userSession);
+        model.addAttribute("requests", requestService.getAllRequestsByItSpecialist(specialistId));
+        model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+        return "index";
+    }
+
+
     // ----------------------------------  REQUEST TYPES --------------------------------------------------
 
     @GetMapping("/all-request-type")
