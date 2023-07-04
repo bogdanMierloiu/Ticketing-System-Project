@@ -245,7 +245,7 @@ public class AdminWebController {
         return "add-specialist-form";
     }
 
-    @PostMapping("add-specialist")
+    @PostMapping("/add-specialist")
     public String addSpecialist(@ModelAttribute ItSpecialistRequest request, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsAdmin(userSession.getMemberOf());
@@ -259,6 +259,7 @@ public class AdminWebController {
         if (response.getError() != null) {
             model.addAttribute("userSession", userSession);
             model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            model.addAttribute("ranks", rankService.getAllRanks());
             return "add-specialist-form";
         }
         return "redirect:/request/admin/all-specialists";
@@ -275,8 +276,8 @@ public class AdminWebController {
         return "update-specialist-form";
     }
 
-    @PostMapping("update-specialist")
-    public String update(@ModelAttribute ItSpecialistRequest request, Model model, HttpSession session) {
+    @PostMapping("/update-specialist")
+    public String updateSpecialist(@ModelAttribute ItSpecialistRequest request, Model model, HttpSession session) {
         UserInSession userSession = HomeController.getUserSession(session);
         checkIsAdmin(userSession.getMemberOf());
         CompletableFuture<AsyncResponse<Void>> asyncResponse = itSpecialistService.update(request);
@@ -287,9 +288,32 @@ public class AdminWebController {
             response = new AsyncResponse<>(null, e);
         }
         if (response.getError() != null) {
+            ItSpecialistResponse itSpecialistToUpdate = itSpecialistService.findById(request.getId());
+            model.addAttribute("itSpecialistToUpdate", itSpecialistToUpdate);
             model.addAttribute("userSession", userSession);
             model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
-            return "add-specialist-form";
+            model.addAttribute("ranks", rankService.getAllRanks());
+            return "update-specialist-form";
+        }
+        return "redirect:/request/admin/all-specialists";
+    }
+
+    @PostMapping("/delete-specialist/{specialistId}")
+    public String deleteSpecialist(@PathVariable Long specialistId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = itSpecialistService.delete(specialistId);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("userSession", userSession);
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            model.addAttribute("specialists", itSpecialistService.getAllSpecialists());
+            return "it-specialists";
         }
         return "redirect:/request/admin/all-specialists";
     }
@@ -328,6 +352,57 @@ public class AdminWebController {
             model.addAttribute("userSession", userSession);
             model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
             return "add-request-type";
+        }
+        return "redirect:/request/admin/all-request-type";
+    }
+
+    @GetMapping("/update-request-type-form/{requestId}")
+    public String updateRequestForm(@PathVariable Long requestId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        RequestTypeResponse requestToUpdate = requestTypeService.getById(requestId);
+        model.addAttribute("requestToUpdate", requestToUpdate);
+        model.addAttribute("userSession", userSession);
+        return "update-request-type-form";
+    }
+
+    @PostMapping("/update-request-type")
+    public String updateRequestType(@ModelAttribute RequestTypeReq request, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestTypeService.update(request);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("requestToUpdate", requestTypeService.getById(request.getId()));
+            model.addAttribute("userSession", userSession);
+            model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            return "update-request-type-form";
+        }
+        return "redirect:/request/admin/all-request-type";
+    }
+
+    @PostMapping("/delete-request-type/{requestId}")
+    public String deleteRequestType(@PathVariable Long requestId, Model model, HttpSession session) {
+        UserInSession userSession = HomeController.getUserSession(session);
+        checkIsAdmin(userSession.getMemberOf());
+        CompletableFuture<AsyncResponse<Void>> asyncResponse = requestTypeService.delete(requestId);
+        AsyncResponse<Void> response;
+        try {
+            response = asyncResponse.get();
+        } catch (Exception e) {
+            response = new AsyncResponse<>(null, e);
+        }
+        if (response.getError() != null) {
+            model.addAttribute("userSession", userSession);
+            model.addAttribute("errorMessage", "A aparut o problema in procesarea cererii dumnevoastra !!");
+            model.addAttribute("requestTypes", requestTypeService.getAllRequestTypes());
+            return "request-types";
         }
         return "redirect:/request/admin/all-request-type";
     }

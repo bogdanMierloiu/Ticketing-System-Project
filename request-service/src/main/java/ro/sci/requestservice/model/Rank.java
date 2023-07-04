@@ -1,12 +1,9 @@
 package ro.sci.requestservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,11 +21,15 @@ public class Rank {
     private String rankName;
 
 
-    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Policeman> policemen = new ArrayList<>();
+    @OneToMany(mappedBy = "rank", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Policeman> policemen;
 
-    @OneToMany(mappedBy = "rank", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ItSpecialist> itSpecialists = new ArrayList<>();
+    @OneToMany(mappedBy = "rank", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @JsonIgnore
+    private List<ItSpecialist> itSpecialists;
 
 
 }

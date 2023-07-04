@@ -44,9 +44,7 @@ public class ItSpecialistService {
     public void delete(Long specialistId) throws NotFoundException {
         ItSpecialist itSpecialist = itSpecialistRepo.findById(specialistId).orElseThrow(
                 () -> new NotFoundException(String.format("The specialist with  id %d not found", specialistId)));
-        if (itSpecialist != null) {
-            itSpecialistRepo.delete(itSpecialist);
-        }
+        itSpecialistRepo.delete(itSpecialist);
     }
 
 

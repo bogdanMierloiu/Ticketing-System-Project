@@ -3,6 +3,7 @@ package ro.sci.requestweb.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -44,6 +45,37 @@ public class RequestTypeService {
             webClientBuilder.build().post()
                     .uri("lb://request-service/api/v1/request-type")
                     .bodyValue(request)
+                    .header("X-Api-Key", key)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
+    }
+
+    @Async
+    public CompletableFuture<AsyncResponse<Void>> update(RequestTypeReq request) {
+        try {
+            webClientBuilder.build().put()
+                    .uri("lb://request-service/api/v1/request-type")
+                    .body(BodyInserters.fromValue(request))
+                    .header("X-Api-Key", key)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+            return CompletableFuture.completedFuture(new AsyncResponse<>());
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(new AsyncResponse<>(null, e));
+        }
+    }
+
+    @Async
+    public CompletableFuture<AsyncResponse<Void>> delete(Long requestTypeId) {
+        try {
+            webClientBuilder.build().delete()
+                    .uri("lb://request-service/api/v1/request-type/{id}", requestTypeId)
                     .header("X-Api-Key", key)
                     .retrieve()
                     .bodyToMono(Void.class)

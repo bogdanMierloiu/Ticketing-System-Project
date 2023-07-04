@@ -75,10 +75,15 @@
             <div class="nothing-found" th:if="${#lists.isEmpty(specialists)}">
                 <h5>Nu exista inregistrari !</h5>
             </div>
+            <div>
+            <span class="error-message" th:if="${errorMessage}">
+                        [[${errorMessage}]]
+            </span>
+            </div>
             <table th:if="${not #lists.isEmpty(specialists)}" class="table table-hover text-center">
                 <thead>
                 <tr>
-                    <th colspan="2" style="text-align: center;" class="text-center">
+                    <th colspan="4" style="text-align: center;" class="text-center">
                         <div>
                             <span>Lucratori din cadrul S.C.I. - Biroul Informatica</span>
                         </div>
@@ -96,6 +101,11 @@
                     <td>
                         <form th:action="@{/request/admin/update-specialist-form/{specialistId}(specialistId=${specialist.id})}">
                             <button class="btn btn-success btn-sm" type="submit">Modifica</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/request/admin/delete-specialist/{specialistId}(specialistId=${specialist.id})}" method="post">
+                            <button class="btn btn-danger btn-sm" type="submit">Sterge</button>
                         </form>
                     </td>
                     <!--                <td>-->

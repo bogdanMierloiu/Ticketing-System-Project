@@ -29,7 +29,7 @@ public class ItSpecialist {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "itSpecialist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "itSpecialist", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Request> requests = new ArrayList<>();
 
 

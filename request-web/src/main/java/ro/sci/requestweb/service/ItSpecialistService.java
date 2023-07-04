@@ -39,6 +39,7 @@ public class ItSpecialistService {
                 .bodyToMono(ItSpecialistResponse.class);
         return responseMono.block();
     }
+
     public ItSpecialistResponse findById(Long specialistId) {
         Mono<ItSpecialistResponse> responseMono = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/it-specialist/find-id/{specialistId}", specialistId)
@@ -97,12 +98,12 @@ public class ItSpecialistService {
 
 
     public Long countAllRequests(Long specialistId) {
-        Mono<Long> responseFlux = webClientBuilder.build().get()
+        Mono<Long> response = webClientBuilder.build().get()
                 .uri("lb://request-query-service/api/v2/it-specialist/count/all-requests/{specialistId}", specialistId)
                 .header("X-Api-Key", key)
                 .retrieve()
                 .bodyToMono(Long.class);
-        return responseFlux.block();
+        return response.block();
     }
 
     public Long countAllRequestsInProgress(Long specialistId) {
