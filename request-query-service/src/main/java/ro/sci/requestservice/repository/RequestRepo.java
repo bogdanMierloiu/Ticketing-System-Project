@@ -42,7 +42,7 @@ public interface RequestRepo extends JpaRepository<Request, Long> {
     @Query("Select r from Request r where r.policeman.policeStructure.id = :id ORDER BY r.createdAt DESC")
     public List<Request> findAllByPoliceStructure(@Param("id") Long id);
 
-    @Query("Select r from Request r where r.itStructRegNo = :number ORDER BY r.createdAt DESC")
+    @Query("Select r from Request r where r.itStructRegNo.number = :number ORDER BY r.createdAt DESC")
     public List<Request> findBySCINumber(@Param("number") Long number);
 
     @Query("Select r from Request r where r.policeman.policeStructureSubunit.id = :id ORDER BY r.createdAt DESC")
