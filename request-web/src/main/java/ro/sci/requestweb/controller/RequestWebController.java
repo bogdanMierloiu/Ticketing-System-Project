@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ro.sci.requestweb.dto.*;
 import ro.sci.requestweb.exception.NotAuthorizedForThisActionException;
 import ro.sci.requestweb.exception.NotHaveAccessException;
+import ro.sci.requestweb.exception.UnsupportedOperationException;
 import ro.sci.requestweb.mapper.AccountRequestMapper;
 import ro.sci.requestweb.service.*;
 
@@ -350,12 +351,13 @@ public class RequestWebController {
         int indexOf = displayName.indexOf(" ");
         String lastName = displayName.substring(0, indexOf);
         ItSpecialistResponse specialistFromSession = itSpecialistService.findByName(lastName);
-        if (specialistFromSession != null) {
-            Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
-            return Objects.equals(specialistFromSession.getId(), specialistId);
+        if (specialistFromSession == null) {
+            throw new UnsupportedOperationException("specialist not added");
         }
-        return false;
+        Long specialistId = requestService.getSpecialistIdByRequest(request.getId());
+        return Objects.equals(specialistFromSession.getId(), specialistId);
     }
+
 
     private void throwErrorIsSpecialistIsNotAssigned(String displayName, RequestResponse request) {
         if (!verifyRequestIsAssignedForSpecialistFromSession(displayName, request)) {

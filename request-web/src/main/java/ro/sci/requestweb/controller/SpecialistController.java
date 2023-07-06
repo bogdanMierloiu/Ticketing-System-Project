@@ -12,6 +12,7 @@ import ro.sci.requestweb.dto.ItSpecialistResponse;
 import ro.sci.requestweb.dto.RequestResponse;
 import ro.sci.requestweb.dto.UserInSession;
 import ro.sci.requestweb.exception.NotAuthorizedForThisActionException;
+import ro.sci.requestweb.exception.SpecialistNotFoundException;
 import ro.sci.requestweb.service.ItSpecialistService;
 import ro.sci.requestweb.service.RequestService;
 
@@ -51,7 +52,6 @@ public class SpecialistController {
     }
 
 
-
     //UTILS
 
     private void checkIsSpecialist(String memberOf) {
@@ -63,7 +63,11 @@ public class SpecialistController {
     private ItSpecialistResponse getSpecialistFromSession(String displayName) {
         int indexOf = displayName.indexOf(" ");
         String lastName = displayName.substring(0, indexOf);
-        return itSpecialistService.findByName(lastName);
+        ItSpecialistResponse specialistFromSession = itSpecialistService.findByName(lastName);
+        if (specialistFromSession == null) {
+            throw new SpecialistNotFoundException("specialist not added");
+        }
+        return specialistFromSession;
     }
 
     private boolean isBureauChief(UserInSession user) {
