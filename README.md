@@ -1,10 +1,1 @@
-# account-request-manager
-
-# create sequence:
-
-CREATE SEQUENCE SCI_sequence
-START WITH 1001
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+Full stack application, built with microservices models, for requesting access accounts in different areas of the Romanian Police network.
